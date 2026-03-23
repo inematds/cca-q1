@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 4.5 — Processamento em Lote (Batch API) | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">🏗️</span><span class="font-bold text-lg hidden sm:inline">CCA-Q1</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Arquitetura</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Ferramentas</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Claude Code</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Prompts</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Contexto</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-amber-400 transition-colors">Inicio</a><span>/</span>
+      <a href="index.html" class="hover:text-amber-400 transition-colors">Trilha 4</a><span>/</span>
+      <span class="text-amber-400 font-medium">Modulo 4.5</span>
+    </nav>
+  </div>
+
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-amber-500/20 text-amber-400 text-sm font-semibold rounded-full mb-4">MODULO 4.5</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📦 Processamento em Lote (Batch API)</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Economia de 50% com a Message Batches API. Janela de 24 horas, limitacoes, correlacao com custom_id e estrategias de reenvio.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-amber-400">20</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-amber-400">Inter</div><div class="text-xs text-neutral-400">Intermediario</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-amber-400">T+P</div><div class="text-xs text-neutral-400">Teoria+Pratica</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">💰 Message Batches API e Economia de 50%</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A Message Batches API da Anthropic permite enviar multiplas requisicoes em um unico lote para processamento assincrono, com desconto de 50% no preco por token. Em vez de fazer 1000 chamadas individuais para processar 1000 documentos, voce envia um lote com todas as requisicoes e recebe os resultados quando estiverem prontos.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Essa economia e possivel porque a Anthropic pode otimizar o scheduling interno — processando os lotes em horarios de menor demanda. O trade-off e que voce abre mao de latencia garantida: os resultados chegam quando estiverem prontos, dentro de uma janela de ate 24 horas.</p>
+
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">💡</span> Economia em Escala</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            <div class="bg-dark-700 rounded-lg p-4 text-center">
+              <div class="text-2xl font-bold text-red-400 mb-1">$100</div>
+              <div class="text-xs text-neutral-400">1000 chamadas individuais (real-time)</div>
+            </div>
+            <div class="bg-dark-700 rounded-lg p-4 text-center border border-amber-500/30">
+              <div class="text-2xl font-bold text-emerald-400 mb-1">$50</div>
+              <div class="text-xs text-neutral-400">1000 chamadas em batch (50% desconto)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">⏰ Janela de 24 Horas e Sem SLA de Latencia</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Resultados de batch sao entregues dentro de uma janela de ate 24 horas. Na pratica, a maioria dos lotes completa em minutos a poucas horas, mas nao ha SLA (Service Level Agreement) de latencia. Isso significa que voce nao pode assumir que os resultados estarao prontos em 10 minutos — eles podem levar 10 minutos ou 10 horas.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Essa incerteza de latencia torna batch inadequado para qualquer cenario que exija resposta rapida: chat interativo, pre-merge checks em CI/CD, alertas em tempo real. Batch e para workloads que podem esperar: processamento noturno de documentos, classificacao de backlog, analise historica.</p>
+
+        <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+          <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">🚨</span> Cenarios Inadequados para Batch</h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span><strong>Pre-merge checks:</strong> Desenvolvedores nao podem esperar horas por feedback de code review</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span><strong>Chat interativo:</strong> Usuarios esperam resposta em segundos, nao horas</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span><strong>Alertas em tempo real:</strong> Deteccao de fraude precisa de latencia sub-segundo</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span><strong>Workflows agenticos:</strong> Cada passo depende do anterior — incompativel com batch</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🚫 Batch Nao Suporta Multi-Turn Tool Calling</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Uma limitacao fundamental da Batch API: cada requisicao no lote e uma chamada unica, sem continuacao. A API nao suporta multi-turn tool calling — ou seja, voce nao pode ter um loop agentico onde Claude chama uma ferramenta, recebe o resultado, e decide o proximo passo. Cada requisicao e single-shot.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Isso significa que workflows agenticos (loop com tool_use iterativo) nao podem ser executados em batch. Batch e ideal para tarefas single-shot: extrair dados de um documento, classificar um texto, gerar um resumo — tarefas que completam em uma unica chamada.</p>
+
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">💡</span> Single-Shot vs Multi-Turn</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div class="bg-emerald-500/10 rounded-lg border border-emerald-500/30 p-4">
+              <h4 class="text-emerald-400 font-semibold text-sm mb-2">Compativel com Batch (single-shot)</h4>
+              <ul class="text-neutral-300 text-xs space-y-1">
+                <li>• Extracao de dados com forced tool</li>
+                <li>• Classificacao de documentos</li>
+                <li>• Geracao de resumos</li>
+                <li>• Traducao em massa</li>
+              </ul>
+            </div>
+            <div class="bg-red-500/10 rounded-lg border border-red-500/30 p-4">
+              <h4 class="text-red-400 font-semibold text-sm mb-2">Incompativel com Batch (multi-turn)</h4>
+              <ul class="text-neutral-300 text-xs space-y-1">
+                <li>• Agentes com loop de ferramentas</li>
+                <li>• Pesquisa iterativa</li>
+                <li>• Code review com leitura de arquivos</li>
+                <li>• Qualquer workflow com tool_use iterativo</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🏷️ custom_id para Correlacao de Resultados</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Cada requisicao no lote pode incluir um <code class="bg-dark-700 px-2 py-0.5 rounded text-amber-400 text-sm">custom_id</code> — um identificador definido por voce que e retornado junto com o resultado. Isso permite correlacionar qual resultado pertence a qual requisicao original, essencial quando voce processa centenas ou milhares de itens.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Na pratica, use o ID do documento, numero de fatura, ou qualquer identificador unico do item como custom_id. Quando os resultados chegam, voce mapeia cada resultado de volta ao documento original usando esse ID, sem depender da ordem (que nao e garantida).</p>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📝</span> Exemplo de Uso de custom_id</h3>
+          <div class="bg-dark-700 rounded-lg p-4 text-sm font-mono text-neutral-300">
+            <p class="text-amber-400">// Requisicao no lote:</p>
+            <p>{"custom_id": "invoice-2025-001",</p>
+            <p>&nbsp;"params": {"model": "claude-sonnet-4-20250514",</p>
+            <p>&nbsp;&nbsp;"messages": [...], "tools": [...]}}</p>
+            <p class="mt-3 text-amber-400">// Resultado retornado:</p>
+            <p>{"custom_id": "invoice-2025-001",</p>
+            <p>&nbsp;"result": {"type": "succeeded",</p>
+            <p>&nbsp;&nbsp;"message": {...}}}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🔄 Reenviar Apenas Itens com Falha</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando um lote completa, nem todas as requisicoes podem ter sido bem-sucedidas. Algumas podem ter falhado por timeout, erro de API, ou rate limiting. A estrategia correta e reenviar apenas os itens com falha em um novo lote — nao reprocessar o lote inteiro.</p>
+
+        <p class="text-neutral-300 leading-relaxed">O custom_id torna isso simples: ao receber os resultados, filtre aqueles com status "errored" ou "expired", colete seus custom_ids, reconstrua as requisicoes correspondentes, e envie um novo lote apenas com esses itens. Repita ate que todos sejam processados com sucesso ou atinjam um limite de retentativas.</p>
+
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">💡</span> Fluxo de Reenvio Seletivo</h3>
+          <div class="space-y-3 text-neutral-300 text-sm">
+            <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">1.</span><span>Envie lote inicial com N requisicoes</span></div>
+            <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">2.</span><span>Receba resultados: M succeeded + K failed</span></div>
+            <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">3.</span><span>Filtre os K itens falhados pelo custom_id</span></div>
+            <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">4.</span><span>Reenvie novo lote apenas com os K itens</span></div>
+            <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">5.</span><span>Repita ate sucesso total ou limite de retentativas</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">⚖️ Quando Usar Batch vs Real-time</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A decisao entre Batch e Real-time se resume a uma pergunta: o resultado pode esperar ate 24 horas? Se sim, use Batch para economizar 50%. Se nao, use Real-time apesar do custo maior. A latencia e o fator decisivo, nao o volume — voce pode processar alto volume tanto em batch quanto em real-time (com paralelismo).</p>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📊</span> Matriz de Decisao</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-emerald-500/10 rounded-lg border border-emerald-500/30 p-4">
+              <h4 class="text-emerald-400 font-semibold text-sm mb-3">Use Batch (50% economia)</h4>
+              <ul class="text-neutral-300 text-xs space-y-2">
+                <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>Extracao em massa de documentos historicos</span></li>
+                <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>Classificacao de backlog acumulado</span></li>
+                <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>Analise de sentimento em avaliacoes</span></li>
+                <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>Geracao de resumos noturnos</span></li>
+                <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>Traducao de catalogo de produtos</span></li>
+              </ul>
+            </div>
+            <div class="bg-blue-500/10 rounded-lg border border-blue-500/30 p-4">
+              <h4 class="text-blue-400 font-semibold text-sm mb-3">Use Real-time (preco cheio)</h4>
+              <ul class="text-neutral-300 text-xs space-y-2">
+                <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">•</span><span>Chat com usuario (latencia em segundos)</span></li>
+                <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">•</span><span>Pre-merge code review em CI/CD</span></li>
+                <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">•</span><span>Agentes com loop de ferramentas</span></li>
+                <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">•</span><span>Deteccao de fraude em tempo real</span></li>
+                <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">•</span><span>Qualquer cenario interativo</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6 flex items-center space-x-3">
+        <span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/20 text-amber-400">✓</span>
+        <span>Resumo do Modulo</span>
+      </h2>
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Message Batches API oferece 50% de economia para processamento assincrono</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Janela de ate 24 horas sem SLA — inadequado para cenarios interativos ou pre-merge</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Sem suporte a multi-turn tool calling — apenas tarefas single-shot</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">custom_id permite correlacionar resultados com requisicoes originais</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Reenvie apenas itens com falha, nao o lote inteiro</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Criterio de decisao: o resultado pode esperar 24h? Sim = batch, Nao = real-time</span></div>
+      </div>
+      <div class="bg-amber-500/10 rounded-lg border border-amber-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm"><strong class="text-amber-400">Proximo modulo:</strong> 4.6 — Arquiteturas de Revisao Multi-Instancia</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="modulo-4-4.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-amber-400 hover:border-amber-500/30 transition-colors font-medium">← Modulo Anterior</a>
+        <a href="modulo-4-6.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 transition-colors font-medium">Proximo Modulo →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>CCA-Q1 — Claude Certified Architect - 2026</p></div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) { themeToggleDarkIcon.classList.remove('hidden'); html.classList.remove('dark'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

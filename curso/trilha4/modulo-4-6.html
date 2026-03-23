@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 4.6 — Arquiteturas de Revisao Multi-Instancia | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">🏗️</span><span class="font-bold text-lg hidden sm:inline">CCA-Q1</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Arquitetura</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Ferramentas</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Claude Code</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Prompts</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Contexto</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-amber-400 transition-colors">Inicio</a><span>/</span>
+      <a href="index.html" class="hover:text-amber-400 transition-colors">Trilha 4</a><span>/</span>
+      <span class="text-amber-400 font-medium">Modulo 4.6</span>
+    </nav>
+  </div>
+
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-amber-500/20 text-amber-400 text-sm font-semibold rounded-full mb-4">MODULO 4.6</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🔍 Arquiteturas de Revisao Multi-Instancia</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Por que self-review falha, como instancias independentes superam revisao propria, multi-pass por arquivo e cross-file, e scores de confianca.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-amber-400">25</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-amber-400">Inter</div><div class="text-xs text-neutral-400">Intermediario</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-amber-400">T+P</div><div class="text-xs text-neutral-400">Teoria+Pratica</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🪞 Limitacao do Self-Review</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Self-review — pedir para Claude verificar sua propria saida dentro da mesma conversa — parece uma solucao elegante, mas tem uma limitacao fundamental: o modelo retem o contexto de raciocinio que levou a resposta original. Todo o chain-of-thought, as premissas assumidas, e as decisoes intermediarias ainda estao na janela de contexto.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Isso cria um vies de confirmacao estrutural. Claude ve nao apenas a resposta final, mas todo o raciocinio que a justifica. E como pedir a um juiz para revisar sua propria sentenca lendo suas proprias anotacoes — ele tende a concordar consigo mesmo porque o raciocinio original ainda faz sentido do seu ponto de vista.</p>
+
+        <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+          <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">🚨</span> Por Que Self-Review Falha</h3>
+          <p class="text-neutral-300 leading-relaxed">O problema nao e que Claude e incapaz de encontrar erros — e que o <strong class="text-red-400">contexto de raciocinio retido cria vies de confirmacao</strong>. O modelo tende a racionalizar a resposta original em vez de avalia-la criticamente, porque todo o raciocinio que a suporta esta disponivel na mesma janela de contexto.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-3">❌ Self-Review (mesma sessao)</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Raciocinio original visivel na janela</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Vies de confirmacao estrutural</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Tende a concordar consigo mesmo</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Erros sistematicos nao detectados</span></li>
+            </ul>
+          </div>
+          <div class="bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+            <h4 class="font-semibold text-emerald-400 mb-3">✅ Instancia Independente</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>Sem acesso ao raciocinio original</span></li>
+              <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>Avaliacao genuinamente independente</span></li>
+              <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>Pode discordar sem vies</span></li>
+              <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>Detecta erros que a primeira instancia nao ve</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🏆 Instancias Independentes Superam Self-Review</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A solucao para a limitacao do self-review e usar uma segunda instancia de Claude — uma nova chamada de API, com nova sessao, sem contexto da primeira. A instancia revisora recebe apenas: (1) o documento original, (2) a saida produzida pela primeira instancia, e (3) instrucoes de revisao. Ela NAO recebe o raciocinio que levou aquela saida.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Isso permite uma avaliacao genuinamente independente. A instancia revisora avalia a saida com "olhos frescos", pode discordar sem o peso do raciocinio anterior, e frequentemente detecta erros que a primeira instancia nao consegue ver por estar "presa" no proprio raciocinio.</p>
+
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">💡</span> Implementacao Pratica</h3>
+          <p class="text-neutral-300 leading-relaxed">Na pratica, sao <strong class="text-amber-400">duas chamadas de API separadas</strong>: a primeira gera a saida, a segunda (nova sessao, contexto limpo) revisa. O custo dobra, mas a qualidade melhora significativamente — especialmente para tarefas onde erros tem alto custo (financeiro, legal, medico).</p>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📝</span> O Que a Instancia Revisora Recebe</h3>
+          <div class="space-y-3 text-neutral-300 text-sm">
+            <div class="flex items-start space-x-3"><span class="text-emerald-400 font-bold">✓</span><span>Documento original (fonte de verdade)</span></div>
+            <div class="flex items-start space-x-3"><span class="text-emerald-400 font-bold">✓</span><span>Saida da primeira instancia (para verificar)</span></div>
+            <div class="flex items-start space-x-3"><span class="text-emerald-400 font-bold">✓</span><span>Instrucoes especificas de revisao</span></div>
+            <div class="flex items-start space-x-3"><span class="text-red-400 font-bold">✗</span><span>Raciocinio ou chain-of-thought da primeira instancia</span></div>
+            <div class="flex items-start space-x-3"><span class="text-red-400 font-bold">✗</span><span>Historico de conversa da primeira sessao</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📑 Multi-Pass: Per-File e Cross-File</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Revisao multi-pass divide a verificacao em etapas com focos diferentes. O primeiro pass e per-file: cada documento/arquivo e verificado individualmente — os dados extraidos batem com o documento? Os campos estao corretos? O segundo pass e cross-file: verificacao de consistencia entre documentos — os totais de subsidiarias somam ao total da holding? As datas sao consistentes?</p>
+
+        <p class="text-neutral-300 leading-relaxed">Cada pass pode usar uma instancia diferente de Claude com instrucoes especificas para aquele tipo de verificacao. O pass per-file foca em precisao de extracao, enquanto o cross-file foca em consistencia logica. Juntos, eles cobrem dois tipos de erro fundamentalmente diferentes.</p>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-6 flex items-center"><span class="mr-2">📍</span> Passes de Revisao</h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm border border-amber-500/30">1</span>
+                <div class="w-0.5 h-8 bg-amber-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-amber-400 mb-1">Pass Per-File (verificacao local)</h4>
+                <p class="text-neutral-300 text-sm">Cada documento verificado individualmente. Foco: precisao de extracao, campos corretos, valores conferirem com o documento fonte.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/10 text-blue-400 font-bold text-sm border border-blue-500/30">2</span>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">Pass Cross-File (verificacao global)</h4>
+                <p class="text-neutral-300 text-sm">Consistencia entre documentos. Foco: totais que devem bater, datas consistentes, referencias cruzadas corretas entre documentos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">📊 Verificacao com Scores de Confianca</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A instancia revisora pode atribuir scores de confianca a cada campo verificado. Um campo com evidencia clara no documento recebe score alto (0.9-1.0); um campo inferido de contexto indireto recebe score medio (0.5-0.7); um campo que parece fabricado recebe score baixo (0.1-0.3). Esses scores permitem automacao parcial inteligente.</p>
+
+        <p class="text-neutral-300 leading-relaxed">O roteamento baseado em confianca funciona assim: campos com score acima do threshold (ex: 0.85) sao aprovados automaticamente; campos abaixo sao roteados para revisao humana. Isso otimiza o tempo humano — revisores focam apenas nos campos mais incertos, enquanto campos de alta confianca fluem automaticamente.</p>
+
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">💡</span> Roteamento por Confianca</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+            <div class="bg-dark-700 rounded-lg p-4 text-center">
+              <div class="text-2xl font-bold text-emerald-400 mb-1">0.85+</div>
+              <div class="text-xs text-neutral-400">Auto-approve: aprovacao automatica</div>
+            </div>
+            <div class="bg-dark-700 rounded-lg p-4 text-center border border-amber-500/30">
+              <div class="text-2xl font-bold text-amber-400 mb-1">0.5-0.84</div>
+              <div class="text-xs text-neutral-400">Review: revisao humana prioritaria</div>
+            </div>
+            <div class="bg-dark-700 rounded-lg p-4 text-center">
+              <div class="text-2xl font-bold text-red-400 mb-1">&lt;0.5</div>
+              <div class="text-xs text-neutral-400">Flag: requer atencao imediata</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🔗 Segunda Instancia de Claude como Revisor</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Na implementacao pratica, a revisao multi-instancia envolve duas chamadas de API completamente separadas. A primeira chamada gera a saida (extracao, classificacao, etc). A segunda chamada — com nova sessao, sem compartilhamento de contexto — recebe a saida da primeira junto com o documento original e instrucoes de verificacao.</p>
+
+        <p class="text-neutral-300 leading-relaxed">O ponto critico e que a segunda chamada NAO e uma continuacao da primeira conversa. E uma sessao completamente nova. Isso garante que o revisor nao tem acesso ao raciocinio da primeira instancia, eliminando o vies de confirmacao. O custo e 2x o numero de chamadas, mas o ganho de qualidade justifica em cenarios de alto valor.</p>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📝</span> Fluxo de Duas Chamadas</h3>
+          <div class="space-y-4">
+            <div class="bg-dark-700 rounded-lg p-4">
+              <h4 class="text-amber-400 font-semibold text-sm mb-2">Chamada 1 — Extracao</h4>
+              <p class="text-neutral-300 text-xs font-mono">messages: [{"role": "user", "content": "Extraia dados deste documento: {doc}"}]</p>
+              <p class="text-neutral-300 text-xs font-mono">tools: [extract_data], tool_choice: {"type": "tool", "name": "extract_data"}</p>
+            </div>
+            <div class="bg-dark-700 rounded-lg p-4">
+              <h4 class="text-blue-400 font-semibold text-sm mb-2">Chamada 2 — Revisao (nova sessao!)</h4>
+              <p class="text-neutral-300 text-xs font-mono">messages: [{"role": "user", "content": "Verifique esta extracao contra o documento original. Documento: {doc}. Extracao: {output_chamada_1}"}]</p>
+              <p class="text-neutral-300 text-xs font-mono">tools: [review_result], tool_choice: {"type": "tool", "name": "review_result"}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🏗️ Arquitetura Completa de Revisao</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A arquitetura completa de revisao multi-instancia combina todas as pecas: extracao com instancia 1, revisao per-file com instancia 2, revisao cross-file com instancia 3 (opcional), scoring de confianca, roteamento baseado em threshold, e fallback para revisao humana. Cada etapa agrega qualidade ao resultado final.</p>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-6 flex items-center"><span class="mr-2">📍</span> Pipeline Completo</h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm border border-amber-500/30">1</span><div class="w-0.5 h-8 bg-amber-500/30 mt-2"></div></div>
+              <div><h4 class="font-semibold text-amber-400 mb-1">Extracao (Instancia 1)</h4><p class="text-neutral-300 text-sm">Forced tool + schema com nullables + descricoes ricas. Produz extracao inicial.</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm border border-amber-500/30">2</span><div class="w-0.5 h-8 bg-amber-500/30 mt-2"></div></div>
+              <div><h4 class="font-semibold text-amber-400 mb-1">Revisao Per-File (Instancia 2)</h4><p class="text-neutral-300 text-sm">Nova sessao. Recebe doc + saida. Verifica cada campo. Atribui confidence scores.</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/10 text-blue-400 font-bold text-sm border border-blue-500/30">3</span><div class="w-0.5 h-8 bg-amber-500/30 mt-2"></div></div>
+              <div><h4 class="font-semibold text-blue-400 mb-1">Revisao Cross-File (Instancia 3, opcional)</h4><p class="text-neutral-300 text-sm">Verifica consistencia entre documentos. Totais, datas, referencias cruzadas.</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-400 font-bold text-sm border border-emerald-500/30">4</span></div>
+              <div><h4 class="font-semibold text-emerald-400 mb-1">Roteamento e Fallback</h4><p class="text-neutral-300 text-sm">Score >= 0.85: auto-approve. Score < 0.85: revisao humana. Monitoramento end-to-end.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">💡</span> Custo vs Qualidade</h3>
+          <p class="text-neutral-300 leading-relaxed">A arquitetura completa custa 2-3x mais por documento, mas o ganho de qualidade e significativo. Para documentos financeiros, legais ou medicos onde erros tem alto custo, o investimento adicional em revisao multi-instancia <strong class="text-amber-400">se paga na prevencao de um unico erro critico</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6 flex items-center space-x-3">
+        <span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/20 text-amber-400">✓</span>
+        <span>Resumo do Modulo</span>
+      </h2>
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Self-review e limitado pelo vies de confirmacao — o raciocinio original permanece no contexto</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Instancias independentes (nova sessao) superam self-review em deteccao de erros</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Multi-pass combina revisao per-file (precisao) com cross-file (consistencia)</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Scores de confianca permitem roteamento automatico: auto-approve vs revisao humana</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Duas chamadas de API separadas (nao continuacao) garantem independencia do revisor</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Pipeline completo: extracao → revisao per-file → cross-file → scoring → roteamento</span></div>
+      </div>
+      <div class="bg-amber-500/10 rounded-lg border border-amber-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm">
+          <strong class="text-amber-400">Proxima trilha:</strong> Trilha 5 — Gerenciamento de Contexto e Otimizacao
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="modulo-4-5.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-amber-400 hover:border-amber-500/30 transition-colors font-medium">← Modulo Anterior</a>
+        <a href="../trilha5/index.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 transition-colors font-medium">Proxima Trilha →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>CCA-Q1 — Claude Certified Architect - 2026</p></div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) { themeToggleDarkIcon.classList.remove('hidden'); html.classList.remove('dark'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

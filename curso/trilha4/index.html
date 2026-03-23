@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trilha 4 - Engenharia de Prompt e Saida Estruturada | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    /* Light mode overrides */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* Light mode - cores de acento (trilha amber) */
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+    html:not(.dark) .hover\:bg-amber-500\/30:hover { background-color: rgba(217, 119, 6, 0.18); }
+
+    /* Light mode - remove gradientes e cores especiais */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* Light mode - nav */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-16 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="inline-block px-4 py-1.5 bg-amber-500/20 text-amber-400 text-sm font-semibold rounded-full mb-6">TRILHA 4</span>
+      <h1 class="text-4xl sm:text-5xl font-bold mb-4">✍️ Engenharia de Prompt e Saida Estruturada</h1>
+      <p class="text-xl text-neutral-300 mb-2">Tornando a saida do Claude confiavel e consistente</p>
+      <p class="text-neutral-400 max-w-2xl mx-auto mb-8">Few-shot, JSON schema, validacao e arquiteturas de revisao. Domine as tecnicas que garantem saidas previsiveis e estruturadas do Claude.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-amber-400">6</div>
+          <div class="text-xs text-neutral-400">Modulos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-amber-400">36</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-amber-400">~3h</div>
+          <div class="text-xs text-neutral-400">Duracao</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-amber-400">Inter.</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- SECTION 1: Simple Cards Grid -->
+    <h2 class="text-2xl font-bold mb-6">Modulos</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-16">
+
+      <a href="#modulo-4-1" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">4.1</span>
+          <h3 class="font-semibold text-neutral-100">Prompts com Criterios Explicitos</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Criterios explicitos, severidade, falsos positivos, categorias</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-4-2" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">4.2</span>
+          <h3 class="font-semibold text-neutral-100">Few-Shot Prompting</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Exemplos direcionados, consistencia, casos ambiguos, formato</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-4-3" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">4.3</span>
+          <h3 class="font-semibold text-neutral-100">Saida Estruturada com tool_use</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">JSON schemas, tool_choice, campos opcionais, estrutura forcada</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~30 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-4-4" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">4.4</span>
+          <h3 class="font-semibold text-neutral-100">Validacao, Retry e Feedback Loops</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Retry com feedback, detected_pattern, limites, erros especificos</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-4-5" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">4.5</span>
+          <h3 class="font-semibold text-neutral-100">Processamento em Lote (Batch API)</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Message Batches API, economia 50%, custom_id, janela 24h</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~20 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-4-6" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">4.6</span>
+          <h3 class="font-semibold text-neutral-100">Arquiteturas de Revisao Multi-Instancia</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Self-review, instancias independentes, multi-pass, confianca</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+    </div>
+
+    <!-- SECTION 2: Detailed Cards with Expandable Topics -->
+    <h2 class="text-2xl font-bold mb-6">Conteudo Detalhado</h2>
+    <div class="space-y-6">
+
+      <!-- MODULE 4.1 -->
+      <div id="modulo-4-1" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">4.1</span>
+                <h3 class="text-2xl font-bold">Prompts com Criterios Explicitos</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Aprenda por que criterios explicitos superam instrucoes vagas e como definir severidade, lidar com falsos positivos e calibrar categorias de classificacao.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-amber-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 4.1.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Criterios explicitos vs instrucoes vagas</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Criterios explicitos sao regras concretas e mensuráveis incluidas no prompt, como "flagueie se o valor exceder R$10.000" em vez de "flagueie valores altos". Instrucoes vagas como "seja conservador" ou "analise cuidadosamente" deixam a interpretacao aberta, gerando resultados inconsistentes entre chamadas.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">A principal causa de inconsistencia em saidas do Claude e a ambiguidade nos criterios. O exame CCA testa a capacidade de transformar requisitos vagos em criterios explicitos que produzem resultados reproduziveis.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Criterios mensuráveis vs subjetivos, limiares numericos explicitos, definicoes operacionais, eliminacao de ambiguidade, consistencia entre chamadas.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.1.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">O problema de "be conservative"</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Instrucoes como "seja conservador" ou "erre pelo lado da cautela" nao definem um limiar claro. Claude interpreta "conservador" de forma diferente dependendo do contexto, levando a resultados imprevisiveis. Um prompt pode produzir excesso de flags em um caso e omissoes em outro.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Este e um anti-padrao classico testado no CCA. A solucao e substituir adjetivos qualitativos por criterios quantitativos: em vez de "seja conservador", especifique "flagueie transacoes acima de 2x a media historica".</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Ambiguidade de adjetivos qualitativos, inconsistencia entre chamadas, substituicao por limiares numericos, calibracao iterativa, reproducibilidade.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.1.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Falsos positivos e perda de confianca</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Falsos positivos ocorrem quando o sistema flageia itens que nao deveriam ser flagueiados. Em sistemas de classificacao ou revisao, excesso de falsos positivos faz os usuarios perderem confianca e passarem a ignorar os alertas — o efeito "cry wolf" que torna o sistema inutil.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame CCA avalia sua capacidade de projetar prompts que equilibram sensibilidade e especificidade. Entender que falsos positivos destroem a confianca do usuario e fundamental para sistemas de producao.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">False positive rate, efeito cry wolf, erosao de confianca, trade-off precisao vs recall, calibracao de limiares.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.1.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Desabilitar categorias de alto falso positivo</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando uma categoria de classificacao gera consistentemente falsos positivos, a abordagem recomendada e desabilita-la temporariamente enquanto se refina os criterios. E melhor ter menos categorias com alta precisao do que muitas categorias com alertas nao confiaveis.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame testa cenarios onde categorias problematicas devem ser removidas em vez de ajustadas. A estrategia de desabilitar temporariamente e preferivel a manter categorias imprecisas em producao.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Desabilitacao temporaria vs ajuste, precisao por categoria, rollback de categorias, analise de performance por classe, iteracao incremental.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.1.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Severidade especifica com exemplos de codigo</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Em vez de pedir para Claude classificar severidade como "alta/media/baixa", fornecer exemplos concretos de codigo para cada nivel. Por exemplo: "severidade alta = SQL injection sem sanitizacao", "severidade media = variavel nao utilizada em funcao critica", "severidade baixa = formatacao inconsistente".</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Definicoes de severidade sem exemplos sao interpretadas de forma inconsistente. O exame CCA testa a tecnica de ancorar niveis de severidade com exemplos de codigo reais para calibrar o julgamento do modelo.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Ancoragem por exemplo, definicoes operacionais de severidade, calibracao com codigo real, escala consistente, eliminacao de subjetividade.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.1.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Iteracao e refinamento de criterios</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Criterios explicitos nao sao definidos de uma vez — eles sao refinados iterativamente. Analise os resultados, identifique padroes de erro (falsos positivos e negativos), ajuste os limiares e adicione exemplos para casos ambiguos. Cada iteracao melhora a precisao do sistema.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA testa a mentalidade de melhoria continua. Prompts de producao sao documentos vivos que evoluem com base em feedback real, nao artefatos estaticos definidos uma unica vez.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Ciclo de refinamento, analise de erros, ajuste de limiares, adicao de edge cases, versionamento de prompts, metricas de qualidade.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-4-1.html')" class="flex items-center space-x-2 px-4 py-2 bg-amber-500/20 text-amber-400 rounded-lg hover:bg-amber-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 4.2 -->
+      <div id="modulo-4-2" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">4.2</span>
+                <h3 class="text-2xl font-bold">Few-Shot Prompting</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Domine a tecnica mais eficaz para consistencia: exemplos direcionados que demonstram formato, julgamento e tratamento de casos ambiguos.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-amber-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 4.2.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">A tecnica mais eficaz para consistencia</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Few-shot prompting e a inclusao de 2-4 exemplos completos de entrada e saida no prompt. E a tecnica mais eficaz para garantir que Claude produza saidas consistentes em formato e julgamento, superando instrucoes detalhadas sem exemplos.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame CCA reconhece few-shot como a tecnica numero um para consistencia. Quando um sistema produz saidas inconsistentes, a primeira intervencao recomendada e adicionar exemplos ao prompt.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Few-shot vs zero-shot, 2-4 exemplos como sweet spot, demonstracao por exemplo vs instrucao, consistencia de formato e julgamento.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.2.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Demonstrando tratamento de casos ambiguos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Os exemplos mais valiosos no few-shot sao aqueles que demonstram como lidar com casos ambiguos — situacoes onde a resposta correta nao e obvia. Incluir um exemplo de caso limite mostra ao modelo como exercer julgamento, nao apenas seguir regras mecanicas.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Casos ambiguos sao onde a maior inconsistencia ocorre. O CCA testa se voce sabe que exemplos devem priorizar edge cases sobre casos triviais para maximizar o impacto no comportamento do modelo.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Exemplos de edge cases, demonstracao de julgamento, priorizacao de casos ambiguos, calibracao de fronteira de decisao.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.2.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Reducao de alucinacao com exemplos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Few-shot examples reduzem alucinacao ao ancorar o modelo em padroes concretos de resposta. Quando o modelo ve exemplos de "nao sei" ou "dados insuficientes", ele aprende que omitir informacao e aceitavel, reduzindo a tendencia de fabricar dados.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Alucinacao e um risco critico em sistemas de producao. O exame CCA testa como few-shot pode ser usado nao apenas para formato, mas para ensinar ao modelo quando admitir incerteza.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Ancoragem comportamental, exemplos de "nao sei", reducao de fabricacao, demonstracao de honestidade, calibracao de confianca.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.2.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">2-4 exemplos direcionados</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">A quantidade ideal de exemplos e 2-4. Menos de 2 nao estabelece um padrao confiavel; mais de 4 consome tokens excessivamente sem ganho proporcional. Cada exemplo deve ser direcionado — escolhido para cobrir um aspecto diferente do comportamento desejado, nao variantes do mesmo caso.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA testa a eficiencia no uso de tokens. Saber que 2-4 exemplos bem escolhidos superam 10 exemplos redundantes e essencial para sistemas de producao onde cada token conta.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Sweet spot de 2-4 exemplos, diversidade sobre quantidade, custo por token, exemplos complementares, cobertura de cenarios distintos.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.2.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Exemplos mostram o formato desejado</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Exemplos few-shot servem como templates visuais do formato de saida esperado. Em vez de descrever "retorne um JSON com campos X, Y e Z", mostre um JSON completo preenchido. O modelo replica a estrutura exata vista nos exemplos, incluindo indentacao, ordem de campos e convencoes de nomenclatura.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Descrever formatos em texto natural e propenso a ambiguidade. O CCA enfatiza que mostrar e superior a descrever para garantir conformidade de formato.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Template visual, show don't tell, replicacao de estrutura, consistencia de formato, especificacao implicita por exemplo.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.2.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Ensinando julgamento, nao apenas formato</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">O valor maximo do few-shot esta em ensinar julgamento — como Claude deve decidir em situacoes nao triviais. Exemplos que incluem raciocinio ("este caso e severidade media porque X, embora Y sugira alta") transferem criterios de decisao, nao apenas formato de saida.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA testa a diferenca entre few-shot que ensina formato (superficial) vs few-shot que ensina julgamento (profundo). Exemplos com raciocinio explicito produzem decisoes mais consistentes em casos novos.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Raciocinio explicito nos exemplos, transferencia de criterios, chain-of-thought embutido, calibracao de julgamento, generalizacao para casos novos.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-4-2.html')" class="flex items-center space-x-2 px-4 py-2 bg-amber-500/20 text-amber-400 rounded-lg hover:bg-amber-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 4.3 -->
+      <div id="modulo-4-3" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">4.3</span>
+                <h3 class="text-2xl font-bold">Saida Estruturada com tool_use</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Use tool_use com JSON schemas para garantir saida estruturada e confiavel. Entenda tool_choice, campos opcionais e a diferenca entre estrutura sintatica e semantica.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-amber-400 font-bold">~30 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 4.3.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">tool_use + JSON schemas = saida mais confiavel</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">A combinacao de tool_use com JSON schemas e o metodo mais confiavel para obter saida estruturada de Claude. Em vez de pedir "retorne um JSON", voce define uma ferramenta com input_schema que especifica exatamente a estrutura esperada. Claude retorna os dados como parametros da ferramenta, garantindo conformidade com o schema.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA posiciona tool_use como a abordagem padrao para saida estruturada. Outras tecnicas (como pedir JSON no prompt) sao menos confiaveis e propensas a erros de formatacao.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Tool_use como mecanismo de saida, input_schema JSON, conformidade automatica, eliminacao de erros de parsing, estrutura garantida.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.3.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Opcoes de tool_choice</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">O parametro tool_choice controla como Claude seleciona ferramentas: "auto" (padrao, Claude decide), "any" (Claude deve usar alguma ferramenta), ou {"type": "tool", "name": "X"} (forca uma ferramenta especifica). Para saida estruturada, forcar a ferramenta garante que Claude sempre retorne no formato desejado.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame CCA testa quando usar cada opcao de tool_choice. Forcar uma ferramenta e essencial para pipelines onde a saida estruturada e obrigatoria, enquanto "auto" e melhor para agentes que precisam decidir.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">tool_choice: auto, any, tool com name, forcagem de ferramenta, garantia de formato, trade-off autonomia vs estrutura.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.3.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Schemas eliminam erros de sintaxe, nao semanticos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">JSON schemas garantem que a saida seja sintaticamente valida (campos corretos, tipos corretos), mas NAO garantem correcao semantica. Um campo "revenue" pode ter o tipo "number" correto mas conter o valor errado. Schemas previnem erros de parsing, nao erros de raciocinio.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">E um erro comum assumir que saida estruturada = saida correta. O CCA testa essa distincao critica: schemas resolvem problemas de formato, mas voce ainda precisa de validacao semantica separada.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Correcao sintatica vs semantica, validacao de tipo vs valor, limitacoes de schemas, necessidade de validacao adicional, erros de raciocinio vs formato.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.3.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Campos opcionais e nullable para dados ausentes</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando alguns dados podem nao existir no documento fonte, o schema deve usar campos opcionais (fora do "required") ou tipos nullable. Isso permite que Claude sinalize "dado nao encontrado" em vez de ser forcado a fabricar um valor para preencher um campo obrigatorio.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Campos required sem alternativa nullable forcam alucinacao — Claude inventa dados para satisfazer o schema. O CCA testa o design de schemas que acomodam dados ausentes sem incentivar fabricacao.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Optional vs required, tipos nullable, prevencao de alucinacao por schema, design de schema defensivo, sinalizacao de dados ausentes.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.3.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Forced tool para estrutura garantida</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Forcar uma ferramenta especifica via tool_choice garante que Claude sempre retorne dados na estrutura definida pelo schema. Essa tecnica e usada em pipelines de extracao onde a saida precisa ser processada programaticamente — cada chamada retorna exatamente os campos esperados.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Em pipelines de producao, saida inconsistente quebra o processamento downstream. O CCA testa quando usar forced tool vs auto, considerando que forced tool impede Claude de decidir que a ferramenta nao e necessaria.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Forced tool via tool_choice, pipeline de extracao, saida deterministica, limitacao da autonomia do modelo, trade-off estrutura vs flexibilidade.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.3.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Descricoes de campos no schema</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Cada campo no JSON schema pode incluir uma propriedade "description" que orienta Claude sobre o que colocar naquele campo. Descricoes como "revenue_usd: receita anual em dolares americanos, extrair do demonstrativo de resultados" sao instrucoes embutidas no schema que guiam a extracao.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Descricoes de campos sao uma forma subestimada de engenharia de prompt. O CCA testa a combinacao de schemas com descricoes ricas para maximizar a precisao de extracao.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Propriedade description no schema, instrucoes embutidas, orientacao por campo, combinacao schema + prompt, precisao de extracao.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-4-3.html')" class="flex items-center space-x-2 px-4 py-2 bg-amber-500/20 text-amber-400 rounded-lg hover:bg-amber-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 4.4 -->
+      <div id="modulo-4-4" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">4.4</span>
+                <h3 class="text-2xl font-bold">Validacao, Retry e Feedback Loops</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Implemente loops de validacao com feedback especifico, entenda quando retries funcionam e quando falham, e aprenda a detectar padroes de erro.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-amber-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 4.4.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Retry com feedback de erro especifico</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando a saida de Claude falha na validacao, o retry eficaz inclui feedback especifico sobre o que esta errado — nao apenas "tente novamente". Feedback como "o campo revenue retornou 0, mas o documento na pagina 3 mostra receita de R$4.2M" permite que Claude corrija o erro especifico.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Retries sem feedback especifico frequentemente produzem o mesmo erro. O CCA testa a tecnica de incluir informacao diagnostica no retry para maximizar a taxa de correcao.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Feedback especifico vs generico, diagnostico no retry, taxa de correcao, informacao contextual, loop de correcao.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.4.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Retries ineficazes quando info ausente na fonte</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Retries sao ineficazes quando a informacao nao existe no documento fonte. Se o dado nao esta no texto fornecido, Claude nao conseguira extraí-lo independentemente de quantas vezes voce tente. Neste caso, retries desperdicam tokens e podem forcar Claude a alucinar um valor.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Saber quando parar de fazer retry e tao importante quanto saber quando fazer. O CCA testa a capacidade de distinguir entre erros corrigiveis (extracao incorreta) e impossibilidades (dado ausente na fonte).</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Distincao erro vs ausencia, retry futeis, risco de alucinacao forcada, limites de retry, fallback para null/ausente.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.4.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Campo detected_pattern para diagnostico</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Incluir um campo como "detected_pattern" ou "reasoning" no schema permite que Claude explique seu raciocinio junto com os dados extraidos. Isso facilita o diagnostico: se o valor extraido esta errado, voce pode ver o raciocinio que levou ao erro e ajustar o prompt de acordo.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Campos de diagnostico transformam saidas opacas em saidas depuraveis. O CCA testa a pratica de incluir campos de raciocinio que facilitam a identificacao e correcao de erros sistematicos.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Campos de diagnostico, raciocinio explicito, depuracao de extracao, auditoria de decisoes, transparencia do modelo.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.4.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Feedback especifico: "revenue era 0 mas doc diz 4.2M"</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">O padrao ouro de feedback de retry inclui tres elementos: o valor retornado ("revenue era 0"), a evidencia correta ("o documento na pagina 3 mostra 4.2M"), e a instrucao especifica ("extraia o valor correto do demonstrativo de resultados"). Essa combinacao maximiza a taxa de correcao.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA testa a formulacao de feedback de retry. A combinacao valor-errado + evidencia-correta + instrucao-especifica e o padrao que o exame espera como resposta ideal para loops de correcao.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Triade valor-evidencia-instrucao, feedback acionavel, maximizacao de taxa de correcao, referencia a fonte, correcao guiada.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.4.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Saber quando parar de fazer retry</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Definir limites de retry e criterios de abandono e essencial. Se apos 2-3 tentativas com feedback especifico o erro persiste, o problema provavelmente nao e corrigivel por retry — pode ser ambiguidade no documento, dado ausente, ou limitacao do modelo. Neste ponto, escalar para revisao humana ou marcar como incerto.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Retries infinitos sao caros e podem degradar a qualidade (Claude comeca a adivinhar). O CCA testa a capacidade de definir limites pragmaticos e rotas de fallback para casos nao resolvidos.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Limite de 2-3 retries, criterios de abandono, escalacao para humano, marcacao de incerteza, custo cumulativo de retries.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.4.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Pipeline de validacao completo</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Um pipeline de validacao completo combina: extracao inicial com tool_use, validacao programatica (tipos, ranges, regras de negocio), retry com feedback especifico para erros detectados, limite de tentativas, e fallback para revisao humana ou marcacao de incerteza. Cada etapa tem criterios claros de passagem.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA testa a arquitetura completa de validacao, nao apenas tecnicas isoladas. Saber montar o pipeline end-to-end com cada etapa corretamente configurada e essencial para sistemas de producao.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Pipeline end-to-end, extracao → validacao → retry → fallback, criterios de passagem, orquestracao de etapas, monitoramento de qualidade.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-4-4.html')" class="flex items-center space-x-2 px-4 py-2 bg-amber-500/20 text-amber-400 rounded-lg hover:bg-amber-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 4.5 -->
+      <div id="modulo-4-5" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">4.5</span>
+                <h3 class="text-2xl font-bold">Processamento em Lote (Batch API)</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Aproveite a Message Batches API para economia de 50%, entenda a janela de 24 horas, limitacoes e estrategias de correlacao e reenvio.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-amber-400 font-bold">~20 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 4.5.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Message Batches API e economia de 50%</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">A Message Batches API permite enviar multiplas requisicoes de uma vez para processamento assincrono, com desconto de 50% no preco por token. Em vez de chamar a API uma vez por documento, voce envia um lote inteiro e recebe os resultados quando estiverem prontos.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Para workloads de alto volume (extracao de centenas de documentos, classificacao em massa), a Batch API reduz custos pela metade. O CCA testa quando usar batch vs real-time e como dimensionar lotes.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Message Batches API, desconto de 50%, processamento assincrono, lotes de requisicoes, economia em escala.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.5.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Janela de 24 horas e sem SLA de latencia</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Resultados de batch sao entregues dentro de uma janela de ate 24 horas, sem garantia de latencia especifica. A maioria dos lotes completa em minutos a horas, mas nao ha SLA. Isso torna batch inadequado para cenarios que exigem resposta imediata, como revisao pre-merge em CI/CD.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA testa a capacidade de identificar quando batch e inadequado. Cenarios que exigem feedback rapido (pre-merge checks, chat interativo) devem usar a API sincrona mesmo com custo maior.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Janela de 24h, sem SLA de latencia, inadequado para real-time, trade-off custo vs velocidade, planejamento de pipeline.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.5.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Batch nao suporta pre-merge e multi-turn</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">A Batch API nao suporta tool calling multi-turn — cada requisicao no lote e uma chamada unica sem continuacao. Isso significa que workflows agenticos (loop com multiplas chamadas de ferramenta) nao podem ser executados em batch. Tambem nao e adequada para pre-merge checks que precisam de feedback antes do merge.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA testa limitacoes especificas da Batch API. Saber que nao suporta multi-turn tool calling e essencial para evitar arquiteturas invalidas.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Sem multi-turn tool calling, chamada unica por requisicao, inadequado para agentes, inadequado para pre-merge, single-shot extraction.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.5.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">custom_id para correlacao de resultados</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Cada requisicao no lote pode incluir um custom_id que e retornado no resultado, permitindo correlacionar qual resultado pertence a qual requisicao original. Por exemplo, usar o ID do documento como custom_id permite mapear resultados de volta para os documentos processados.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Sem custom_id, correlacionar resultados com requisicoes em lotes grandes se torna impossivel. O CCA testa a pratica de incluir IDs de correlacao para rastreabilidade.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">custom_id como correlator, rastreabilidade de resultados, mapeamento requisicao-resultado, IDs de documento, processamento pos-batch.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.5.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Reenviar apenas itens com falha</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando um lote completa, alguns itens podem ter falhado (erro de API, timeout, etc). A estrategia correta e reenviar apenas os itens com falha em um novo lote, nao reprocessar o lote inteiro. O custom_id permite identificar quais itens precisam de reenvio.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Reprocessar lotes inteiros por causa de falhas parciais desperdicam recursos. O CCA testa a estrategia de reenvio seletivo como pratica padrao para batch processing.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Reenvio seletivo, identificacao de falhas por custom_id, novo lote com itens falhados, eficiencia de reprocessamento, idempotencia.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.5.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Quando usar Batch vs Real-time</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Use Batch para: extracao em massa, classificacao de backlog, analise de documentos historicos. Use Real-time para: interacao com usuario, pre-merge checks, agentes com tool calling, qualquer cenario que exija resposta em segundos. A decisao principal e: o resultado pode esperar ate 24 horas?</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA apresenta cenarios e pede para escolher entre batch e real-time. Saber aplicar o criterio de latencia vs custo e fundamental para arquitetar sistemas eficientes.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Criterio de latencia, batch para background, real-time para interativo, custo vs velocidade, dimensionamento de workload.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-4-5.html')" class="flex items-center space-x-2 px-4 py-2 bg-amber-500/20 text-amber-400 rounded-lg hover:bg-amber-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 4.6 -->
+      <div id="modulo-4-6" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">4.6</span>
+                <h3 class="text-2xl font-bold">Arquiteturas de Revisao Multi-Instancia</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Entenda por que self-review e limitado, como instancias independentes melhoram a qualidade, e como implementar revisao multi-pass com scores de confianca.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-amber-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 4.6.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Limitacao do self-review</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Self-review — pedir para Claude revisar sua propria saida na mesma conversa — e limitado porque o modelo retem o contexto de raciocinio que levou a resposta original. Isso cria um vies de confirmacao: Claude tende a concordar consigo mesmo pois o raciocinio original ainda esta na janela de contexto.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA testa a compreensao de que self-review tem eficacia reduzida comparado a revisao por instancia independente. E um erro comum assumir que pedir "revise sua resposta" e suficiente para controle de qualidade.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Vies de confirmacao, contexto de raciocinio retido, limitacao de self-review, independencia de revisao, mesma sessao vs nova sessao.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.6.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Instancias independentes superam self-review</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Usar uma segunda instancia de Claude (nova sessao, sem contexto da primeira) para revisar a saida produz resultados significativamente melhores. A instancia revisora ve apenas a saida + o documento original, sem o raciocinio que levou aquela saida, eliminando o vies de confirmacao.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA recomenda instancias independentes como padrao para revisao de qualidade. O exame testa cenarios onde self-review e apresentado como opcao e a resposta correta e usar instancia separada.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Instancia revisora independente, eliminacao de vies, contexto limpo, revisao sem raciocinio original, custo adicional justificado.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.6.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Multi-pass: por arquivo e cross-file</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Revisao multi-pass divide a verificacao em etapas: primeiro, revisao por arquivo (cada arquivo/documento e verificado individualmente), depois revisao cross-file (verificacao de consistencia entre arquivos, como totais que devem bater). Cada pass usa criterios diferentes e pode usar instancias diferentes.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Revisao single-pass perde inconsistencias entre documentos. O CCA testa arquiteturas multi-pass que combinam verificacao local e global para maximizar a deteccao de erros.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Revisao per-file, revisao cross-file, consistencia entre documentos, passes sequenciais, criterios diferenciados por pass.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.6.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Verificacao com scores de confianca</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">A instancia revisora pode atribuir scores de confianca a cada campo verificado (ex: "confidence": 0.95 para campos com evidencia clara, 0.4 para campos inferidos). Esses scores permitem roteamento automatico: alta confianca passa direto, baixa confianca vai para revisao humana.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Scores de confianca permitem automacao parcial com seguranca. O CCA testa a arquitetura de roteamento baseado em confianca para otimizar o balanco entre automacao e revisao humana.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Confidence scores, roteamento por confianca, threshold de automacao, revisao humana seletiva, calibracao de scores.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.6.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Segunda instancia de Claude como revisor</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">Na pratica, a implementacao envolve: (1) primeira chamada de API gera a saida, (2) segunda chamada de API (nova sessao) recebe a saida + documento original + instrucoes de revisao. A segunda instancia nao tem acesso ao raciocinio da primeira, verificando a saida de forma independente.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA testa a implementacao pratica de revisao multi-instancia. Saber que sao duas chamadas de API separadas (nao continuacao da mesma conversa) e essencial para a arquitetura correta.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Duas chamadas de API separadas, contexto limpo para revisor, instrucoes de revisao especificas, custo de 2x chamadas, ganho de qualidade.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 4.6.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-amber-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Arquitetura completa de revisao</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-amber-400 font-semibold">O que e:</span> <span class="text-neutral-300">A arquitetura completa combina: extracao com instancia 1, revisao per-file com instancia 2, revisao cross-file com instancia 3, scoring de confianca, roteamento (auto-approve ou humano), e retry para itens de baixa confianca. Cada etapa agrega qualidade ao resultado final.</span></div>
+                <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O CCA testa a visao sistemica de revisao multi-instancia. Saber conectar as pecas — extracao, revisao, scoring, roteamento — em uma arquitetura coerente e essencial para sistemas de alta qualidade.</span></div>
+                <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Pipeline extracao → revisao → scoring → roteamento, multiplas instancias, custo vs qualidade, automacao parcial com oversight humano, monitoramento end-to-end.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-4-6.html')" class="flex items-center space-x-2 px-4 py-2 bg-amber-500/20 text-amber-400 rounded-lg hover:bg-amber-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="module-modal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="absolute inset-4 sm:inset-8 lg:inset-16 bg-dark-900 rounded-2xl border border-dark-600 overflow-hidden flex flex-col">
+      <div class="flex items-center justify-between p-4 border-b border-dark-700">
+        <span class="text-neutral-400 text-sm">Modulo Completo</span>
+        <button onclick="closeModal()" class="p-2 hover:bg-dark-700 rounded-lg transition-colors">
+          <svg class="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <iframe id="modal-iframe" class="flex-1 w-full" src="" frameborder="0"></iframe>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    // Toggle topic explanation
+    function toggleTopic(button) {
+      const explanation = button.nextElementSibling;
+      const arrow = button.querySelector('svg');
+      explanation.classList.toggle('active');
+      arrow.classList.toggle('rotate-180');
+    }
+
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Modal
+    function openModal(src) {
+      const modal = document.getElementById('module-modal');
+      const iframe = document.getElementById('modal-iframe');
+      iframe.src = src;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('module-modal');
+      const iframe = document.getElementById('modal-iframe');
+      modal.classList.add('hidden');
+      iframe.src = '';
+      document.body.style.overflow = '';
+    }
+
+    // ESC to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+
+</body>
+</html>

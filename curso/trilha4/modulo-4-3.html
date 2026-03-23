@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 4.3 — Saida Estruturada com tool_use | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Arquitetura</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Ferramentas</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Claude Code</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Prompts</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Contexto</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-amber-400 transition-colors">Inicio</a><span>/</span>
+      <a href="index.html" class="hover:text-amber-400 transition-colors">Trilha 4</a><span>/</span>
+      <span class="text-amber-400 font-medium">Modulo 4.3</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-amber-500/20 text-amber-400 text-sm font-semibold rounded-full mb-4">MODULO 4.3</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🔧 Saida Estruturada com tool_use</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">O metodo mais confiavel para saida estruturada. JSON schemas, tool_choice, campos opcionais e a distincao critica entre correcao sintatica e semantica.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-amber-400">30</div><div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-amber-400">Inter</div><div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-amber-400">T+P</div><div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🔗 tool_use + JSON Schemas = Saida Mais Confiavel</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A combinacao de tool_use com JSON schemas e o metodo mais confiavel para obter saida estruturada de Claude. Em vez de pedir "retorne um JSON" no prompt (o que pode falhar com markdown, texto extra, ou formatacao inconsistente), voce define uma ferramenta cujo input_schema especifica exatamente a estrutura esperada.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Quando Claude "chama" essa ferramenta, os argumentos sao automaticamente formatados de acordo com o schema. O resultado e JSON valido, com os campos corretos e tipos esperados — sem necessidade de parsing manual ou limpeza de formatacao. Isso elimina uma classe inteira de bugs de integracao.</p>
+
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Tool_use nao e apenas para chamar ferramentas externas — e o <strong class="text-amber-400">mecanismo padrao para saida estruturada</strong>. Defina uma ferramenta "ficticia" cujo unico proposito e forcar Claude a retornar dados no formato do schema. Os dados vem como argumentos da ferramenta, nao como texto livre.</p>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📝</span> Exemplo: Ferramenta de Extracao</h3>
+          <div class="bg-dark-700 rounded-lg p-4 text-sm font-mono text-neutral-300">
+            <p class="text-amber-400">// Definicao da ferramenta</p>
+            <p>{"name": "extract_financial_data",</p>
+            <p>&nbsp;"description": "Extrai dados financeiros do documento",</p>
+            <p>&nbsp;"input_schema": {</p>
+            <p>&nbsp;&nbsp;"type": "object",</p>
+            <p>&nbsp;&nbsp;"properties": {</p>
+            <p>&nbsp;&nbsp;&nbsp;"revenue": {"type": "number"},</p>
+            <p>&nbsp;&nbsp;&nbsp;"net_income": {"type": ["number", "null"]},</p>
+            <p>&nbsp;&nbsp;&nbsp;"currency": {"type": "string", "enum": ["USD","BRL","EUR"]}</p>
+            <p>&nbsp;&nbsp;},</p>
+            <p>&nbsp;&nbsp;"required": ["revenue", "currency"]</p>
+            <p>&nbsp;}}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">⚙️ Opcoes de tool_choice</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O parametro tool_choice controla como Claude seleciona ferramentas. Existem tres opcoes principais, cada uma com casos de uso distintos. A escolha correta depende de se voce quer que Claude decida se precisa de uma ferramenta (auto), use alguma ferramenta obrigatoriamente (any), ou use uma ferramenta especifica (tool).</p>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-6 flex items-center"><span class="mr-2">📍</span> As 3 Opcoes de tool_choice</h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm border border-amber-500/30">1</span>
+                <div class="w-0.5 h-8 bg-amber-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-amber-400 mb-1">tool_choice: "auto" (padrao)</h4>
+                <p class="text-neutral-300 text-sm">Claude decide se quer usar uma ferramenta ou responder com texto. Ideal para agentes que precisam de autonomia de decisao.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm border border-amber-500/30">2</span>
+                <div class="w-0.5 h-8 bg-amber-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-amber-400 mb-1">tool_choice: "any"</h4>
+                <p class="text-neutral-300 text-sm">Claude DEVE usar alguma ferramenta, mas pode escolher qual. Util quando voce tem multiplas ferramentas de saida e quer que Claude selecione a mais adequada.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-400 font-bold text-sm border border-emerald-500/30">3</span>
+              </div>
+              <div>
+                <h4 class="font-semibold text-emerald-400 mb-1">tool_choice: {"type": "tool", "name": "X"} (recomendado para saida estruturada)</h4>
+                <p class="text-neutral-300 text-sm">Forca Claude a usar a ferramenta especifica. Garante que toda chamada retorna dados no formato definido pelo schema. Ideal para pipelines de extracao.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">⚠️ Schemas Eliminam Erros de Sintaxe, Nao Semanticos</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Uma distincao critica: JSON schemas garantem correcao sintatica (formato valido, campos presentes, tipos corretos), mas NAO garantem correcao semantica (valores corretos). Um schema pode garantir que o campo "revenue" seja um numero, mas nao pode garantir que esse numero seja a receita correta extraida do documento.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Isso significa que schemas resolvem o problema de parsing (voce nunca recebe JSON malformado), mas voce ainda precisa de validacao semantica separada para verificar se os valores fazem sentido. Por exemplo, validar que a receita nao e negativa, que datas estao no range correto, ou que totais somam corretamente.</p>
+
+        <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+          <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">🚨</span> Armadilha Comum</h3>
+          <p class="text-neutral-300 leading-relaxed">Assumir que <strong class="text-red-400">saida estruturada = saida correta</strong> e um erro perigoso. O schema garante que voce recebe {"revenue": number}, mas o valor pode ser 0 quando deveria ser 4.2M. Sempre implemente validacao semantica alem do schema.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+            <h4 class="font-semibold text-emerald-400 mb-3">✅ O que schemas resolvem</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>JSON sempre valido e parseable</span></li>
+              <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>Campos obrigatorios sempre presentes</span></li>
+              <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>Tipos corretos (string, number, etc)</span></li>
+              <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">•</span><span>Valores enum restritos a opcoes validas</span></li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-3">❌ O que schemas NAO resolvem</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Valor correto no campo (semantica)</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Consistencia entre campos relacionados</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Dados fabricados vs extraidos</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Regras de negocio complexas</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔓 Campos Opcionais e Nullable para Dados Ausentes</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O design do schema tem impacto direto na qualidade da extracao. Se todos os campos sao required e nao aceitam null, Claude e forcado a preencher cada campo — mesmo quando o dado nao existe no documento. Isso incentiva alucinacao: o modelo inventa um valor para satisfazer o schema.</p>
+
+        <p class="text-neutral-300 leading-relaxed">A solucao e usar campos opcionais (fora do array "required") ou tipos nullable (usando <code class="bg-dark-700 px-2 py-0.5 rounded text-amber-400 text-sm">"type": ["number", "null"]</code>). Isso permite que Claude sinalize "este dado nao foi encontrado" retornando null, em vez de fabricar um valor. Combine com few-shot que demonstre o comportamento de retornar null.</p>
+
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">💡</span> Design Defensivo de Schema</h3>
+          <p class="text-neutral-300 leading-relaxed">Marque como <strong class="text-amber-400">required apenas campos que SEMPRE existem</strong> no tipo de documento processado. Todos os outros campos devem ser opcionais ou nullable. Isso e especialmente importante em extracao de documentos nao padronizados onde campos podem estar ausentes.</p>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📝</span> Schema Defensivo vs Rigido</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-dark-700 rounded-lg p-4">
+              <h4 class="text-red-400 font-semibold text-sm mb-2">Schema Rigido (forca alucinacao):</h4>
+              <p class="text-neutral-300 text-xs font-mono">"required": ["revenue", "net_income", "employees", "founded_year"]</p>
+            </div>
+            <div class="bg-dark-700 rounded-lg p-4">
+              <h4 class="text-emerald-400 font-semibold text-sm mb-2">Schema Defensivo (permite nulls):</h4>
+              <p class="text-neutral-300 text-xs font-mono">"required": ["revenue"]<br>"net_income": {"type": ["number", "null"]}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🎯 Forced Tool para Estrutura Garantida</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando sua pipeline requer saida estruturada em 100% das chamadas, use tool_choice com o tipo "tool" e o nome da ferramenta especifica. Isso forca Claude a sempre "chamar" a ferramenta, garantindo que a saida seja no formato do schema. Claude nao pode decidir responder com texto livre em vez de dados estruturados.</p>
+
+        <p class="text-neutral-300 leading-relaxed">O trade-off e que Claude perde a capacidade de dizer "nao consigo extrair esses dados" em texto livre. A solucao e incluir um campo como "extraction_status" no schema com opcoes como "success", "partial", "failed", permitindo que Claude sinalize problemas dentro do formato estruturado.</p>
+
+        <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">📊</span> Quando Usar Forced Tool</h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">•</span><span><strong>Pipeline de extracao:</strong> Cada documento deve produzir exatamente um JSON com os campos definidos</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">•</span><span><strong>Classificacao em massa:</strong> Cada item deve receber exatamente uma classificacao estruturada</span></li>
+            <li class="flex items-start space-x-2"><span class="text-blue-400 mt-0.5">•</span><span><strong>Processamento downstream:</strong> O proximo passo da pipeline espera um formato fixo</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">📝 Descricoes de Campos no Schema</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A propriedade "description" em cada campo do JSON schema funciona como instrucao embutida. Claude le essas descricoes e as usa para guiar a extracao. Uma descricao como "revenue_usd: receita total anual em dolares americanos, extrair da linha 'Total Revenue' do demonstrativo de resultados" e muito mais eficaz do que apenas "revenue_usd: number".</p>
+
+        <p class="text-neutral-300 leading-relaxed">Descricoes ricas sao uma forma de engenharia de prompt que muitos desenvolvedores subestimam. Elas permitem especificar nao apenas o que extrair, mas de onde extrair, como formatar, e como lidar com ambiguidade — tudo dentro do schema que ja define a estrutura.</p>
+
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">💡</span> Descricoes como Instrucoes</h3>
+          <p class="text-neutral-300 leading-relaxed">Descricoes de campos sao <strong class="text-amber-400">engenharia de prompt embutida no schema</strong>. Use-as para especificar: fonte do dado, formato esperado, unidade de medida, tratamento de ambiguidade, e valor padrao quando ausente. Quanto mais rica a descricao, mais precisa a extracao.</p>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📝</span> Descricoes Ricas vs Pobres</h3>
+          <div class="space-y-3">
+            <div class="bg-red-500/10 rounded-lg border border-red-500/30 p-4">
+              <h4 class="text-red-400 font-semibold text-sm mb-1">Pobre:</h4>
+              <p class="text-neutral-300 text-xs font-mono">"revenue": {"type": "number"}</p>
+            </div>
+            <div class="bg-emerald-500/10 rounded-lg border border-emerald-500/30 p-4">
+              <h4 class="text-emerald-400 font-semibold text-sm mb-1">Rica:</h4>
+              <p class="text-neutral-300 text-xs font-mono">"revenue": {"type": ["number", "null"], "description": "Receita total anual em USD. Extrair da linha 'Total Revenue' ou 'Net Sales' do Income Statement. Se multiplos periodos, usar o mais recente. Retornar null se nao encontrado."}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6 flex items-center space-x-3">
+        <span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/20 text-amber-400">✓</span>
+        <span>Resumo do Modulo</span>
+      </h2>
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">tool_use + JSON schema e o metodo mais confiavel para saida estruturada</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">tool_choice com tipo "tool" forca saida estruturada em 100% das chamadas</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Schemas garantem correcao sintatica, NAO semantica — validacao adicional e necessaria</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Campos nullable previnem alucinacao quando dados estao ausentes</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Forced tool garante formato mas requer campo de status para sinalizar falhas</span></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold text-lg">✓</span><span class="text-neutral-300">Descricoes ricas de campos funcionam como engenharia de prompt embutida no schema</span></div>
+      </div>
+      <div class="bg-amber-500/10 rounded-lg border border-amber-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm"><strong class="text-amber-400">Proximo modulo:</strong> 4.4 — Validacao, Retry e Feedback Loops</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="modulo-4-2.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-amber-400 hover:border-amber-500/30 transition-colors font-medium">← Modulo Anterior</a>
+        <a href="modulo-4-4.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 transition-colors font-medium">Proximo Modulo →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>CCA-Q1 — Claude Certified Architect - 2026</p></div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) { themeToggleDarkIcon.classList.remove('hidden'); html.classList.remove('dark'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

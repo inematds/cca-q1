@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 4.1 — Prompts com Criterios Explicitos | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* Light mode - amber accent */
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-amber-400 { color: #92400e; }
+
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13, 148, 136, 0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13, 148, 136, 0.25); }
+
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .bg-red-500\/20 { background-color: rgba(220, 38, 38, 0.12); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+
+    /* Light mode - remove gradientes e cores especiais */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* Light mode - nav */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-amber-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-amber-400 transition-colors">Trilha 4</a>
+      <span>/</span>
+      <span class="text-amber-400 font-medium">Modulo 4.1</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-amber-500/20 text-amber-400 text-sm font-semibold rounded-full mb-4">MODULO 4.1</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📋 Prompts com Criterios Explicitos</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Criterios explicitos superam instrucoes vagas. Aprenda a eliminar ambiguidade, definir severidade com exemplos e gerenciar falsos positivos.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-amber-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-amber-400">25</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-amber-400">Inter</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-amber-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- ==================== TOPIC 1 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">📋 Criterios Explicitos vs Instrucoes Vagas</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A diferenca mais impactante na engenharia de prompt e entre criterios explicitos e instrucoes vagas. Um prompt com "analise cuidadosamente os dados" produz resultados imprevisiveis porque "cuidadosamente" nao tem definicao operacional. Ja um prompt com "flagueie transacoes acima de R$10.000 ou com variacao superior a 200% da media mensal" produz resultados consistentes e verificaveis.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Criterios explicitos sao regras concretas, mensuráveis e nao ambiguas. Eles transformam o julgamento subjetivo do modelo em aplicacao de regras objetivas. Isso nao elimina a capacidade de raciocinio de Claude — apenas ancora esse raciocinio em parametros bem definidos, reduzindo a variancia entre chamadas.</p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Criterios explicitos substituem adjetivos subjetivos por <strong class="text-amber-400">regras mensuráveis e verificaveis</strong>. Em vez de "seja conservador", especifique os limiares exatos. Em vez de "analise cuidadosamente", defina quais campos verificar e quais condicoes flagueiar. A consistencia vem da precisao dos criterios.</p>
+        </div>
+
+        <!-- Grid Fazer vs Evitar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+            <h4 class="font-semibold text-emerald-400 mb-4 flex items-center">
+              <span class="mr-2">✅</span> Criterios Explicitos
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>"Flagueie se revenue > R$10.000 e margem < 5%"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>"Classifique como alta severidade: SQL injection, XSS, RCE"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>"Retorne null se o campo nao existir no documento"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>"Ignore warnings de formatacao, foque em erros logicos"</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center">
+              <span class="mr-2">❌</span> Instrucoes Vagas
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>"Seja conservador na analise"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>"Classifique a severidade adequadamente"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>"Extraia os dados relevantes"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>"Analise cuidadosamente todos os aspectos"</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 2 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">⚠️ O Problema de "Be Conservative"</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Instrucoes como "seja conservador" sao um dos anti-padroes mais comuns e mais perigosos em engenharia de prompt. O problema fundamental e que "conservador" nao tem uma definicao operacional unica — em contextos diferentes, Claude interpreta essa instrucao de formas diferentes, gerando inconsistencia sistematica.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Em um sistema de deteccao de fraude, "seja conservador" pode significar "flagueie mais itens para nao perder fraudes reais" (mais falsos positivos) ou "so flagueie quando tiver certeza para nao incomodar clientes legitimos" (menos falsos positivos). Ambas as interpretacoes sao razoáveis, mas produzem comportamentos opostos.</p>
+
+        <!-- Box Alerta -->
+        <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+          <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center">
+            <span class="mr-2">🚨</span> Anti-Padrao Critico
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Adjetivos qualitativos como "conservador", "cuidadoso", "rigoroso" e "moderado" sao <strong class="text-red-400">ambiguos por natureza</strong>. Substitua-os por limiares numericos: em vez de "seja conservador com gastos altos", especifique "flagueie gastos acima de R$5.000 ou acima de 3x a media dos ultimos 6 meses".</p>
+        </div>
+
+        <!-- Box Dados -->
+        <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">📊</span> Impacto na Pratica
+          </h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Inconsistencia:</strong> A mesma instrucao vaga produz resultados diferentes em chamadas consecutivas</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Irreproducibilidade:</strong> Impossivel debugar quando o criterio e subjetivo</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Desalinhamento:</strong> O modelo interpreta "conservador" diferente do que o desenvolvedor pretendia</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 3 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🎯 Falsos Positivos e Perda de Confianca</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Falsos positivos — itens incorretamente flagueiados como problematicos — sao mais destrutivos para um sistema do que pode parecer. Quando um sistema de revisao gera muitos falsos positivos, os usuarios desenvolvem "fadiga de alertas" e comecam a ignorar todos os alertas, incluindo os verdadeiros positivos que realmente precisam de atencao.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Este e o efeito "cry wolf": apos serem expostos a muitos alarmes falsos, os usuarios perdem confianca no sistema e param de prestar atencao. O resultado paradoxal e que um sistema que flageia demais acaba sendo menos util do que um que flageia pouco mas com alta precisao.</p>
+
+        <!-- Box Conceito -->
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Equilibrio Precisao vs Recall
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">O trade-off entre precisao (itens flagueiados que sao realmente problemas) e recall (problemas reais que sao detectados) e central para sistemas de classificacao. Para a maioria dos sistemas em producao, <strong class="text-amber-400">precisao alta e mais importante que recall alto</strong> — usuarios confiam mais em poucos alertas corretos do que em muitos alertas duvidosos.</p>
+        </div>
+
+        <!-- Timeline -->
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-6 flex items-center">
+            <span class="mr-2">📉</span> Ciclo de Degradacao de Confianca
+          </h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm border border-amber-500/30">1</span>
+                <div class="w-0.5 h-8 bg-amber-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-amber-400 mb-1">Excesso de Alertas</h4>
+                <p class="text-neutral-300 text-sm">Sistema com criterios vagos gera muitos falsos positivos — itens sao flagueiados sem razao real.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm border border-amber-500/30">2</span>
+                <div class="w-0.5 h-8 bg-amber-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-amber-400 mb-1">Fadiga de Alertas</h4>
+                <p class="text-neutral-300 text-sm">Usuarios percebem que a maioria dos alertas sao falsos e comecam a desconsiderar todos os alertas.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-red-500/20 text-red-400 font-bold text-sm border border-red-500/30">3</span>
+              </div>
+              <div>
+                <h4 class="font-semibold text-red-400 mb-1">Sistema Ignorado</h4>
+                <p class="text-neutral-300 text-sm">Alertas reais passam despercebidos porque o sistema perdeu credibilidade. O investimento no sistema e desperdicado.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 4 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔧 Desabilitar Categorias de Alto Falso Positivo</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando uma categoria de classificacao gera consistentemente falsos positivos, a abordagem mais pragmatica e desabilita-la temporariamente. E contraintuitivo — parece que voce esta reduzindo a capacidade do sistema — mas na verdade voce esta aumentando a confianca geral ao remover ruido.</p>
+
+        <p class="text-neutral-300 leading-relaxed">A estrategia recomendada e: monitore a taxa de falso positivo por categoria, desabilite categorias que ultrapassem um limiar aceitavel (por exemplo, >30% de falsos positivos), refine os criterios da categoria offline usando exemplos reais de erros, e reabilite quando a precisao estiver acima do limiar.</p>
+
+        <!-- Box Estrategia -->
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center">
+            <span class="mr-2">🔧</span> Estrategia de Refinamento
+          </h3>
+          <div class="space-y-3 text-neutral-300 text-sm">
+            <div class="flex items-start space-x-3">
+              <span class="text-amber-400 font-bold">1.</span>
+              <span>Monitore taxa de falso positivo por categoria em producao</span>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="text-amber-400 font-bold">2.</span>
+              <span>Desabilite categorias com FP rate > 30% (ou seu limiar)</span>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="text-amber-400 font-bold">3.</span>
+              <span>Colete exemplos de FP para refinar criterios offline</span>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="text-amber-400 font-bold">4.</span>
+              <span>Reabilite com criterios refinados e monitore novamente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 5 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">📊 Severidade Especifica com Exemplos de Codigo</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Definicoes de severidade sem exemplos concretos sao interpretadas de forma inconsistente. "Severidade alta" para um desenvolvedor pode significar "qualquer bug em producao", enquanto para outro significa "apenas vulnerabilidades de seguranca criticas". A solucao e ancorar cada nivel de severidade com exemplos de codigo reais.</p>
+
+        <p class="text-neutral-300 leading-relaxed">A tecnica funciona porque exemplos criam ancoras cognitivas. Quando Claude ve que "SQL injection sem sanitizacao" e severidade alta, ele calibra seu entendimento de "alta" para todo o espectro. Exemplos concretos eliminam a zona cinza entre niveis de severidade.</p>
+
+        <!-- Box Exemplo -->
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center">
+            <span class="mr-2">📝</span> Ancoragem por Nivel de Severidade
+          </h3>
+          <div class="space-y-4">
+            <div class="bg-red-500/10 rounded-lg border border-red-500/30 p-4">
+              <h4 class="font-semibold text-red-400 text-sm mb-2">ALTA — Vulnerabilidade de seguranca exploravel</h4>
+              <p class="text-neutral-300 text-sm">SQL injection sem sanitizacao, XSS persistente, execucao remota de codigo, credenciais hardcoded em repositorio publico</p>
+            </div>
+            <div class="bg-amber-500/10 rounded-lg border border-amber-500/30 p-4">
+              <h4 class="font-semibold text-amber-400 text-sm mb-2">MEDIA — Bug em logica de negocio critica</h4>
+              <p class="text-neutral-300 text-sm">Calculo incorreto de impostos, race condition em transacao financeira, variavel nao inicializada em path critico</p>
+            </div>
+            <div class="bg-blue-500/10 rounded-lg border border-blue-500/30 p-4">
+              <h4 class="font-semibold text-blue-400 text-sm mb-2">BAIXA — Problema de qualidade de codigo</h4>
+              <p class="text-neutral-300 text-sm">Formatacao inconsistente, variavel nao utilizada, comentario desatualizado, nome de funcao pouco descritivo</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 6 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔄 Iteracao e Refinamento de Criterios</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Criterios explicitos nao nascem perfeitos — eles sao refinados atraves de ciclos iterativos. O processo e: defina criterios iniciais, execute em dados reais, analise os erros (falsos positivos e falsos negativos), ajuste os limiares, adicione exemplos para edge cases, e repita. Cada ciclo melhora incrementalmente a qualidade.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Na pratica, trate seus prompts como codigo: versione-os, faca revisoes, teste com conjuntos de dados representativos e monitore metricas de qualidade em producao. Um prompt de producao maduro normalmente passou por 5-10 iteracoes de refinamento antes de atingir performance aceitavel.</p>
+
+        <!-- Box Conceito -->
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Prompts como Codigo
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Prompts de producao sao <strong class="text-amber-400">documentos vivos</strong>, nao artefatos estaticos. Aplique as mesmas praticas de engenharia de software: versionamento, testes, code review, monitoramento. Cada falha detectada em producao e uma oportunidade de refinar criterios e adicionar edge cases ao prompt.</p>
+        </div>
+
+        <!-- Grid de Metricas -->
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center">
+            <span class="mr-2">📈</span> Metricas de Monitoramento
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-dark-700 rounded-lg p-4">
+              <h4 class="font-semibold text-amber-400 text-sm mb-2">Taxa de Falso Positivo</h4>
+              <p class="text-neutral-300 text-xs">% de itens flagueiados que nao eram problemas reais</p>
+            </div>
+            <div class="bg-dark-700 rounded-lg p-4">
+              <h4 class="font-semibold text-amber-400 text-sm mb-2">Taxa de Falso Negativo</h4>
+              <p class="text-neutral-300 text-xs">% de problemas reais que o sistema nao detectou</p>
+            </div>
+            <div class="bg-dark-700 rounded-lg p-4">
+              <h4 class="font-semibold text-amber-400 text-sm mb-2">Consistencia Inter-run</h4>
+              <p class="text-neutral-300 text-xs">% de concordancia quando o mesmo input e processado multiplas vezes</p>
+            </div>
+            <div class="bg-dark-700 rounded-lg p-4">
+              <h4 class="font-semibold text-amber-400 text-sm mb-2">Cobertura de Edge Cases</h4>
+              <p class="text-neutral-300 text-xs">% de casos ambiguos tratados corretamente pelo prompt</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESUMO ==================== -->
+    <section>
+      <h2 class="text-2xl font-bold mb-6 flex items-center space-x-3">
+        <span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/20 text-amber-400">✓</span>
+        <span>Resumo do Modulo</span>
+      </h2>
+
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3">
+          <span class="text-amber-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Criterios explicitos superam instrucoes vagas em consistencia e verificabilidade</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-amber-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Instrucoes como "seja conservador" sao ambiguas e produzem resultados inconsistentes</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-amber-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Falsos positivos destroem a confianca do usuario — precisao e mais importante que recall</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-amber-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Desabilite categorias de alto falso positivo temporariamente em vez de mante-las imprecisas</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-amber-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Ancore niveis de severidade com exemplos de codigo concretos, nao definicoes abstratas</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-amber-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Trate prompts como codigo: versione, teste, monitore e refine iterativamente</span>
+        </div>
+      </div>
+
+      <!-- Next Module -->
+      <div class="bg-amber-500/10 rounded-lg border border-amber-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm">
+          <strong class="text-amber-400">Proximo modulo:</strong> 4.2 — Few-Shot Prompting
+        </p>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-amber-400 hover:border-amber-500/30 transition-colors font-medium">
+          ← Voltar para Trilha
+        </a>
+        <a href="modulo-4-2.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 transition-colors font-medium">
+          Proximo Modulo →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

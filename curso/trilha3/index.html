@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trilha 3 - Configuracao e Fluxos do Claude Code | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    /* Light mode overrides */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* Light mode - cores de acento (trilha purple) */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+
+    /* Light mode - remove gradientes e cores especiais */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* Light mode - nav */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-16 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="inline-block px-4 py-1.5 bg-purple-500/20 text-purple-400 text-sm font-semibold rounded-full mb-6">TRILHA 3</span>
+      <h1 class="text-4xl sm:text-5xl font-bold mb-4">⚙️ Configuracao e Fluxos do Claude Code</h1>
+      <p class="text-xl text-neutral-300 mb-2">CLAUDE.md, skills, commands, plan mode, regras por caminho e CI/CD</p>
+      <p class="text-neutral-400 max-w-2xl mx-auto mb-8">Tudo sobre configurar e automatizar Claude Code. Domine a hierarquia de configuracao, commands customizados, regras condicionais, plan mode e integracao com pipelines CI/CD.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-purple-400">6</div>
+          <div class="text-xs text-neutral-400">Modulos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-purple-400">36</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-purple-400">~3h</div>
+          <div class="text-xs text-neutral-400">Duracao</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-purple-400">Inter.</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- SECTION 1: Simple Cards Grid -->
+    <h2 class="text-2xl font-bold mb-6">Modulos</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-16">
+
+      <a href="#modulo-3-1" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-purple-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm">3.1</span>
+          <h3 class="font-semibold text-neutral-100">Hierarquia de CLAUDE.md</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">3 niveis de config, @import modular, .claude/rules/ por topico</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-3-2" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-purple-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm">3.2</span>
+          <h3 class="font-semibold text-neutral-100">Commands e Skills Customizados</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Commands de projeto, pessoais, Skills com SKILL.md e frontmatter</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-3-3" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-purple-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm">3.3</span>
+          <h3 class="font-semibold text-neutral-100">Regras Condicionais por Caminho</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Frontmatter YAML paths, carregamento condicional, glob patterns</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~20 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-3-4" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-purple-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm">3.4</span>
+          <h3 class="font-semibold text-neutral-100">Plan Mode vs Execucao Direta</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Quando usar plan mode, execucao direta, subagente Explore</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-3-5" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-purple-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm">3.5</span>
+          <h3 class="font-semibold text-neutral-100">Tecnicas de Refinamento Iterativo</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Exemplos concretos, iteracao test-driven, padrao entrevista</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-3-6" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-purple-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm">3.6</span>
+          <h3 class="font-semibold text-neutral-100">Claude Code em CI/CD</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Flag -p nao-interativo, --output-format json, pipeline pratico</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~30 min · 6 topicos</span>
+      </a>
+
+    </div>
+
+    <!-- SECTION 2: Detailed Cards with Expandable Topics -->
+    <h2 class="text-2xl font-bold mb-6">Conteudo Detalhado</h2>
+    <div class="space-y-6">
+
+      <!-- MODULE 3.1 -->
+      <div id="modulo-3-1" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm">3.1</span>
+                <h3 class="text-2xl font-bold">Hierarquia de CLAUDE.md</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Compreenda os 3 niveis de configuracao do Claude Code, como usar @import para modularidade e .claude/rules/ para regras por topico, otimizando o consumo de tokens.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-purple-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 3.1.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Nivel usuario (~/.claude/CLAUDE.md)</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">O arquivo ~/.claude/CLAUDE.md e o nivel mais alto de configuracao pessoal do Claude Code. Ele e carregado em TODAS as sessoes, independentemente do projeto. Contem preferencias globais como estilo de comunicacao, convencoes de codigo pessoais e atalhos que voce usa em todos os projetos.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Entender a hierarquia de configuracao e fundamental para o exame CCA. Saber que o nivel usuario e sempre carregado e se aplica a todos os projetos permite separar preferencias pessoais de regras de projeto, evitando duplicacao e conflitos.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">~/.claude/CLAUDE.md como config global, carregamento automatico em todas as sessoes, preferencias pessoais vs regras de projeto, menor precedencia na hierarquia, ideal para estilo e convencoes pessoais.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.1.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Nivel projeto (.claude/CLAUDE.md)</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">O arquivo .claude/CLAUDE.md na raiz do projeto define configuracoes especificas do projeto. E versionado no Git e compartilhado com toda a equipe. Contem convencoes de codigo do projeto, estrutura de pastas, dependencias importantes e regras que todos os desenvolvedores devem seguir.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O nivel projeto e o mais importante na pratica — define o comportamento padrao de Claude para todo o time. O exame testa a diferenca entre config pessoal e de projeto, e quando cada uma deve ser usada.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">.claude/CLAUDE.md na raiz do projeto, versionado no Git, compartilhado pela equipe, maior precedencia que nivel usuario, convencoes e regras do projeto.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.1.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Regras por diretorio</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Voce pode colocar CLAUDE.md em subdiretorios do projeto para definir regras especificas para aquela area. Por exemplo, um CLAUDE.md em src/api/ pode definir convencoes de API, enquanto um em src/frontend/ define regras de componentes React. Essas regras sao carregadas apenas quando Claude trabalha em arquivos daquele diretorio.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Regras por diretorio permitem configuracao granular sem poluir o contexto global. O exame testa cenarios onde regras conflitantes em diferentes niveis devem ser resolvidas pela hierarquia de precedencia.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">CLAUDE.md em subdiretorios, carregamento por proximidade, precedencia local sobre global, regras contextuais por area do projeto, economia de tokens por escopo.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.1.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">@import modular</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">A diretiva @import permite incluir outros arquivos Markdown dentro do CLAUDE.md, criando uma estrutura modular. Em vez de um unico arquivo monolitico, voce pode dividir as regras em arquivos separados e importa-los conforme necessario, facilitando manutencao e reutilizacao.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Projetos grandes precisam de configuracoes extensas. O @import permite organizar essas configuracoes de forma sustentavel, evitando arquivos CLAUDE.md gigantes que dificultam a manutencao e desperdicam tokens com regras irrelevantes.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Sintaxe @import para incluir arquivos, modularizacao de regras, reutilizacao entre projetos, organizacao por dominio, reducao de duplicacao.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.1.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">.claude/rules/ por topico</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">O diretorio .claude/rules/ permite criar arquivos de regras separados por topico (ex: testing.md, api-design.md, security.md). Cada arquivo contem regras especificas para um dominio, e podem ter frontmatter YAML para controlar quando sao carregados.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O .claude/rules/ e a forma mais avancada e eficiente de configurar o Claude Code. Permite carregamento condicional baseado em caminhos, reduzindo drasticamente o consumo de tokens em projetos grandes.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">.claude/rules/ como diretorio de regras, um arquivo por topico, frontmatter YAML para condicoes, carregamento seletivo, economia de tokens por relevancia.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.1.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Instrucao vs base de conhecimento</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">O CLAUDE.md serve para instrucoes ativas (regras que Claude deve seguir), nao como base de conhecimento passiva. Instrucoes sao imperativas ("sempre use TypeScript strict"), enquanto base de conhecimento e informativa ("o projeto usa TypeScript"). A distincao impacta como Claude interpreta e prioriza o conteudo.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Misturar instrucoes com informacoes passivas dilui a eficacia do CLAUDE.md. O exame testa a capacidade de distinguir entre configuracao efetiva (instrucoes) e contexto informativo (base de conhecimento), e onde cada um deve ficar.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Instrucoes imperativas vs informacoes descritivas, CLAUDE.md para regras ativas, documentacao do projeto para contexto, regras path-scoped economizam tokens, foco em acoes concretas.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-3-1.html')" class="flex items-center space-x-2 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 3.2 -->
+      <div id="modulo-3-2" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm">3.2</span>
+                <h3 class="text-2xl font-bold">Commands e Skills Customizados</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Aprenda a criar commands de projeto e pessoais, skills com SKILL.md e frontmatter avancado para automacao e reutilizacao de workflows no Claude Code.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-purple-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 3.2.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Commands de projeto (.claude/commands/)</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Commands de projeto sao arquivos Markdown em .claude/commands/ que definem workflows reutilizaveis. Cada arquivo .md se torna um slash command disponivel para toda a equipe. Sao versionados no Git e compartilhados automaticamente com todos os desenvolvedores do projeto.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Commands de projeto padronizam workflows da equipe — como fazer deploy, criar componentes, rodar testes. O exame testa a diferenca entre commands de projeto (versionados) e pessoais (locais), e quando usar cada um.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">.claude/commands/ como diretorio de commands, arquivos .md como slash commands, versionamento no Git, compartilhamento com a equipe, invocacao via /nome-do-command.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.2.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Commands pessoais</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Commands pessoais ficam em ~/.claude/commands/ e sao disponiveis em todos os projetos, mas apenas para voce. Sao ideais para workflows pessoais como formatacao de commits, templates de PR, ou atalhos de produtividade que nao fazem sentido para toda a equipe.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">A separacao entre commands pessoais e de projeto segue o mesmo principio da hierarquia CLAUDE.md. O exame testa se voce sabe onde colocar cada tipo de command para maximo compartilhamento sem poluir o escopo do projeto.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">~/.claude/commands/ como diretorio pessoal, disponivel em todos os projetos, nao versionado no Git, preferencias individuais, complementa commands de projeto.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.2.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Skills com SKILL.md</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Skills sao uma evolucao dos commands que incluem um arquivo SKILL.md com frontmatter YAML. O frontmatter define metadados como context (fork/normal), allowed-tools, e argument-hint. Skills podem ser mais sofisticadas que commands simples, com isolamento de contexto e restricoes de ferramentas.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Skills representam a forma mais avancada de automacao no Claude Code. O exame testa o uso correto de frontmatter YAML, especialmente context: fork para isolamento e allowed-tools para restringir ferramentas disponiveis.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">SKILL.md com frontmatter YAML, metadados de configuracao, context para modo de execucao, allowed-tools para restricoes, argument-hint para guiar parametros.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.2.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">context: fork</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">O campo context: fork no frontmatter de um SKILL.md faz com que a skill seja executada em um contexto isolado (fork da sessao atual). Isso significa que a skill tem sua propria janela de contexto, nao polui a conversa principal, e seus resultados sao retornados de forma compacta ao contexto original.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Fork e essencial para skills que fazem operacoes verbosas (ex: busca em muitos arquivos) ou que precisam de isolamento. O exame testa quando usar fork vs execucao normal e os trade-offs de cada abordagem.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">context: fork para isolamento, janela de contexto separada, resultado compactado, nao polui conversa principal, ideal para operacoes verbosas ou exploratias.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.2.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">allowed-tools</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">O campo allowed-tools no frontmatter de SKILL.md restringe quais ferramentas estao disponiveis durante a execucao da skill. Por exemplo, uma skill de revisao pode ter allowed-tools: [Read, Grep, Glob] para impedir que faca modificacoes. Isso cria guardrails deterministicos por skill.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Restringir ferramentas por skill e um padrao de seguranca fundamental. O exame testa cenarios onde skills com ferramentas demais causam problemas, e como allowed-tools resolve isso de forma deterministicael.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">allowed-tools como whitelist de ferramentas, restricao por skill, seguranca por design, prevencao de acoes indesejadas, guardrail deterministico vs instrucao no prompt.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.2.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">argument-hint</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">O campo argument-hint no frontmatter fornece uma dica visual de que tipo de argumento a skill espera quando invocada. Por exemplo, argument-hint: "caminho do arquivo" mostra ao usuario o que passar apos o slash command. Melhora a UX sem impor restricoes tecnicas.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Boas skills sao auto-documentadas. O argument-hint faz parte do conjunto de metadados que tornam skills descobriveis e faceis de usar, complementando o nome e a descricao do arquivo SKILL.md.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">argument-hint como dica visual, melhoria de UX, guia para o usuario, complementa nome do command, auto-documentacao de skills.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-3-2.html')" class="flex items-center space-x-2 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 3.3 -->
+      <div id="modulo-3-3" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm">3.3</span>
+                <h3 class="text-2xl font-bold">Regras Condicionais por Caminho</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Domine o sistema de regras condicionais com frontmatter YAML paths em .claude/rules/, carregando regras apenas quando relevantes para economizar tokens.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-purple-400 font-bold">~20 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 3.3.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Frontmatter YAML paths</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Arquivos em .claude/rules/ podem ter frontmatter YAML com o campo paths que define quando a regra deve ser carregada. O frontmatter usa a sintaxe --- no inicio do arquivo, seguido de paths: com uma lista de glob patterns que determinam para quais arquivos a regra se aplica.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O frontmatter paths e o mecanismo central das regras condicionais. O exame testa a sintaxe correta, a semantica dos glob patterns e como o carregamento condicional funciona na pratica.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Sintaxe --- para frontmatter YAML, campo paths como lista de patterns, carregamento sob demanda, economia de contexto, regras aplicadas apenas quando relevantes.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.3.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Carregamento condicional</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando Claude edita ou le um arquivo, o sistema verifica quais regras em .claude/rules/ tem paths que correspondem ao caminho do arquivo. Apenas as regras cujos patterns fazem match sao carregadas no contexto. Regras sem frontmatter paths sao sempre carregadas (comportamento global).</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O carregamento condicional e a chave para escalar configuracoes em projetos grandes. Sem ele, todas as regras seriam carregadas sempre, desperdicando tokens com informacoes irrelevantes para a tarefa atual.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Match baseado em arquivos editados/lidos, carregamento sob demanda, regras sem paths = globais, economia de tokens, escala para projetos grandes.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.3.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Glob patterns</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Os glob patterns usados no campo paths seguem a convencao padrao: * para qualquer sequencia em um nivel, ** para recursivo em subdiretorios, e extensoes especificas como *.ts, *.py. Exemplos: "src/api/**/*.ts" (todos os .ts em src/api), "*.test.js" (todos os arquivos de teste JS).</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Saber escrever glob patterns corretos e essencial para configurar regras condicionais eficazes. Patterns muito amplos carregam regras desnecessarias; muito estreitos perdem arquivos relevantes. O exame testa a interpretacao de patterns.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">* para nivel unico, ** para recursivo, extensoes especificas, combinacao de patterns, precisao vs cobertura, exemplos praticos de matching.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.3.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Economia de tokens</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Regras condicionais por caminho economizam tokens porque so carregam instrucoes relevantes para os arquivos sendo manipulados. Em um projeto com 20 arquivos de regras, se Claude esta editando um arquivo .py, apenas as regras com paths matching *.py sao carregadas — nao as regras de TypeScript, CSS ou SQL.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O consumo de tokens impacta diretamente custo e qualidade. Regras condicionais podem reduzir drasticamente o contexto carregado, liberando espaco para o raciocinio de Claude e os resultados das ferramentas.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Tokens economizados por carregamento seletivo, menos contexto irrelevante, mais espaco para raciocinio, reducao de custo em projetos grandes, path-scoped rules como otimizacao.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.3.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Exemplos praticos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Exemplos concretos de regras condicionais: testing.md com paths: ["**/*.test.*", "**/*.spec.*"] para regras de testes; api-design.md com paths: ["src/api/**", "src/routes/**"] para convencoes de API; security.md com paths: ["src/auth/**", "*.env*"] para regras de seguranca.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Exemplos praticos consolidam a teoria. O exame apresenta cenarios reais e pede para configurar regras condicionais corretas, entao praticar com exemplos concretos e essencial para a preparacao.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Regras de teste com patterns de test/spec, regras de API com patterns de rotas, regras de seguranca com patterns sensiveis, organizacao por dominio, nomes descritivos de arquivos.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.3.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Vantagens sobre CLAUDE.md por diretorio</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Regras condicionais em .claude/rules/ sao superiores a CLAUDE.md por diretorio por varios motivos: centralizacao (todas as regras em um local), flexibilidade de paths (patterns podem cruzar diretorios), e carregamento por tipo de arquivo (nao apenas por diretorio). CLAUDE.md por diretorio so se aplica ao diretorio onde esta.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame testa a escolha entre .claude/rules/ com paths e CLAUDE.md por diretorio. Saber as vantagens de cada abordagem permite responder corretamente questoes sobre configuracao otima em diferentes cenarios.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Centralizacao vs distribuicao, paths por tipo de arquivo vs por diretorio, flexibilidade de glob patterns, manutencao simplificada, .claude/rules/ como abordagem preferida.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-3-3.html')" class="flex items-center space-x-2 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 3.4 -->
+      <div id="modulo-3-4" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm">3.4</span>
+                <h3 class="text-2xl font-bold">Plan Mode vs Execucao Direta</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Saiba quando usar plan mode para tarefas complexas, execucao direta para tarefas simples, e como o subagente Explore auxilia na descoberta verbosa.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-purple-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 3.4.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Quando usar plan mode</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Plan mode faz Claude pensar e planejar antes de executar. Em vez de comecar a editar arquivos imediatamente, Claude primeiro analisa a codebase, identifica arquivos relevantes, propoe uma estrategia e espera aprovacao. So entao executa as mudancas planejadas.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Plan mode e essencial para tarefas de grande escala como refatoracoes, migracoes ou features que tocam muitos arquivos. O exame testa quando plan mode e a escolha correta e quando execucao direta e mais eficiente.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Planejamento antes de execucao, analise previa da codebase, aprovacao humana do plano, ideal para mudancas de grande escala, reduz risco de erros em cascata.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.4.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Quando usar execucao direta</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Execucao direta e o modo padrao do Claude Code — Claude analisa a requisicao e comeca a executar imediatamente, usando ferramentas conforme necessario. E ideal para tarefas simples, bem definidas e de escopo limitado, como corrigir um bug especifico, adicionar uma funcao ou modificar um arquivo.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Usar plan mode para tarefas simples e desperdicio de tokens e tempo. O exame testa a capacidade de escolher o modo correto com base na complexidade da tarefa — execucao direta para tarefas simples, plan mode para complexas.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Modo padrao do Claude Code, execucao imediata, ideal para tarefas simples, sem overhead de planejamento, eficiente para mudancas de escopo limitado.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.4.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Subagente Explore</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">O subagente Explore e uma funcionalidade que permite a Claude explorar a codebase de forma verbosa em um contexto isolado. Ele navega por arquivos, entende a estrutura e retorna um resumo compacto ao contexto principal. E como um "scout" que mapeia o terreno antes de Claude tomar decisoes.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Explore e fundamental para tarefas em codebases desconhecidas. O exame testa quando usar Explore vs leitura direta de arquivos, e como o isolamento de contexto previne poluicao da conversa principal.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Subagente de exploracao, contexto isolado, resultado compacto, ideal para codebases desconhecidas, previne poluicao da conversa principal.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.4.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Tarefas complexas vs simples</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">A distincao entre tarefas complexas e simples guia a escolha entre plan mode e execucao direta. Tarefas complexas envolvem multiplos arquivos, dependencias entre mudancas, ou decisoes arquiteturais. Tarefas simples sao isoladas, bem definidas e de escopo claro — um arquivo, uma funcao, um bug.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame apresenta cenarios e pede para classificar a complexidade e escolher o modo adequado. Saber avaliar a complexidade de uma tarefa e uma habilidade fundamental para usar Claude Code eficientemente.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Criterios de complexidade: numero de arquivos, dependencias entre mudancas, ambiguidade dos requisitos, impacto potencial, reversibilidade das mudancas.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.4.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Combinar plan + execucao</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Na pratica, o melhor workflow combina ambos os modos: comece com plan mode para entender o escopo e definir a estrategia, depois execute cada etapa do plano em modo direto. Isso da visao global sem perder agilidade na execucao. Voce pode alternar entre modos dentro da mesma sessao.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">A combinacao de modos e a abordagem mais madura e produtiva. O exame testa se voce entende que plan e execucao nao sao mutuamente exclusivos, e como combina-los para diferentes fases de uma tarefa.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Plan para estrategia global, execucao para implementacao, alternancia entre modos, fases de uma tarefa, flexibilidade de abordagem.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.4.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Decisoes de arquitetura</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Decisoes de arquitetura — como estruturar modulos, definir interfaces, escolher padroes — devem sempre passar por plan mode. Essas decisoes tem impacto de longo prazo e sao dificeis de reverter. Plan mode permite discutir trade-offs, considerar alternativas e obter aprovacao antes de implementar.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame testa cenarios onde decisoes arquiteturais tomadas em execucao direta levam a problemas. Saber identificar quando uma tarefa envolve decisoes arquiteturais e crucial para escolher o modo correto.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Decisoes de alto impacto, irreversibilidade, discussao de trade-offs, aprovacao antes de implementacao, plan mode como checkpoint de qualidade.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-3-4.html')" class="flex items-center space-x-2 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 3.5 -->
+      <div id="modulo-3-5" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm">3.5</span>
+                <h3 class="text-2xl font-bold">Tecnicas de Refinamento Iterativo</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Domine tecnicas para obter melhores resultados do Claude Code: exemplos concretos, iteracao test-driven, padrao entrevista e refinamento progressivo de requisitos.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-purple-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 3.5.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Exemplos concretos vs prosa</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Exemplos concretos de entrada/saida (I/O) sao muito mais eficazes que descricoes em prosa para comunicar requisitos a Claude. Em vez de "formate a saida como uma tabela bonita", mostre exatamente como a tabela deve ficar com dados reais. Exemplos concretos eliminam ambiguidade e reduzem iteracoes.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame testa a eficacia de diferentes formas de comunicar requisitos. Exemplos concretos sao consistentemente mais eficazes que descricoes verbais, especialmente para formatos de saida, transformacoes de dados e regras de negocio.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Exemplos I/O > prosa descritiva, eliminacao de ambiguidade, reducao de iteracoes, dados reais nos exemplos, formato de saida concreto.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.5.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Iteracao test-driven</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Na iteracao test-driven, voce escreve os testes ANTES de pedir a Claude para implementar a funcionalidade. Os testes definem o contrato de forma inequivoca. Claude implementa ate que todos os testes passem. Isso cria um ciclo de feedback automatico onde os testes sao os criterios de aceitacao.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Iteracao test-driven e a tecnica mais confiavel para obter resultados precisos do Claude Code. O exame testa quando usar TDD com Claude e como testes servem como especificacao executavel mais precisa que qualquer descricao textual.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Testes como especificacao, escrever testes antes da implementacao, ciclo red-green com Claude, feedback automatico, criterios de aceitacao executaveis.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.5.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Padrao entrevista</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">No padrao entrevista, em vez de dar instrucoes detalhadas de uma vez, voce pede a Claude para fazer perguntas antes de comecar a implementar. Claude identifica ambiguidades nos requisitos e pede esclarecimentos. Isso resulta em especificacoes mais completas e menos retrabalho.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O padrao entrevista e especialmente valioso quando os requisitos sao vagos ou incompletos. O exame testa quando usar esse padrao e como ele previne implementacoes baseadas em suposicoes incorretas.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Claude pergunta antes de implementar, identificacao de ambiguidades, esclarecimento de requisitos, prevencao de suposicoes, especificacao colaborativa.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.5.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">2-3 exemplos para requisitos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Fornecer 2-3 exemplos concretos e o numero ideal para definir requisitos ambiguos. Um exemplo pode ser interpretado como caso unico; 2-3 exemplos revelam o padrao. Mais que 3 exemplos raramente adicionam valor e consomem tokens desnecessariamente. Os exemplos devem cobrir o caso normal, um edge case e opcionalmente um caso de erro.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame testa a quantidade ideal de exemplos e que tipos de casos cobrir. Saber que 2-3 exemplos estrategicos sao mais eficazes que muitos exemplos redundantes e uma habilidade pratica testada no CCA.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">2-3 exemplos como numero ideal, caso normal + edge case + erro, revelar padroes com multiplos exemplos, evitar redundancia, cobertura estrategica de cenarios.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.5.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Compartilhar falhas de teste</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando testes falham, compartilhar a saida completa do teste com Claude e mais eficaz que descrever o problema em palavras. A saida do teste contem informacoes precisas: qual assertion falhou, valor esperado vs recebido, stack trace. Claude usa esses dados para diagnosticar e corrigir com precisao.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Compartilhar falhas de teste e uma tecnica de refinamento que acelera drasticamente o ciclo de correcao. O exame testa se voce sabe usar saida de testes como feedback preciso, em vez de descricoes verbais imprecisas.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Saida de teste como feedback preciso, assertion falhou > descricao verbal, stack trace para diagnostico, ciclo de correcao acelerado, dados concretos > prosa.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.5.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Dominios desconhecidos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Para dominios onde voce nao tem expertise (ex: configurar Kubernetes, otimizar queries SQL, implementar algoritmos criptograficos), o padrao entrevista combinado com exemplos e especialmente valioso. Peca a Claude para explicar as opcoes, faca perguntas sobre trade-offs, e use o padrao iterativo para refinar o resultado.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Trabalhar em dominios desconhecidos e uma realidade do desenvolvimento. O exame testa como usar Claude Code efetivamente quando voce nao e especialista no dominio, aproveitando o conhecimento de Claude enquanto mantém controle da qualidade via testes e exemplos.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Padrao entrevista para explorar dominio, exemplos para validar entendimento, testes como rede de seguranca, aprendizado iterativo, Claude como especialista consultado.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-3-5.html')" class="flex items-center space-x-2 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 3.6 -->
+      <div id="modulo-3-6" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm">3.6</span>
+                <h3 class="text-2xl font-bold">Claude Code em CI/CD</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Integre Claude Code em pipelines CI/CD com modo nao-interativo, output JSON, sessoes separadas para revisao e boas praticas de automacao.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-purple-400 font-bold">~30 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 3.6.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Flag -p (nao-interativo)</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">A flag -p (ou --prompt) executa Claude Code em modo nao-interativo: recebe um prompt como argumento, executa a tarefa e retorna o resultado sem esperar input do usuario. E essencial para CI/CD porque pipelines automatizados nao tem interacao humana.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Integrar Claude Code em CI/CD requer modo nao-interativo. O exame testa o conhecimento da flag -p, suas limitacoes (sem confirmacao humana) e como configurar CLAUDE.md para compensar a falta de interacao.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Flag -p para modo headless, sem interacao humana, prompt como argumento, saida para stdout, ideal para pipelines CI/CD automatizados.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.6.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">--output-format json</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">A flag --output-format json faz Claude Code retornar a saida em formato JSON estruturado em vez de texto livre. Isso permite que scripts e pipelines CI/CD parseiem a saida programaticamente, extraindo campos especificos como resultado, erros, arquivos modificados e metricas.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Output JSON e fundamental para automacao robusta. O exame testa quando usar output JSON vs texto e como integrar a saida estruturada com ferramentas de CI/CD como GitHub Actions, Jenkins ou scripts shell.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">--output-format json para saida estruturada, parsing programatico, integracao com scripts, campos extraiveis, automacao robusta.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.6.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">CLAUDE.md no CI</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">No ambiente CI/CD, o CLAUDE.md do projeto e automaticamente carregado (pois esta no repositorio). Porem, o CLAUDE.md de usuario (~/.claude/CLAUDE.md) nao existe no runner CI. Isso significa que configuracoes especificas para CI devem estar no CLAUDE.md do projeto ou em regras dedicadas como .claude/rules/ci.md.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame testa o entendimento de que o ambiente CI e diferente do ambiente do desenvolvedor. Saber que o CLAUDE.md de usuario nao esta disponivel no CI e como compensar isso e uma questao pratica frequente.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">CLAUDE.md de projeto disponivel no CI, CLAUDE.md de usuario ausente, regras especificas para CI, configuracao via .claude/rules/, ambiente CI vs local.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.6.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Sessao separada para revisao</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Uma pratica recomendada em CI/CD e usar uma sessao SEPARADA de Claude para revisar o trabalho de outra sessao. A sessao de implementacao gera o codigo; uma segunda sessao, com contexto limpo, revisa as mudancas. Isso evita o vies de auto-revisao onde o mesmo agente avalia seu proprio trabalho.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame testa o conceito de auto-revisao enviesada e como sessoes separadas mitigam esse problema. E um padrao fundamental para qualidade em pipelines automatizados com Claude.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Sessao de implementacao vs sessao de revisao, contexto limpo para revisao, evitar auto-revisao enviesada, pipeline de qualidade, duas invocacoes separadas.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.6.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Auto-revisao enviesada</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Auto-revisao enviesada ocorre quando a mesma sessao de Claude que implementou o codigo e usada para revisar esse mesmo codigo. Claude tende a avaliar positivamente seu proprio trabalho porque o raciocinio que levou a implementacao ainda esta no contexto, criando um vies de confirmacao sistematico.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Este e um anti-padrao critico testado no exame CCA. Entender por que auto-revisao e enviesada e como resolver (sessao separada) e fundamental para projetar pipelines de qualidade com Claude.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Vies de confirmacao em auto-revisao, raciocinio no contexto influencia avaliacao, sessao separada como solucao, contexto limpo para objetividade, anti-padrao em pipelines CI/CD.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 3.6.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-purple-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Pipeline pratico</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-purple-400 font-semibold">O que e:</span> <span class="text-neutral-300">Um pipeline pratico com Claude Code em CI/CD tipicamente inclui: (1) Claude implementa a tarefa com -p, (2) testes automatizados rodam, (3) uma segunda sessao de Claude revisa as mudancas, (4) se tudo passa, o PR e criado ou atualizado automaticamente. Cada etapa usa --output-format json para parsing.</span></div>
+                <div><span class="text-purple-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame apresenta cenarios de pipeline e pede para identificar a configuracao correta. Saber montar um pipeline completo — da implementacao a revisao — e uma competencia pratica testada no CCA.</span></div>
+                <div><span class="text-purple-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Pipeline: implementar → testar → revisar → publicar, -p para cada etapa, --output-format json para integracao, sessoes separadas, CLAUDE.md do projeto como configuracao.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-3-6.html')" class="flex items-center space-x-2 px-4 py-2 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="module-modal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="absolute inset-4 sm:inset-8 lg:inset-16 bg-dark-900 rounded-2xl border border-dark-600 overflow-hidden flex flex-col">
+      <div class="flex items-center justify-between p-4 border-b border-dark-700">
+        <span class="text-neutral-400 text-sm">Modulo Completo</span>
+        <button onclick="closeModal()" class="p-2 hover:bg-dark-700 rounded-lg transition-colors">
+          <svg class="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <iframe id="modal-iframe" class="flex-1 w-full" src="" frameborder="0"></iframe>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    // Toggle topic explanation
+    function toggleTopic(button) {
+      const explanation = button.nextElementSibling;
+      const arrow = button.querySelector('svg');
+      explanation.classList.toggle('active');
+      arrow.classList.toggle('rotate-180');
+    }
+
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Modal
+    function openModal(src) {
+      const modal = document.getElementById('module-modal');
+      const iframe = document.getElementById('modal-iframe');
+      iframe.src = src;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('module-modal');
+      const iframe = document.getElementById('modal-iframe');
+      modal.classList.add('hidden');
+      iframe.src = '';
+      document.body.style.overflow = '';
+    }
+
+    // ESC to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+
+</body>
+</html>

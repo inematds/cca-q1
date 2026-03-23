@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 3.2 — Commands e Skills Customizados | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124, 58, 237, 0.18); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span><span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span><span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10">
+            <span class="sm:hidden">T3</span><span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span><span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span><span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-purple-400 transition-colors">Trilha 3</a>
+      <span>/</span>
+      <span class="text-purple-400 font-medium">Modulo 3.2</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-purple-500/20 text-purple-400 text-sm font-semibold rounded-full mb-4">MODULO 3.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🔧 Commands e Skills Customizados</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Crie workflows reutilizaveis com commands de projeto e pessoais, e domine skills avancadas com SKILL.md, context: fork e allowed-tools para automacao segura.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-purple-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-purple-400">25</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-purple-400">Inter</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-purple-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">📦 Commands de Projeto (.claude/commands/)</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Commands de projeto sao arquivos Markdown em <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">.claude/commands/</code> que definem workflows reutilizaveis para toda a equipe. Cada arquivo <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">.md</code> se torna um slash command invocavel por qualquer membro do time. Como estao no repositorio, sao versionados no Git e evoluem junto com o projeto.</p>
+        <p class="text-neutral-300 leading-relaxed">O nome do arquivo define o nome do command: <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">deploy.md</code> vira <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">/deploy</code>, <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">create-component.md</code> vira <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">/create-component</code>. O conteudo do arquivo e o prompt que Claude recebe quando o command e invocado.</p>
+        <div class="bg-purple-500/10 rounded-xl border border-purple-500/30 p-6">
+          <h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Commands de projeto padronizam workflows da equipe. Um <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">/review</code> pode definir exatamente como fazer code review, um <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">/test-component</code> pode padronizar a criacao de testes. Todos usam o mesmo workflow, garantindo consistencia.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">👤 Commands Pessoais</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Commands pessoais ficam em <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">~/.claude/commands/</code> e estao disponiveis em TODOS os projetos, mas apenas para voce. Nao sao versionados no Git e nao sao compartilhados com a equipe. Sao ideais para automacoes pessoais de produtividade.</p>
+        <p class="text-neutral-300 leading-relaxed">Exemplos de commands pessoais: <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">/my-commit</code> para formatar commits no seu estilo, <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">/my-pr</code> para criar PRs com seu template preferido, ou <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">/explain</code> para pedir explicacoes detalhadas no formato que voce prefere.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+            <h4 class="font-semibold text-purple-400 mb-4">📦 Projeto (.claude/commands/)</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Versionado no Git</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Compartilhado com a equipe</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Especifico do projeto</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Workflows padronizados</span></li>
+            </ul>
+          </div>
+          <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+            <h4 class="font-semibold text-purple-400 mb-4">👤 Pessoal (~/.claude/commands/)</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>NAO versionado no Git</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Apenas para voce</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Disponivel em todos os projetos</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Preferencias individuais</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">⚡ Skills com SKILL.md</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Skills sao uma evolucao dos commands que adicionam metadados via frontmatter YAML no arquivo SKILL.md. Enquanto commands sao simplesmente prompts em arquivos .md, skills podem definir configuracoes avancadas como modo de execucao, ferramentas permitidas e dicas de argumentos.</p>
+        <p class="text-neutral-300 leading-relaxed">O frontmatter YAML fica no topo do arquivo entre delimitadores <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">---</code>. Os campos mais importantes sao <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">context</code> (modo de execucao), <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">allowed-tools</code> (ferramentas permitidas) e <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">argument-hint</code> (dica de parametro). O restante do arquivo e o prompt da skill.</p>
+        <div class="bg-purple-500/10 rounded-xl border border-purple-500/30 p-6">
+          <h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span class="mr-2">💡</span> Estrutura de um SKILL.md</h3>
+          <p class="text-neutral-300 leading-relaxed">O arquivo comeca com frontmatter YAML (entre ---), seguido pelo prompt em Markdown. O frontmatter define <strong class="text-purple-400">como</strong> a skill executa; o corpo define <strong class="text-purple-400">o que</strong> a skill faz. Essa separacao e fundamental para skills robustas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔀 context: fork</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O campo <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">context: fork</code> no frontmatter de um SKILL.md faz a skill executar em uma sessao isolada — um "fork" da conversa principal. A skill tem sua propria janela de contexto, pode fazer operacoes verbosas sem poluir a conversa, e retorna apenas um resumo compacto ao contexto original.</p>
+        <p class="text-neutral-300 leading-relaxed">Isso e essencial para skills que fazem muitas leituras de arquivo, buscas extensas ou exploracoes que consumiriam muitos tokens no contexto principal. O fork age como um subagente especializado que executa a tarefa e retorna o resultado filtrado.</p>
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Quando Usar Fork</h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Skills que fazem buscas extensas em muitos arquivos</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Operacoes de analise que geram muita saida intermediaria</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Exploracoes de codebase que nao precisam ficar no historico</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Qualquer skill onde a jornada e menos importante que o destino</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🔒 allowed-tools</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O campo <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">allowed-tools</code> restringe quais ferramentas estao disponiveis durante a execucao de uma skill. E uma whitelist: apenas as ferramentas listadas podem ser usadas. Ferramentas nao listadas ficam completamente indisponiveis — Claude nem as ve como opcao.</p>
+        <p class="text-neutral-300 leading-relaxed">Isso e um guardrail deterministico, nao probabilistico. Enquanto instrucoes no prompt ("nao edite arquivos") podem ser ignoradas pelo modelo, <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">allowed-tools</code> impede fisicamente o uso de ferramentas nao autorizadas. E a diferenca entre "pedir gentilmente" e "trancar a porta".</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-purple-500/10 rounded-xl border border-purple-500/30 p-6">
+            <h4 class="font-semibold text-purple-400 mb-4 flex items-center"><span class="mr-2">✅</span> allowed-tools (deterministico)</h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Garante 100% que ferramentas restritas nao serao usadas</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Modelo nem ve as ferramentas nao listadas</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Auditavel e verificavel</span></li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center"><span class="mr-2">❌</span> Instrucao no prompt (probabilistico)</h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Modelo pode ignorar a instrucao em casos-limite</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Todas as ferramentas continuam disponiveis</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Nao-auditavel, depende do comportamento do modelo</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">💬 argument-hint</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O campo <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">argument-hint</code> fornece uma dica visual sobre que tipo de argumento a skill espera. Quando o usuario digita o slash command, o argument-hint aparece como placeholder, guiando sobre o que passar como parametro.</p>
+        <p class="text-neutral-300 leading-relaxed">Por exemplo, uma skill de review pode ter <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">argument-hint: "caminho do arquivo ou PR"</code>, e uma skill de refactor pode ter <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">argument-hint: "nome da funcao a refatorar"</code>. E uma melhoria de UX que torna skills mais descobriveis e faceis de usar sem consultar documentacao.</p>
+        <div class="bg-purple-500/10 rounded-xl border border-purple-500/30 p-6">
+          <h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span class="mr-2">💡</span> Boas Skills sao Auto-documentadas</h3>
+          <p class="text-neutral-300 leading-relaxed">A combinacao de um bom nome de arquivo, argument-hint claro e corpo do SKILL.md descritivo cria skills que qualquer membro da equipe pode usar sem treinamento. O nome diz <strong class="text-purple-400">o que</strong> faz, o hint diz <strong class="text-purple-400">o que precisa</strong>, e o corpo define <strong class="text-purple-400">como</strong> faz.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO FINAL -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📋</span> Resumo Final</h2>
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">Commands de projeto (.claude/commands/) sao versionados e compartilhados com a equipe</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">Commands pessoais (~/.claude/commands/) sao globais e privados</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">Skills usam SKILL.md com frontmatter YAML para configuracao avancada</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">context: fork executa em sessao isolada para operacoes verbosas</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">allowed-tools cria guardrails deterministicos por skill</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">argument-hint melhora a UX com dicas visuais de parametros</span></div>
+      </div>
+      <div class="bg-purple-500/10 rounded-lg border border-purple-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm"><strong class="text-purple-400">Proximo modulo:</strong> 3.3 — Regras Condicionais por Caminho</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="modulo-3-1.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-purple-400 hover:border-purple-500/30 transition-colors font-medium">← Modulo Anterior</a>
+        <a href="modulo-3-3.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/10 transition-colors font-medium">Proximo Modulo →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>CCA-Q1 — Claude Certified Architect - 2026</p></div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) { themeToggleDarkIcon.classList.remove('hidden'); html.classList.remove('dark'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

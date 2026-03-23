@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 3.6 — Claude Code em CI/CD | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .bg-red-500\/20 { background-color: rgba(220, 38, 38, 0.12); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">🏗️</span><span class="font-bold text-lg hidden sm:inline">CCA-Q1</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Arquitetura</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Ferramentas</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Claude Code</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Prompts</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Contexto</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400 transition-colors">Inicio</a><span>/</span>
+      <a href="index.html" class="hover:text-purple-400 transition-colors">Trilha 3</a><span>/</span>
+      <span class="text-purple-400 font-medium">Modulo 3.6</span>
+    </nav>
+  </div>
+
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-purple-500/20 text-purple-400 text-sm font-semibold rounded-full mb-4">MODULO 3.6</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🚀 Claude Code em CI/CD</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Integre Claude Code em pipelines automatizados com modo nao-interativo, output JSON, sessoes separadas para revisao e boas praticas de automacao.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-purple-400">30</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-purple-400">Inter</div><div class="text-xs text-neutral-400">Intermediario</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-purple-400">T+P</div><div class="text-xs text-neutral-400">Teoria+Pratica</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🖥️ Flag -p (Nao-interativo)</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A flag <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">-p</code> (ou <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">--prompt</code>) e o ponto de entrada para usar Claude Code em pipelines CI/CD. Ela executa Claude em modo nao-interativo: recebe um prompt como argumento de linha de comando, executa a tarefa completa sem esperar input humano, e retorna a saida para stdout.</p>
+        <p class="text-neutral-300 leading-relaxed">Sem a flag -p, Claude Code espera interacao do usuario via terminal — impossivel em um runner CI. Com -p, voce pode usar Claude Code como qualquer outro comando de CLI: <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">claude -p "revise o codigo e sugira melhorias"</code>. A saida vai para stdout e pode ser capturada, parseada ou redirecionada.</p>
+        <div class="bg-purple-500/10 rounded-xl border border-purple-500/30 p-6">
+          <h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">A flag <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">-p</code> transforma Claude Code de ferramenta interativa em <strong class="text-purple-400">componente de pipeline</strong>. E o requisito fundamental para qualquer integracao CI/CD: sem -p, nao ha automacao.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📊 --output-format json</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A flag <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">--output-format json</code> faz Claude Code retornar a saida em formato JSON estruturado em vez de texto livre. Isso e essencial para automacao porque permite que scripts parseiem a saida programaticamente, extraiam campos especificos e tomem decisoes baseadas nos resultados.</p>
+        <p class="text-neutral-300 leading-relaxed">Com output JSON, voce pode extrair informacoes como: arquivos modificados, resultado da tarefa (sucesso/falha), mensagens de erro detalhadas, e metricas. Sem JSON, voce dependeria de parsing de texto livre, que e fragil e propenso a quebrar quando Claude muda a forma como formata a resposta.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-purple-500/10 rounded-xl border border-purple-500/30 p-6">
+            <h4 class="font-semibold text-purple-400 mb-4 flex items-center"><span class="mr-2">✅</span> --output-format json</h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Saida estruturada e parseavel</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Integracao robusta com scripts</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Campos extraiveis programaticamente</span></li>
+              <li class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">•</span><span>Nao quebra se Claude mudar formatacao</span></li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center"><span class="mr-2">❌</span> Texto livre (sem flag)</h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Parsing fragil com regex/grep</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Quebra quando formato muda</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Dificil extrair dados especificos</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Nao-confiavel para automacao</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📄 CLAUDE.md no CI</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">No ambiente CI/CD, o runner clona o repositorio e executa Claude Code. O <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">.claude/CLAUDE.md</code> do projeto esta no repositorio, entao e carregado normalmente. Porem, o <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">~/.claude/CLAUDE.md</code> (nivel usuario) NAO existe no runner CI — cada runner e uma maquina limpa.</p>
+        <p class="text-neutral-300 leading-relaxed">Isso significa que qualquer configuracao necessaria para o CI deve estar no CLAUDE.md do projeto ou em <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">.claude/rules/</code>. Voce pode criar um arquivo especifico como <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">.claude/rules/ci.md</code> com regras para o ambiente CI: nao pedir confirmacao, ser mais conservador em mudancas, relatar erros em formato estruturado.</p>
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Dica Importante</h3>
+          <p class="text-neutral-300 leading-relaxed">Nao dependa de configuracoes de nivel usuario no CI. Tudo que Claude precisa saber para executar no pipeline deve estar no repositorio: <code class="bg-dark-700 px-2 py-0.5 rounded text-amber-400 text-sm">.claude/CLAUDE.md</code> e <code class="bg-dark-700 px-2 py-0.5 rounded text-amber-400 text-sm">.claude/rules/</code>. Teste localmente com um CLAUDE.md de usuario vazio para simular o ambiente CI.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔍 Sessao Separada para Revisao</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Uma pratica fundamental em pipelines CI/CD com Claude e usar sessoes SEPARADAS para implementacao e revisao. A sessao de implementacao gera o codigo; uma segunda sessao, completamente independente e com contexto limpo, revisa as mudancas geradas.</p>
+        <p class="text-neutral-300 leading-relaxed">Na pratica, isso significa duas invocacoes separadas de <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">claude -p</code>: a primeira para implementar, a segunda para revisar. A sessao de revisao nao tem acesso ao raciocinio da sessao de implementacao, entao avalia o resultado objetivamente, sem o vies de "eu mesmo fiz isso".</p>
+        <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">📊</span> Pipeline com Sessoes Separadas</h3>
+          <div class="space-y-3">
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm flex-shrink-0">1</span>
+              <p class="text-neutral-300 text-sm"><strong class="text-blue-400">Sessao 1 — Implementacao:</strong> claude -p "implemente a feature X"</p>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm flex-shrink-0">2</span>
+              <p class="text-neutral-300 text-sm"><strong class="text-blue-400">Testes automatizados:</strong> npm test (verificacao mecanica)</p>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm flex-shrink-0">3</span>
+              <p class="text-neutral-300 text-sm"><strong class="text-blue-400">Sessao 2 — Revisao:</strong> claude -p "revise as mudancas do ultimo commit"</p>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm flex-shrink-0">4</span>
+              <p class="text-neutral-300 text-sm"><strong class="text-blue-400">Decisao:</strong> Se tudo passa, criar/atualizar PR automaticamente</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">⚠️ Auto-revisao Enviesada</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Auto-revisao enviesada e um anti-padrao critico que ocorre quando a MESMA sessao de Claude que implementou o codigo e usada para revisa-lo. O raciocinio que levou a implementacao ainda esta no contexto, criando um vies de confirmacao: Claude tende a avaliar positivamente decisoes que ele mesmo tomou.</p>
+        <p class="text-neutral-300 leading-relaxed">Isso e analogo a pedir a um desenvolvedor para revisar seu proprio pull request — ele ja sabe por que tomou cada decisao e tende a justifica-las em vez de questiona-las. A mesma dinamica acontece com Claude: o contexto da sessao de implementacao "ancora" a avaliacao, reduzindo a capacidade critica.</p>
+        <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+          <h3 class="text-lg font-semibold text-red-400 mb-4 flex items-center"><span class="mr-2">🚨</span> Anti-padrao Critico</h3>
+          <div class="space-y-3">
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-400 font-bold text-sm flex-shrink-0">!</span>
+              <div>
+                <h4 class="font-semibold text-red-400 mb-1">NAO faca: mesma sessao para implementar e revisar</h4>
+                <p class="text-neutral-300 text-sm">O vies de confirmacao faz Claude avaliar positivamente seu proprio trabalho. Erros e problemas sao subestimados ou ignorados.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm flex-shrink-0">✓</span>
+              <div>
+                <h4 class="font-semibold text-purple-400 mb-1">FACA: sessao separada com contexto limpo</h4>
+                <p class="text-neutral-300 text-sm">A sessao de revisao ve apenas o resultado (diff do codigo), nao o raciocinio. Avalia objetivamente, sem ancoragem no processo de implementacao.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔧 Pipeline Pratico</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Um pipeline pratico com Claude Code em CI/CD combina todas as tecnicas desta trilha. O fluxo tipico e: (1) receber trigger (issue, PR, schedule), (2) Claude implementa com <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">-p</code>, (3) testes automatizados rodam, (4) segunda sessao de Claude revisa, (5) se tudo passa, acao automatica (criar PR, comentar, merge).</p>
+        <p class="text-neutral-300 leading-relaxed">Cada etapa usa <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">--output-format json</code> para parsing programatico. O CLAUDE.md do projeto configura o comportamento. Regras em <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">.claude/rules/</code> podem ter configuracoes especificas para CI. E sessoes separadas garantem revisao nao-enviesada.</p>
+
+        <!-- Timeline Pipeline -->
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-6 flex items-center"><span class="mr-2">📍</span> Pipeline Completo</h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm border border-purple-500/30">1</span>
+                <div class="w-0.5 h-8 bg-purple-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-purple-400 mb-1">Trigger</h4>
+                <p class="text-neutral-300 text-sm">Issue criada, PR aberto, schedule, ou webhook. Define o prompt para Claude.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm border border-purple-500/30">2</span>
+                <div class="w-0.5 h-8 bg-purple-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-purple-400 mb-1">Implementacao (Sessao 1)</h4>
+                <p class="text-neutral-300 text-sm"><code class="bg-dark-700 px-1.5 py-0.5 rounded text-purple-400 text-xs">claude -p "..." --output-format json</code> — Claude implementa a tarefa.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm border border-purple-500/30">3</span>
+                <div class="w-0.5 h-8 bg-purple-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-purple-400 mb-1">Testes Automatizados</h4>
+                <p class="text-neutral-300 text-sm">npm test, pytest, go test — verificacao mecanica das mudancas.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm border border-purple-500/30">4</span>
+                <div class="w-0.5 h-8 bg-purple-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-purple-400 mb-1">Revisao (Sessao 2)</h4>
+                <p class="text-neutral-300 text-sm"><code class="bg-dark-700 px-1.5 py-0.5 rounded text-purple-400 text-xs">claude -p "revise o diff..." --output-format json</code> — sessao limpa revisa.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm border border-purple-500/30">5</span>
+              </div>
+              <div>
+                <h4 class="font-semibold text-purple-400 mb-1">Acao Final</h4>
+                <p class="text-neutral-300 text-sm">Se tudo passa: criar PR, comentar, ou merge automatico conforme configuracao.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO FINAL -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📋</span> Resumo Final</h2>
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">Flag -p transforma Claude Code em componente de pipeline nao-interativo</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">--output-format json permite parsing programatico da saida</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">CLAUDE.md de usuario nao existe no CI — toda config deve estar no repo</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">Sessoes separadas para implementacao e revisao evitam auto-revisao enviesada</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">Auto-revisao e um anti-padrao critico — vies de confirmacao degrada qualidade</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">Pipeline completo: trigger → implementar → testar → revisar → publicar</span></div>
+      </div>
+      <div class="bg-purple-500/10 rounded-lg border border-purple-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm">
+          <strong class="text-purple-400">Proxima trilha:</strong> Trilha 4 — Prompts e Engenharia de Contexto
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="modulo-3-5.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-purple-400 hover:border-purple-500/30 transition-colors font-medium">← Modulo Anterior</a>
+        <a href="../trilha4/index.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/10 transition-colors font-medium">Proxima Trilha →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>CCA-Q1 — Claude Certified Architect - 2026</p></div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) { themeToggleDarkIcon.classList.remove('hidden'); html.classList.remove('dark'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

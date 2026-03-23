@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 3.5 — Tecnicas de Refinamento Iterativo | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">🏗️</span><span class="font-bold text-lg hidden sm:inline">CCA-Q1</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Arquitetura</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Ferramentas</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Claude Code</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Prompts</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Contexto</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400 transition-colors">Inicio</a><span>/</span>
+      <a href="index.html" class="hover:text-purple-400 transition-colors">Trilha 3</a><span>/</span>
+      <span class="text-purple-400 font-medium">Modulo 3.5</span>
+    </nav>
+  </div>
+
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-purple-500/20 text-purple-400 text-sm font-semibold rounded-full mb-4">MODULO 3.5</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🔄 Tecnicas de Refinamento Iterativo</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Maximize a qualidade dos resultados com exemplos concretos, iteracao test-driven, padrao entrevista e refinamento progressivo de requisitos.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-purple-400">25</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-purple-400">Inter</div><div class="text-xs text-neutral-400">Intermediario</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-purple-400">T+P</div><div class="text-xs text-neutral-400">Teoria+Pratica</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">📝 Exemplos Concretos vs Prosa</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A forma mais eficaz de comunicar requisitos a Claude e atraves de exemplos concretos de entrada e saida (I/O), nao descricoes em prosa. Em vez de "formate como uma tabela com colunas alinhadas", mostre exatamente como a tabela deve ficar com dados reais. Exemplos eliminam ambiguidade de uma forma que palavras nao conseguem.</p>
+        <p class="text-neutral-300 leading-relaxed">Essa tecnica e especialmente poderosa para formatos de saida, transformacoes de dados, regras de negocio complexas e convencoes de codigo. Um exemplo concreto comunica mais em 5 linhas do que um paragrafo de prosa em 50 palavras.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-purple-500/10 rounded-xl border border-purple-500/30 p-6">
+            <h4 class="font-semibold text-purple-400 mb-4 flex items-center"><span class="mr-2">✅</span> Exemplo Concreto (eficaz)</h4>
+            <p class="text-neutral-300 text-sm mb-2">Entrada: getUserById(123)</p>
+            <p class="text-neutral-300 text-sm">Saida: { id: 123, name: "Ana", role: "admin" }</p>
+            <p class="text-neutral-400 text-xs mt-3">Claro, inequivoco, reproduzivel</p>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center"><span class="mr-2">❌</span> Prosa (ambigua)</h4>
+            <p class="text-neutral-300 text-sm">"Retorne um objeto JSON com os dados do usuario, incluindo identificador, nome e nivel de permissao."</p>
+            <p class="text-neutral-400 text-xs mt-3">Ambiguo: "nivel de permissao" e "role"? "level"? numero?</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🧪 Iteracao Test-Driven</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Na iteracao test-driven, voce escreve os testes ANTES de pedir a Claude para implementar. Os testes definem o contrato de forma executavel e inequivoca. Claude implementa ate que todos os testes passem. Se um teste falha, voce compartilha a saida e Claude corrige. O ciclo continua ate 100% green.</p>
+        <p class="text-neutral-300 leading-relaxed">Isso e mais poderoso que qualquer descricao textual porque testes sao especificacoes executaveis. Nao ha ambiguidade: ou o teste passa ou nao. Claude recebe feedback preciso (assertion esperada vs recebida) e pode corrigir cirurgicamente.</p>
+        <div class="bg-purple-500/10 rounded-xl border border-purple-500/30 p-6">
+          <h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span class="mr-2">💡</span> Ciclo TDD com Claude</h3>
+          <div class="space-y-3">
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm flex-shrink-0">1</span>
+              <p class="text-neutral-300 text-sm"><strong class="text-purple-400">Red:</strong> Escreva testes que definem o comportamento desejado</p>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm flex-shrink-0">2</span>
+              <p class="text-neutral-300 text-sm"><strong class="text-purple-400">Green:</strong> Peca a Claude para implementar ate os testes passarem</p>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm flex-shrink-0">3</span>
+              <p class="text-neutral-300 text-sm"><strong class="text-purple-400">Refine:</strong> Compartilhe falhas, Claude corrige, repita ate 100% green</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🎤 Padrao Entrevista</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">No padrao entrevista, em vez de tentar especificar tudo de uma vez, voce pede a Claude para fazer perguntas antes de comecar. "Preciso implementar autenticacao. Antes de comecar, me faca perguntas sobre os requisitos." Claude identifica ambiguidades que voce nem percebeu e pede esclarecimentos.</p>
+        <p class="text-neutral-300 leading-relaxed">Isso resulta em especificacoes mais completas e menos retrabalho. Claude pode perguntar: "JWT ou sessions? Refresh tokens? OAuth providers? Rate limiting?" — questoes que voce talvez esquecesse de especificar e que levariam a suposicoes erradas na implementacao.</p>
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Quando Usar o Padrao Entrevista</h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Requisitos vagos ou incompletos — voce sabe o "o que" mas nao os detalhes</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Dominios complexos com muitas decisoes de design</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Features novas onde os trade-offs nao sao claros</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Quando voce quer evitar suposicoes incorretas de Claude</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">📐 2-3 Exemplos para Requisitos</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O numero ideal de exemplos para definir um requisito ambiguo e 2-3. Um unico exemplo pode ser interpretado como caso particular. Dois exemplos revelam o padrao. Tres exemplos cobrem caso normal, edge case e caso de erro. Mais que tres raramente adiciona valor e consome tokens desnecessarios.</p>
+        <p class="text-neutral-300 leading-relaxed">A estrategia e: primeiro exemplo mostra o caso feliz (happy path), segundo mostra um edge case (entrada vazia, valor limite, formato diferente), terceiro mostra tratamento de erro (input invalido, timeout, dados ausentes). Essa combinacao cobre a vasta maioria das situacoes.</p>
+        <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center"><span class="mr-2">📊</span> Estrategia dos 3 Exemplos</h3>
+          <div class="space-y-3">
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm flex-shrink-0">1</span>
+              <div><h4 class="font-semibold text-blue-400 text-sm">Happy path</h4><p class="text-neutral-300 text-sm">Input normal, saida esperada padrao</p></div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm flex-shrink-0">2</span>
+              <div><h4 class="font-semibold text-blue-400 text-sm">Edge case</h4><p class="text-neutral-300 text-sm">Input vazio, valor limite, formato alternativo</p></div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm flex-shrink-0">3</span>
+              <div><h4 class="font-semibold text-blue-400 text-sm">Caso de erro</h4><p class="text-neutral-300 text-sm">Input invalido, como o erro deve ser tratado</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🐛 Compartilhar Falhas de Teste</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando testes falham, a saida do teste e o feedback mais preciso que voce pode dar a Claude. A saida contem exatamente qual assertion falhou, o valor esperado vs o recebido, a stack trace com o ponto exato de falha, e qualquer erro de runtime. Esses dados permitem diagnostico cirurgico.</p>
+        <p class="text-neutral-300 leading-relaxed">Em vez de dizer "a funcao nao esta retornando o valor certo", compartilhe a saida completa do teste. Claude ve <code class="bg-dark-700 px-2 py-0.5 rounded text-purple-400 text-sm">Expected: { id: 123 }, Received: { userId: 123 }</code> e imediatamente identifica que o nome do campo esta errado. Isso economiza iteracoes e acelera drasticamente o ciclo de correcao.</p>
+        <div class="bg-purple-500/10 rounded-xl border border-purple-500/30 p-6">
+          <h3 class="text-lg font-semibold text-purple-400 mb-3 flex items-center"><span class="mr-2">💡</span> Principio: Dados Concretos > Prosa</h3>
+          <p class="text-neutral-300 leading-relaxed">A saida de um teste que falhou contem mais informacao util em 5 linhas do que um paragrafo inteiro de descricao verbal. Assertion + expected + received + stack trace = diagnostico preciso. Sempre prefira compartilhar a saida real.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🌍 Dominios Desconhecidos</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando voce trabalha em um dominio onde nao tem expertise (Kubernetes, criptografia, otimizacao de queries SQL), as tecnicas de refinamento iterativo sao ainda mais valiosas. O padrao entrevista ajuda a explorar opcoes que voce nao conhece. Exemplos concretos validam que voce entendeu a solucao. Testes garantem que funciona mesmo sem voce entender todos os detalhes.</p>
+        <p class="text-neutral-300 leading-relaxed">A combinacao ideal para dominios desconhecidos: (1) use o padrao entrevista para entender as opcoes, (2) peca a Claude para explicar trade-offs em linguagem simples, (3) defina exemplos concretos de I/O esperado, (4) escreva testes como rede de seguranca, (5) itere com feedback de testes ate convergir.</p>
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Dica para o Exame</h3>
+          <p class="text-neutral-300 leading-relaxed">O exame CCA testa cenarios onde o desenvolvedor nao e especialista no dominio. A resposta correta e sempre usar <strong class="text-amber-400">combinacao de tecnicas</strong>: entrevista para entender, exemplos para especificar, testes para validar. Nunca "confiar cegamente" na saida de Claude em dominios desconhecidos.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO FINAL -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📋</span> Resumo Final</h2>
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">Exemplos concretos de I/O sao mais eficazes que descricoes em prosa</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">Iteracao test-driven cria um ciclo de feedback automatico e preciso</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">Padrao entrevista previne suposicoes incorretas em requisitos vagos</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">2-3 exemplos estrategicos cobrem happy path, edge case e erro</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">Saida de testes e o feedback mais preciso para Claude corrigir erros</span></div>
+        <div class="flex items-start space-x-3"><span class="text-purple-400 font-bold text-lg">✓</span><span class="text-neutral-300">Para dominios desconhecidos: combinar entrevista + exemplos + testes</span></div>
+      </div>
+      <div class="bg-purple-500/10 rounded-lg border border-purple-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm"><strong class="text-purple-400">Proximo modulo:</strong> 3.6 — Claude Code em CI/CD</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="modulo-3-4.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-purple-400 hover:border-purple-500/30 transition-colors font-medium">← Modulo Anterior</a>
+        <a href="modulo-3-6.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/10 transition-colors font-medium">Proximo Modulo →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>CCA-Q1 — Claude Certified Architect - 2026</p></div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) { themeToggleDarkIcon.classList.remove('hidden'); html.classList.remove('dark'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

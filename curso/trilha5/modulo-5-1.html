@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 5.1 — Gerenciamento de Contexto de Conversacao | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    /* Light mode */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13, 148, 136, 0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13, 148, 136, 0.25); }
+    html:not(.dark) .hover\:bg-teal-500\/30:hover { background-color: rgba(13, 148, 136, 0.18); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-teal-400 bg-teal-500/10">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-teal-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-teal-400 transition-colors">Trilha 5</a>
+      <span>/</span>
+      <span class="text-teal-400 font-medium">Modulo 5.1</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-teal-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-teal-500/20 text-teal-400 text-sm font-semibold rounded-full mb-4">MODULO 5.1</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🧠 Gerenciamento de Contexto de Conversacao</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Tecnicas para manter informacoes relevantes acessiveis ao longo de conversas longas, evitando degradacao de qualidade e perda de foco do modelo.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-teal-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-teal-400">25</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-teal-400">Inter</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-teal-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- ==================== TOPIC 1 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🔍 Efeito "Lost in the Middle"</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O efeito "lost in the middle" e um fenomeno bem documentado em modelos de linguagem de grande porte: informacoes posicionadas no meio de um contexto longo recebem significativamente menos atencao do que informacoes no inicio ou no final. Isso nao e um bug — e uma propriedade emergente da arquitetura de atencao dos transformers.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Em conversas agenticas longas, esse efeito se torna critico. As primeiras instrucoes (system prompt) e as mensagens mais recentes recebem maxima atencao, enquanto tool results intermediarios, decisoes tomadas no meio da conversa e dados coletados anteriormente podem ser efetivamente "esquecidos" pelo modelo.</p>
+
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">O modelo prioriza informacoes no <strong class="text-teal-400">inicio (primacy)</strong> e no <strong class="text-teal-400">final (recency)</strong> da janela de contexto. Informacoes no meio sao progressivamente negligenciadas a medida que o contexto cresce. Isso impacta diretamente a qualidade de respostas em conversas longas.</p>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center">
+            <span class="mr-2">📊</span> Impacto por Posicao no Contexto
+          </h3>
+          <div class="space-y-4">
+            <div class="flex items-center space-x-4">
+              <span class="text-teal-400 font-bold w-24 flex-shrink-0">Inicio</span>
+              <div class="flex-1 bg-teal-500/20 rounded-full h-4 relative"><div class="bg-teal-500/60 rounded-full h-4" style="width: 95%"></div></div>
+              <span class="text-neutral-400 text-sm w-12">95%</span>
+            </div>
+            <div class="flex items-center space-x-4">
+              <span class="text-neutral-400 font-bold w-24 flex-shrink-0">Meio</span>
+              <div class="flex-1 bg-teal-500/20 rounded-full h-4 relative"><div class="bg-red-500/60 rounded-full h-4" style="width: 40%"></div></div>
+              <span class="text-neutral-400 text-sm w-12">40%</span>
+            </div>
+            <div class="flex items-center space-x-4">
+              <span class="text-teal-400 font-bold w-24 flex-shrink-0">Final</span>
+              <div class="flex-1 bg-teal-500/20 rounded-full h-4 relative"><div class="bg-teal-500/60 rounded-full h-4" style="width: 90%"></div></div>
+              <span class="text-neutral-400 text-sm w-12">90%</span>
+            </div>
+          </div>
+          <p class="text-neutral-500 text-xs mt-4">* Representacao ilustrativa da atencao relativa por posicao em contextos longos</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 2 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📈 Acumulo de Tokens por Tool Results</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Cada chamada de ferramenta em um loop agentico adiciona dois blocos ao historico: o <code class="bg-dark-700 px-2 py-0.5 rounded text-teal-400 text-sm">tool_use</code> (a solicitacao do modelo) e o <code class="bg-dark-700 px-2 py-0.5 rounded text-teal-400 text-sm">tool_result</code> (o retorno da execucao). Em tarefas complexas com dezenas de iteracoes, esses blocos acumulam-se rapidamente, consumindo a maior parte da janela de contexto.</p>
+
+        <p class="text-neutral-300 leading-relaxed">O problema nao e apenas o consumo de tokens — e o efeito cascata. A medida que tool results antigos empurram as instrucoes iniciais para o "meio" do contexto, o modelo começa a perder fidelidade as regras e restricoes originais. Isso cria uma degradacao gradual e silenciosa da qualidade.</p>
+
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Tool results acumulam tokens de forma linear a cada iteracao. Em uma sessao com 20 chamadas de ferramenta retornando ~500 tokens cada, somente os resultados consomem <strong class="text-teal-400">~10.000 tokens</strong> — sem contar as mensagens do usuario e respostas do modelo. Monitorar e gerenciar esse crescimento e essencial.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+            <h4 class="font-semibold text-teal-400 mb-3">Crescimento por Iteracao</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Iteracao 1: ~1K tokens acumulados</span></li>
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Iteracao 10: ~10K tokens acumulados</span></li>
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Iteracao 30: ~30K tokens acumulados</span></li>
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Iteracao 50+: janela critica, degradacao visivel</span></li>
+            </ul>
+          </div>
+          <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+            <h4 class="font-semibold text-teal-400 mb-3">Sinais de Problema</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Modelo "esquece" instrucoes do system prompt</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Respostas contradizem decisoes anteriores</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Repeticao de tentativas ja falhadas</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Latencia crescente por chamada de API</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 3 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📌 Pin Key Facts no Topo</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A tecnica mais direta para combater o "lost in the middle" e posicionar informacoes criticas no TOPO do contexto — tipicamente no system prompt. Fatos, regras de negocio, restricoes de seguranca e instrucoes essenciais devem sempre estar nas primeiras posicoes do contexto, onde recebem maxima atencao.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Essa pratica e chamada de "pinning" porque as informacoes ficam "fixadas" no topo, independentemente de quanto o contexto cresca com tool results e mensagens adicionais. E a estrategia de primeira linha para manter confiabilidade em conversas longas.</p>
+
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">O system prompt e a posicao mais confiavel para informacoes criticas. <strong class="text-teal-400">Regras de negocio, restricoes de seguranca e instrucoes essenciais devem estar no system prompt</strong>, nao em mensagens de usuario que serao empurradas para o meio do contexto a medida que a conversa cresce.</p>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center">
+            <span class="mr-2">🏗️</span> Hierarquia de Posicionamento
+          </h3>
+          <div class="space-y-4">
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm flex-shrink-0">1</span>
+              <div>
+                <h4 class="font-semibold text-teal-400">System Prompt (maxima prioridade)</h4>
+                <p class="text-neutral-300 text-sm">Regras de negocio, restricoes de seguranca, formato de output obrigatorio</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm flex-shrink-0">2</span>
+              <div>
+                <h4 class="font-semibold text-teal-400">Primeira mensagem do usuario</h4>
+                <p class="text-neutral-300 text-sm">Contexto do problema, objetivo da tarefa, dados de referencia</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-dark-600 text-neutral-400 font-bold text-sm flex-shrink-0">3</span>
+              <div>
+                <h4 class="font-semibold text-neutral-400">Meio do historico (menor prioridade)</h4>
+                <p class="text-neutral-300 text-sm">Tool results antigos, tentativas anteriores, dados intermediarios</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 4 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">✂️ Trim de Outputs Verbosos</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Ferramentas frequentemente retornam muito mais dados do que o necessario. Uma busca em banco de dados pode retornar 50 registros quando apenas os 5 primeiros sao relevantes. Um comando de sistema pode gerar centenas de linhas de log quando apenas a mensagem de erro importa. Injetar esses resultados completos no historico e um desperdicio de contexto.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Trimming e a pratica de processar tool results antes de inseri-los no historico, reduzindo seu tamanho enquanto preserva informacoes essenciais. Isso pode ser feito no codigo orquestrador (antes de enviar o tool_result ao modelo) ou via instrucoes que pedem ao modelo para resumir resultados.</p>
+
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Trim tool results <strong class="text-teal-400">antes</strong> de inseri-los no historico. Truncar com indicador <code class="bg-dark-700 px-1.5 py-0.5 rounded text-teal-400 text-xs">[truncated, showing first 20 of 500 results]</code>, extrair apenas campos relevantes, e definir limites de tamanho por tipo de ferramenta.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+            <h4 class="font-semibold text-teal-400 mb-4 flex items-center">
+              <span class="mr-2">✅</span> Tecnicas de Trim
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Truncar a N linhas/registros com nota de truncamento</span></li>
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Extrair campos especificos de JSONs grandes</span></li>
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Resumir saidas de comandos longos</span></li>
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Comprimir stack traces mantendo mensagem principal</span></li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center">
+              <span class="mr-2">❌</span> Evitar
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Injetar resultados completos de queries de banco</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Incluir logs de debug inteiros no historico</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Retornar arquivos inteiros quando apenas parte e relevante</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Ignorar tamanho do resultado ao inserir no contexto</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 5 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🔀 Delegacao a Subagentes</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Subagentes sao a solucao arquitetural para o problema de contexto finito. Em vez de tentar processar tudo em uma unica janela de contexto, o agente principal delega partes especificas da tarefa a subagentes, cada um com sua propria janela de contexto limpa e focada.</p>
+
+        <p class="text-neutral-300 leading-relaxed">O subagente recebe apenas as instrucoes necessarias para sua tarefa especifica, processa a informacao e retorna um resultado resumido ao agente principal. Isso significa que centenas de linhas de dados podem ser processadas pelo subagente mas apenas um paragrafo de conclusoes retorna ao contexto principal.</p>
+
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Subagentes funcionam como <strong class="text-teal-400">"compressores de contexto"</strong>: recebem uma tarefa especifica, processam grandes volumes de dados em sua propria janela, e retornam apenas um resultado resumido. O contexto do agente principal cresce minimamente enquanto grandes quantidades de informacao sao processadas.</p>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center">
+            <span class="mr-2">🏗️</span> Fluxo de Delegacao
+          </h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm border border-teal-500/30">1</span>
+                <div class="w-0.5 h-8 bg-teal-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-teal-400 mb-1">Agente Principal Identifica Subtarefa</h4>
+                <p class="text-neutral-300 text-sm">"Preciso analisar 200 registros de log para encontrar erros de autenticacao"</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm border border-teal-500/30">2</span>
+                <div class="w-0.5 h-8 bg-teal-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-teal-400 mb-1">Subagente Processa com Contexto Proprio</h4>
+                <p class="text-neutral-300 text-sm">Subagente recebe os 200 registros em sua janela limpa, analisa cada um</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm border border-teal-500/30">3</span>
+              </div>
+              <div>
+                <h4 class="font-semibold text-teal-400 mb-1">Resultado Resumido Retorna ao Principal</h4>
+                <p class="text-neutral-300 text-sm">"Encontrados 3 erros de autenticacao: linhas 45, 123, 189. Causa: token expirado."</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 6 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔄 Nova Sessao com Resumo vs Conversa Obsoleta</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando uma conversa agentica se torna muito longa, ha um ponto alem do qual continuar na mesma sessao causa mais problemas do que beneficios. O contexto esta cheio de tentativas falhadas, tangentes, dados obsoletos e resultados intermediarios que nao sao mais relevantes. A qualidade das respostas cai progressivamente.</p>
+
+        <p class="text-neutral-300 leading-relaxed">A solucao e iniciar uma nova sessao com um resumo estruturado do progresso. Esse resumo captura apenas: o objetivo original, as descobertas-chave, o estado atual, e os proximos passos. Isso fornece ao modelo um contexto limpo, focado e atualizado — muito superior a uma conversa longa e ruidosa.</p>
+
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed"><strong class="text-teal-400">Nova sessao com resumo estruturado > conversa stale longa.</strong> O resumo deve conter: objetivo, descobertas, estado atual, tentativas falhadas (para nao repetir) e proximos passos. /compact e uma alternativa leve para quando a sessao ainda nao esta critica.</p>
+        </div>
+
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center">
+            <span class="mr-2">🎯</span> Quando Agir
+          </h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Modelo começa a "esquecer" instrucoes dadas no inicio da conversa</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Respostas contradizem decisoes tomadas anteriormente</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Modelo repete erros que ja foram identificados e corrigidos</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Latencia por chamada de API aumentou significativamente</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Use <code class="bg-dark-700 px-1.5 py-0.5 rounded text-teal-400 text-xs">/compact</code> como primeira medida, nova sessao se persistir</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESUMO FINAL ==================== -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center">
+        <span class="mr-3">📋</span> Resumo Final
+      </h2>
+
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3">
+          <span class="text-teal-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">O efeito "lost in the middle" causa degradacao silenciosa em conversas longas</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-teal-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Tool results acumulam tokens linearmente, consumindo a janela de contexto</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-teal-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Pin key facts no topo (system prompt) para maxima atencao do modelo</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-teal-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Trim outputs verbosos antes de inserir no historico</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-teal-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Subagentes funcionam como compressores de contexto</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-teal-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Nova sessao com resumo supera conversa obsoleta em qualidade</span>
+        </div>
+      </div>
+
+      <div class="bg-teal-500/10 rounded-lg border border-teal-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm">
+          <strong class="text-teal-400">Proximo modulo:</strong> 5.2 — Padroes de Escalonamento
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-teal-400 hover:border-teal-500/30 transition-colors font-medium">
+          ← Voltar para Trilha
+        </a>
+        <a href="modulo-5-2.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-teal-500/20 border border-teal-500/30 text-teal-400 hover:bg-teal-500/10 transition-colors font-medium">
+          Proximo Modulo →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

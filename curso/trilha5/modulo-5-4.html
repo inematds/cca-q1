@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 5.4 — Contexto em Codebases Grandes | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13, 148, 136, 0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13, 148, 136, 0.25); }
+    html:not(.dark) .hover\:bg-teal-500\/30:hover { background-color: rgba(13, 148, 136, 0.18); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">🏗️</span><span class="font-bold text-lg hidden sm:inline">CCA-Q1</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Arquitetura</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Ferramentas</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Claude Code</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Prompts</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-teal-400 bg-teal-500/10"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Contexto</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-teal-400 transition-colors">Inicio</a><span>/</span>
+      <a href="index.html" class="hover:text-teal-400 transition-colors">Trilha 5</a><span>/</span>
+      <span class="text-teal-400 font-medium">Modulo 5.4</span>
+    </nav>
+  </div>
+
+  <header class="bg-gradient-to-br from-teal-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-teal-500/20 text-teal-400 text-sm font-semibold rounded-full mb-4">MODULO 5.4</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📁 Contexto em Codebases Grandes</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Sinais de degradacao, scratchpad files, subagentes e /compact para manter qualidade em projetos extensos.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">25</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">Inter</div><div class="text-xs text-neutral-400">Intermediario</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">T+P</div><div class="text-xs text-neutral-400">Teoria+Pratica</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">⚠️ Sinais de Degradacao de Contexto</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A degradacao de contexto em codebases grandes e insidiosa porque acontece gradualmente. O modelo nao para de funcionar — ele começa a dar respostas sutilmente piores, mais genericas e menos alinhadas com o projeto especifico. Reconhecer os sinais precocemente e critico.</p>
+        <p class="text-neutral-300 leading-relaxed">Os indicadores mais claros sao: o modelo começa a mencionar "padroes tipicos" em vez de referenciar o codigo real do projeto, da respostas inconsistentes com decisoes anteriores, e repete erros que ja foram discutidos e corrigidos na mesma sessao.</p>
+        <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+          <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Sinais de Alerta</h3>
+          <ul class="space-y-3 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span><strong class="text-red-400">"Typical patterns":</strong> modelo fala de padroes genericos em vez do codigo real do projeto</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span><strong class="text-red-400">Inconsistencias:</strong> contradiz decisoes tomadas anteriormente na mesma sessao</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span><strong class="text-red-400">Repeticao de erros:</strong> sugere abordagens que ja falharam e foram descartadas</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span><strong class="text-red-400">Perda de convencoes:</strong> esquece naming conventions, estrutura de pastas ou padroes do projeto</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span><strong class="text-red-400">Hallucinations:</strong> referencia arquivos, funcoes ou APIs que nao existem no projeto</span></li>
+          </ul>
+        </div>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Quando Claude começa a falar de <strong class="text-teal-400">"padroes tipicos"</strong> em vez de referenciar o codigo real, ou <strong class="text-teal-400">contradiz decisoes anteriores</strong>, e sinal de degradacao de contexto. A intervencao deve ser imediata.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📝 Scratchpad Files</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Scratchpad files sao a tecnica mais simples e eficaz para contornar limites de contexto. O agente escreve seu progresso, decisoes e dados intermediarios em um arquivo no disco. Quando precisa dessa informacao novamente, simplesmente le o arquivo em vez de depender da memoria do contexto.</p>
+        <p class="text-neutral-300 leading-relaxed">Na pratica, o agente pode criar um arquivo como <code class="bg-dark-700 px-2 py-0.5 rounded text-teal-400 text-sm">.scratchpad.md</code> ou <code class="bg-dark-700 px-2 py-0.5 rounded text-teal-400 text-sm">.progress.json</code> e atualiza-lo incrementalmente. Isso externaliza o estado, tornando-o independente da janela de contexto.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Scratchpads <strong class="text-teal-400">externalizam estado para o disco</strong>, contornando limites da janela de contexto. O agente escreve progresso incrementalmente e rele quando necessario — simples, eficaz e sem custo de setup.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📄</span> Exemplo de Scratchpad</h3>
+          <div class="bg-dark-700 rounded-lg p-4 font-mono text-sm text-neutral-300 space-y-1">
+            <p class="text-teal-400"># Progresso - Refatoracao Auth Module</p>
+            <p class="text-neutral-500">## Decisoes</p>
+            <p>- Usar JWT em vez de sessions (decidido no passo 3)</p>
+            <p>- Manter backward compat com API v1</p>
+            <p class="text-neutral-500">## Arquivos Modificados</p>
+            <p>- src/auth/jwt.ts (novo)</p>
+            <p>- src/auth/middleware.ts (refatorado)</p>
+            <p class="text-neutral-500">## Proximos Passos</p>
+            <p>- Atualizar testes em tests/auth/</p>
+            <p>- Migrar endpoints em src/routes/</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🔀 Delegacao a Subagentes para Codebases</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Em codebases com centenas ou milhares de arquivos, carregar tudo no contexto de um unico agente e impossivel. A solucao e delegar exploracoes a subagentes especializados: um analisa o modulo de autenticacao, outro investiga a camada de dados, outro verifica a cobertura de testes.</p>
+        <p class="text-neutral-300 leading-relaxed">Cada subagente recebe instrucoes focadas e opera com sua propria janela limpa. O resultado e um resumo das conclusoes, nao os arquivos inteiros. O agente principal assim constroi uma visao completa da codebase usando apenas resumos.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Subagentes permitem <strong class="text-teal-400">explorar codebases de qualquer tamanho</strong>. Cada subagente analisa uma parte especifica com contexto focado e retorna apenas conclusoes. O agente principal opera com resumos, nao com arquivos inteiros.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">🏗️</span> Exemplo de Distribuicao</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-dark-700 rounded-lg p-4 text-center">
+              <div class="text-teal-400 font-bold mb-2">Subagente A</div>
+              <p class="text-neutral-300 text-sm">Analisa src/auth/</p>
+              <p class="text-neutral-400 text-xs mt-1">Retorna: "JWT com refresh tokens, middleware em 3 rotas"</p>
+            </div>
+            <div class="bg-dark-700 rounded-lg p-4 text-center">
+              <div class="text-teal-400 font-bold mb-2">Subagente B</div>
+              <p class="text-neutral-300 text-sm">Analisa src/database/</p>
+              <p class="text-neutral-400 text-xs mt-1">Retorna: "Prisma ORM, 12 models, migrations em dia"</p>
+            </div>
+            <div class="bg-dark-700 rounded-lg p-4 text-center">
+              <div class="text-teal-400 font-bold mb-2">Subagente C</div>
+              <p class="text-neutral-300 text-sm">Analisa tests/</p>
+              <p class="text-neutral-400 text-xs mt-1">Retorna: "78% cobertura, gaps em auth e payments"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">💾 Persistencia de Estado Estruturado</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Para tarefas que se estendem por multiplas sessoes, scratchpads informais podem nao ser suficientes. Estado estruturado em formato JSON ou YAML captura informacoes de forma precisa e parseavel: arquivos modificados, dependencias, decisoes, e plano de execucao.</p>
+        <p class="text-neutral-300 leading-relaxed">O CLAUDE.md e uma forma especial de estado persistente que Claude Code le automaticamente no inicio de cada sessao. Usado para convencoes do projeto, decisoes arquiteturais permanentes e instrucoes que devem sobreviver entre sessoes.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Estado estruturado (JSON/YAML) permite <strong class="text-teal-400">continuidade precisa entre sessoes</strong>. <code class="bg-dark-700 px-1.5 py-0.5 rounded text-teal-400 text-xs">CLAUDE.md</code> serve como <strong class="text-teal-400">memoria de longo prazo</strong> — lido automaticamente a cada nova sessao.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📄</span> Exemplo de Estado JSON</h3>
+          <div class="bg-dark-700 rounded-lg p-4 font-mono text-sm text-neutral-300 space-y-1">
+            <p>{</p>
+            <p class="pl-4"><span class="text-teal-400">"task"</span>: "Migrar auth de sessions para JWT",</p>
+            <p class="pl-4"><span class="text-teal-400">"phase"</span>: 2,</p>
+            <p class="pl-4"><span class="text-teal-400">"completed"</span>: ["jwt.ts", "middleware.ts"],</p>
+            <p class="pl-4"><span class="text-teal-400">"pending"</span>: ["routes/*.ts", "tests/auth/"],</p>
+            <p class="pl-4"><span class="text-teal-400">"decisions"</span>: {</p>
+            <p class="pl-8">"token_expiry": "15min access, 7d refresh",</p>
+            <p class="pl-8">"backward_compat": true</p>
+            <p class="pl-4">}</p>
+            <p>}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🗜️ /compact para Reducao de Contexto</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O comando <code class="bg-dark-700 px-2 py-0.5 rounded text-teal-400 text-sm">/compact</code> no Claude Code resume o historico de conversacao atual, preservando conclusoes-chave e estado mas descartando detalhes intermediarios como tool results verbosos, tentativas falhadas e raciocinio passo-a-passo.</p>
+        <p class="text-neutral-300 leading-relaxed">E a ferramenta mais rapida para intervir quando sinais de degradacao aparecem. Nao requer criar nova sessao, nao requer resumo manual — basta executar <code class="bg-dark-700 px-2 py-0.5 rounded text-teal-400 text-sm">/compact</code> e o contexto e automaticamente reduzido.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed"><code class="bg-dark-700 px-2 py-0.5 rounded text-teal-400 text-sm">/compact</code> e <strong class="text-teal-400">resumo automatico do contexto</strong> — preserva conclusoes, descarta detalhes intermediarios. Use proativamente quando a conversa esta ficando longa, nao espere sinais de degradacao.</p>
+        </div>
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Quando Usar /compact</h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Apos completar um marco significativo da tarefa</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Quando percebe os primeiros sinais de degradacao</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Antes de iniciar uma nova fase que requer foco</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Proativamente a cada 15-20 interacoes em tarefas longas</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔗 Estrategia Combinada</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Para projetos complexos de longa duracao, a abordagem ideal combina todas as tecnicas: subagentes para exploracao, scratchpad para estado intermediario, /compact quando o contexto cresce, e novas sessoes com resumo estruturado para marcos importantes.</p>
+        <p class="text-neutral-300 leading-relaxed">A chave e saber quando aplicar cada tecnica. Subagentes sao ideais para explorar partes desconhecidas. Scratchpads para manter progresso. /compact para manutenção de rotina. Nova sessao para reset completo quando a degradacao e severa.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Nenhuma tecnica isolada resolve todos os problemas. A <strong class="text-teal-400">combinacao situacional</strong> de subagentes + scratchpad + /compact + nova sessao e o que permite trabalhar em projetos de qualquer complexidade e duracao.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📍</span> Decisao por Cenario</h3>
+          <div class="space-y-4">
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xs flex-shrink-0">SUB</span>
+              <div><h4 class="font-semibold text-teal-400 text-sm">Subagentes</h4><p class="text-neutral-300 text-sm">Quando precisa explorar partes grandes e desconhecidas da codebase</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xs flex-shrink-0">PAD</span>
+              <div><h4 class="font-semibold text-teal-400 text-sm">Scratchpad</h4><p class="text-neutral-300 text-sm">Para persistir decisoes e progresso ao longo da sessao</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xs flex-shrink-0">/C</span>
+              <div><h4 class="font-semibold text-teal-400 text-sm">/compact</h4><p class="text-neutral-300 text-sm">Manutencao de rotina quando contexto esta crescendo</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xs flex-shrink-0">NEW</span>
+              <div><h4 class="font-semibold text-amber-400 text-sm">Nova sessao</h4><p class="text-neutral-300 text-sm">Reset completo quando degradacao e severa e /compact nao resolve</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO FINAL -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📋</span> Resumo Final</h2>
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">"Typical patterns" e inconsistencias sao sinais de degradacao de contexto</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Scratchpad files externalizam estado para o disco, contornando limites de contexto</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Subagentes permitem explorar codebases de qualquer tamanho</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Estado estruturado e CLAUDE.md garantem continuidade entre sessoes</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">/compact e a intervencao mais rapida para degradacao de contexto</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Combinacao situacional de tecnicas para projetos complexos</span></div>
+      </div>
+      <div class="bg-teal-500/10 rounded-lg border border-teal-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm"><strong class="text-teal-400">Proximo modulo:</strong> 5.5 — Revisao Humana e Calibracao</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="modulo-5-3.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-teal-400 hover:border-teal-500/30 transition-colors font-medium">← Modulo Anterior</a>
+        <a href="modulo-5-5.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-teal-500/20 border border-teal-500/30 text-teal-400 hover:bg-teal-500/10 transition-colors font-medium">Proximo Modulo →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>CCA-Q1 — Claude Certified Architect - 2026</p></div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) { themeToggleDarkIcon.classList.remove('hidden'); html.classList.remove('dark'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 5.5 — Revisao Humana e Calibracao | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13, 148, 136, 0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13, 148, 136, 0.25); }
+    html:not(.dark) .hover\:bg-teal-500\/30:hover { background-color: rgba(13, 148, 136, 0.18); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">🏗️</span><span class="font-bold text-lg hidden sm:inline">CCA-Q1</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Arquitetura</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Ferramentas</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Claude Code</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Prompts</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-teal-400 bg-teal-500/10"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Contexto</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-teal-400 transition-colors">Inicio</a><span>/</span>
+      <a href="index.html" class="hover:text-teal-400 transition-colors">Trilha 5</a><span>/</span>
+      <span class="text-teal-400 font-medium">Modulo 5.5</span>
+    </nav>
+  </div>
+
+  <header class="bg-gradient-to-br from-teal-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-teal-500/20 text-teal-400 text-sm font-semibold rounded-full mb-4">MODULO 5.5</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🎯 Revisao Humana e Calibracao</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Como metricas agregadas escondem problemas, amostragem estratificada, scores de confianca e roteamento para revisao humana.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">25</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">Inter</div><div class="text-xs text-neutral-400">Intermediario</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">T+P</div><div class="text-xs text-neutral-400">Teoria+Pratica</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">📊 Acuracia Agregada Mascara Problemas</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Um sistema com 97% de acuracia agregada parece excelente — ate voce olhar as categorias individuais. Esse numero pode esconder que o sistema acerta 99.5% dos casos simples (que representam 90% do volume) mas apenas 40% dos casos complexos. A media alta mascara performance abismal onde mais importa.</p>
+        <p class="text-neutral-300 leading-relaxed">Esse fenomeno e uma manifestacao do paradoxo de Simpson: metricas agregadas podem mostrar uma tendencia completamente diferente das metricas desagregadas por categoria. Em sistemas agenticos, os 3% de erros podem ser exatamente os casos de maior impacto financeiro ou regulatorio.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed"><strong class="text-teal-400">97% de acuracia agregada pode significar 40% em edge cases criticos.</strong> Metricas agregadas criam falsa confianca. Sempre desagregar por categoria, tipo de tarefa e complexidade para revelar a performance real.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📊</span> Exemplo: 97% Agregado Mascara Problemas</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between bg-dark-700 rounded-lg p-3">
+              <span class="text-neutral-300 text-sm">Consultas simples (90% do volume)</span>
+              <span class="text-teal-400 font-bold">99.5%</span>
+            </div>
+            <div class="flex items-center justify-between bg-dark-700 rounded-lg p-3">
+              <span class="text-neutral-300 text-sm">Casos com excecoes (7% do volume)</span>
+              <span class="text-amber-400 font-bold">78%</span>
+            </div>
+            <div class="flex items-center justify-between bg-dark-700 rounded-lg p-3">
+              <span class="text-neutral-300 text-sm">Edge cases complexos (3% do volume)</span>
+              <span class="text-red-400 font-bold">40%</span>
+            </div>
+            <div class="flex items-center justify-between bg-teal-500/10 rounded-lg p-3 border border-teal-500/30">
+              <span class="text-neutral-300 text-sm font-bold">Media ponderada agregada</span>
+              <span class="text-teal-400 font-bold">97%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🎲 Amostragem Aleatoria Estratificada</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Stratified random sampling garante que a amostra selecionada para revisao humana represente todas as categorias de tarefa proporcionalmente. Em vez de pegar 100 casos aleatorios (que provavelmente serao 90+ casos simples), voce seleciona uma proporcao minima de cada categoria.</p>
+        <p class="text-neutral-300 leading-relaxed">Isso garante que edge cases raros — que sao frequentemente os mais criticos — sejam representados na amostra de revisao. Oversampling deliberado de categorias raras e uma pratica comum para garantir visibilidade nessas areas.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Amostragem estratificada garante <strong class="text-teal-400">representacao minima de cada categoria</strong> na revisao. Oversampling de edge cases garante visibilidade onde problemas sao mais provaveis e mais impactantes.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-3">Amostragem Aleatoria Simples</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>100 amostras aleatorias do total</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>~90 casos simples, ~7 com excecoes, ~3 complexos</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Problemas em edge cases invisiveis</span></li>
+            </ul>
+          </div>
+          <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+            <h4 class="font-semibold text-teal-400 mb-3">Amostragem Estratificada</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>50 simples + 25 com excecoes + 25 complexos</span></li>
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Oversampling deliberado de categorias raras</span></li>
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Problemas em todas as categorias visiveis</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🔢 Scores de Confianca por Campo</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Em vez de um unico score de confianca para toda a resposta, field-level confidence scores atribuem um indicador individual a cada campo do output. Isso permite identificar exatamente quais partes da resposta sao confiaveis e quais sao incertas.</p>
+        <p class="text-neutral-300 leading-relaxed">Por exemplo, em uma extracao de dados de documento, o agente pode ter 0.98 de confianca no nome da empresa mas apenas 0.65 no valor do contrato (porque o documento estava parcialmente ilegivel). O score global seria 0.82, mas o campo critico (valor) esta muito abaixo do aceitavel.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Scores por campo permitem <strong class="text-teal-400">revisao granular focada</strong>. O revisor humano olha apenas os campos de baixa confianca, em vez de revisar a resposta inteira. Isso otimiza drasticamente o tempo de revisao.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📄</span> Exemplo: Extracao com Scores por Campo</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between bg-dark-700 rounded-lg p-3">
+              <span class="text-neutral-300 text-sm">empresa: "Acme Corp"</span>
+              <span class="text-teal-400 font-bold text-sm">0.98</span>
+            </div>
+            <div class="flex items-center justify-between bg-dark-700 rounded-lg p-3">
+              <span class="text-neutral-300 text-sm">cnpj: "12.345.678/0001-90"</span>
+              <span class="text-teal-400 font-bold text-sm">0.95</span>
+            </div>
+            <div class="flex items-center justify-between bg-dark-700 rounded-lg p-3">
+              <span class="text-neutral-300 text-sm">data: "2026-01-15"</span>
+              <span class="text-amber-400 font-bold text-sm">0.82</span>
+            </div>
+            <div class="flex items-center justify-between bg-red-500/10 rounded-lg p-3 border border-red-500/30">
+              <span class="text-neutral-300 text-sm">valor: "R$ 1.250.000,00"</span>
+              <span class="text-red-400 font-bold text-sm">0.65 ← revisao</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔀 Roteamento de Baixa Confianca</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O roteamento por confianca cria um sistema hibrido onde o agente processa autonomamente todos os casos de alta confianca e encaminha apenas os casos incertos para revisao humana. Isso maximiza a eficiencia do agente enquanto garante qualidade atraves de oversight seletivo.</p>
+        <p class="text-neutral-300 leading-relaxed">O threshold de confianca deve ser configuravel por tipo de campo e criticidade. Campos de alto impacto (valores financeiros, dados pessoais) podem ter thresholds mais altos (0.95+), enquanto campos de baixo risco (descricoes, tags) podem aceitar thresholds menores (0.80+).</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Campos com score abaixo do threshold sao <strong class="text-teal-400">automaticamente roteados para fila de revisao humana</strong>. Thresholds sao configurados por criticidade do campo — valores financeiros exigem confianca maior que campos descritivos.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📍</span> Fluxo de Roteamento</h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm border border-teal-500/30">1</span><div class="w-0.5 h-8 bg-teal-500/30 mt-2"></div></div>
+              <div><h4 class="font-semibold text-teal-400 mb-1">Agente Processa e Atribui Scores</h4><p class="text-neutral-300 text-sm">Cada campo recebe confidence score individual</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm border border-teal-500/30">2</span><div class="w-0.5 h-8 bg-teal-500/30 mt-2"></div></div>
+              <div><h4 class="font-semibold text-teal-400 mb-1">Threshold Check por Campo</h4><p class="text-neutral-300 text-sm">Compara score vs threshold configurado para aquele tipo de campo</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm border border-teal-500/30">3</span></div>
+              <div><h4 class="font-semibold text-teal-400 mb-1">Roteamento Seletivo</h4><p class="text-neutral-300 text-sm">Campos acima do threshold: aprovados. Abaixo: fila de revisao humana.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🔄 Calibracao Continua</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Scores de confianca so sao uteis se forem calibrados — isto e, quando o agente diz "95% confianca", deveria realmente acertar ~95% das vezes. Se acerta apenas 70%, os scores estao super-calibrados (overconfident). Se acerta 99%, estao sub-calibrados (underconfident).</p>
+        <p class="text-neutral-300 leading-relaxed">A calibracao e feita comparando os scores preditos com os resultados reais da revisao humana. Esse feedback loop continuo ajusta os scores ao longo do tempo, mantendo-os alinhados com a realidade de performance do sistema.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Scores descalibrados sao <strong class="text-teal-400">piores que nenhum score</strong> — criam falsa confianca. O feedback loop <strong class="text-teal-400">humano corrige → sistema ajusta thresholds → scores melhoram</strong> garante calibracao continua.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📊</span> Calibration Check</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between bg-dark-700 rounded-lg p-3">
+              <span class="text-neutral-300 text-sm">Score predito: 0.95</span>
+              <span class="text-neutral-300 text-sm">Acuracia real: 0.93</span>
+              <span class="text-teal-400 font-bold text-sm">Calibrado</span>
+            </div>
+            <div class="flex items-center justify-between bg-dark-700 rounded-lg p-3">
+              <span class="text-neutral-300 text-sm">Score predito: 0.90</span>
+              <span class="text-neutral-300 text-sm">Acuracia real: 0.70</span>
+              <span class="text-red-400 font-bold text-sm">Overconfident</span>
+            </div>
+            <div class="flex items-center justify-between bg-dark-700 rounded-lg p-3">
+              <span class="text-neutral-300 text-sm">Score predito: 0.60</span>
+              <span class="text-neutral-300 text-sm">Acuracia real: 0.92</span>
+              <span class="text-amber-400 font-bold text-sm">Underconfident</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🖥️ Design de Interface de Revisao</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A interface de revisao humana deve ser otimizada para velocidade e precisao. Campos de baixa confianca devem estar destacados visualmente. O raciocinio do agente deve estar acessivel para contexto. E acoes de aprovar/rejeitar/corrigir devem ser de um clique.</p>
+        <p class="text-neutral-300 leading-relaxed">Batch review — revisar multiplos casos em sequencia com interface otimizada — e essencial para manter throughput. Metricas de tempo por revisao e taxa de concordancia entre revisores informam melhorias no design e na calibracao do sistema.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Interface de revisao otimizada: <strong class="text-teal-400">highlight de campos incertos, raciocinio do agente visivel, one-click approve/reject, batch review</strong>. O design deve minimizar tempo de revisao sem sacrificar qualidade do feedback.</p>
+        </div>
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Elementos Essenciais da Interface</h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Highlight visual de campos com score abaixo do threshold</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Raciocinio do agente expandivel para cada campo</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Dados-fonte originais acessiveis para comparacao</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Botoes de approve/reject/edit de acesso rapido</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Metricas de tempo e throughput de revisao por sessao</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO FINAL -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📋</span> Resumo Final</h2>
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">97% agregado pode mascarar 40% em edge cases — sempre desagregar</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Amostragem estratificada garante visibilidade em todas as categorias</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Scores por campo permitem revisao granular e focada</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Baixa confianca roteia automaticamente para fila de revisao humana</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Calibracao continua garante que scores reflitam a realidade</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Interface otimizada maximiza throughput de revisao humana</span></div>
+      </div>
+      <div class="bg-teal-500/10 rounded-lg border border-teal-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm"><strong class="text-teal-400">Proximo modulo:</strong> 5.6 — Proveniencia e Sintese Multi-Fonte</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="modulo-5-4.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-teal-400 hover:border-teal-500/30 transition-colors font-medium">← Modulo Anterior</a>
+        <a href="modulo-5-6.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-teal-500/20 border border-teal-500/30 text-teal-400 hover:bg-teal-500/10 transition-colors font-medium">Proximo Modulo →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>CCA-Q1 — Claude Certified Architect - 2026</p></div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) { themeToggleDarkIcon.classList.remove('hidden'); html.classList.remove('dark'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

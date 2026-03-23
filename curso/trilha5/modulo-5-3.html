@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 5.3 — Propagacao de Erros Multi-Agente | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13, 148, 136, 0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13, 148, 136, 0.25); }
+    html:not(.dark) .hover\:bg-teal-500\/30:hover { background-color: rgba(13, 148, 136, 0.18); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">🏗️</span><span class="font-bold text-lg hidden sm:inline">CCA-Q1</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Arquitetura</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Ferramentas</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Claude Code</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Prompts</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-teal-400 bg-teal-500/10"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Contexto</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-teal-400 transition-colors">Inicio</a><span>/</span>
+      <a href="index.html" class="hover:text-teal-400 transition-colors">Trilha 5</a><span>/</span>
+      <span class="text-teal-400 font-medium">Modulo 5.3</span>
+    </nav>
+  </div>
+
+  <header class="bg-gradient-to-br from-teal-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-teal-500/20 text-teal-400 text-sm font-semibold rounded-full mb-4">MODULO 5.3</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">💥 Propagacao de Erros Multi-Agente</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Como propagar erros com contexto estruturado entre agentes, distinguir falhas de resultados vazios e evitar anti-padroes de supressao.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">25</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">Inter</div><div class="text-xs text-neutral-400">Intermediario</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">T+P</div><div class="text-xs text-neutral-400">Teoria+Pratica</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">📦 Contexto de Erro Estruturado</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando um subagente falha, simplesmente retornar "erro" ou uma string vazia nao fornece informacao suficiente para o agente principal decidir como prosseguir. Erros devem ser propagados com contexto estruturado que permita recuperacao inteligente.</p>
+        <p class="text-neutral-300 leading-relaxed">O contexto estruturado de erro deve conter quatro campos essenciais: o tipo de falha, a query que foi tentada, quaisquer resultados parciais obtidos antes da falha, e alternativas sugeridas que o agente principal pode tentar.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Erros devem ser propagados com <strong class="text-teal-400">contexto estruturado</strong>: failure_type, attempted_query, partial_results e suggested_alternatives. Isso permite que o agente receptor tome decisoes informadas sobre recuperacao.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📄</span> Formato de Erro Estruturado</h3>
+          <div class="bg-dark-700 rounded-lg p-4 font-mono text-sm text-neutral-300 space-y-1">
+            <p>{</p>
+            <p class="pl-4"><span class="text-teal-400">"failure_type"</span>: "api_timeout",</p>
+            <p class="pl-4"><span class="text-teal-400">"attempted_query"</span>: "GET /api/orders/12345",</p>
+            <p class="pl-4"><span class="text-teal-400">"partial_results"</span>: {"order_id": "12345", "status": "unknown"},</p>
+            <p class="pl-4"><span class="text-teal-400">"suggested_alternatives"</span>: [</p>
+            <p class="pl-8">"retry_with_backoff",</p>
+            <p class="pl-8">"query_cache_instead",</p>
+            <p class="pl-8">"use_order_history_endpoint"</p>
+            <p class="pl-4">]</p>
+            <p>}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔍 Access Failures vs Resultados Vazios</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">E absolutamente critico distinguir entre dois cenarios fundamentalmente diferentes: (1) a ferramenta falhou ao tentar acessar os dados (API fora do ar, timeout, permissao negada), e (2) a ferramenta acessou os dados com sucesso mas nao encontrou resultados (busca bem-sucedida com zero matches).</p>
+        <p class="text-neutral-300 leading-relaxed">No primeiro caso, a resposta correta pode ser retry, usar fonte alternativa ou escalonar. No segundo caso, "nao encontrado" e a informacao correta e deve ser reportada como tal. Confundir os dois leva a respostas fundamentalmente erradas.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed"><strong class="text-teal-400">Access failure ≠ resultado vazio valido.</strong> "Nao consegui acessar o sistema" e completamente diferente de "acessei o sistema e nao ha registros". O primeiro requer retry/escalonamento; o segundo e informacao util.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+            <h4 class="font-semibold text-red-400 mb-3">Access Failure</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>HTTP 500, 502, 503 (erro do servidor)</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>Timeout de conexao</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>HTTP 401/403 (permissao negada)</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">•</span><span>DNS resolution failure</span></li>
+            </ul>
+            <p class="text-red-400 text-xs mt-3 font-semibold">Acao: retry, fonte alternativa, ou escalonar</p>
+          </div>
+          <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+            <h4 class="font-semibold text-teal-400 mb-3">Resultado Vazio Valido</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>HTTP 200 com array vazio []</span></li>
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Query executou sem erros, zero matches</span></li>
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Busca por CPF retorna "nao cadastrado"</span></li>
+              <li class="flex items-start space-x-2"><span class="text-teal-400 mt-0.5">•</span><span>Filtro aplicado corretamente, sem resultados</span></li>
+            </ul>
+            <p class="text-teal-400 text-xs mt-3 font-semibold">Acao: reportar "nao encontrado" como informacao valida</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🚫 Anti-Padroes: Supressao e Terminacao</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Dois anti-padroes criticos dominam o tratamento de erros em sistemas multi-agente: supressao silenciosa e terminacao total. Ambos representam extremos que comprometem gravemente a confiabilidade do sistema.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center"><span class="mr-2">🔇</span> Supressao Silenciosa</h4>
+            <p class="text-neutral-300 text-sm mb-3">O subagente falha mas retorna uma resposta vazia ou generica sem indicar o erro. O agente principal nao sabe que houve falha.</p>
+            <div class="bg-dark-700 rounded-lg p-3 text-sm">
+              <p class="text-neutral-400">Subagente falha ao buscar dados...</p>
+              <p class="text-red-400 mt-1">Retorna: "" (string vazia)</p>
+              <p class="text-neutral-400 mt-1">Principal interpreta como: "nao ha dados"</p>
+              <p class="text-red-400 mt-1 font-semibold">Resultado: resposta incorreta</p>
+            </div>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center"><span class="mr-2">💣</span> Terminacao Total</h4>
+            <p class="text-neutral-300 text-sm mb-3">Qualquer erro em qualquer subagente aborta toda a tarefa, mesmo quando outros subagentes concluiram com sucesso.</p>
+            <div class="bg-dark-700 rounded-lg p-3 text-sm">
+              <p class="text-teal-400">Subagente A: sucesso (dados de vendas)</p>
+              <p class="text-teal-400">Subagente B: sucesso (dados de estoque)</p>
+              <p class="text-red-400">Subagente C: falha (API de marketing)</p>
+              <p class="text-red-400 mt-1 font-semibold">Resultado: tudo descartado, tarefa abortada</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">✅</span> Abordagem Correta: Degradacao Graceful</h3>
+          <p class="text-neutral-300 leading-relaxed">Agregar resultados dos subagentes que tiveram sucesso e indicar claramente quais partes falharam. <strong class="text-teal-400">Uma resposta parcial com transparencia sobre lacunas e quase sempre melhor que nenhuma resposta.</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔧 Recuperacao Local em Subagentes</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Antes de propagar um erro ao agente principal, o subagente deve tentar recuperacao local. Isso inclui: retry com backoff exponencial para erros transitorios, busca em fonte alternativa se a primaria falhou, e retorno de resultados parciais com indicacao clara do que faltou.</p>
+        <p class="text-neutral-300 leading-relaxed">Apenas erros genuinamente irrecuperaveis — como "recurso nao existe" ou "permissao permanentemente negada" — devem ser propagados sem tentativa de recuperacao. Erros transitorios (timeouts, rate limits) devem ser tratados localmente.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Subagentes devem tentar <strong class="text-teal-400">recuperacao local</strong> antes de propagar erros: retry com backoff, fonte alternativa, ou resultado parcial. Apenas erros <strong class="text-teal-400">irrecuperaveis</strong> devem subir ao agente principal.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📍</span> Hierarquia de Recuperacao</h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm border border-teal-500/30">1</span><div class="w-0.5 h-8 bg-teal-500/30 mt-2"></div></div>
+              <div><h4 class="font-semibold text-teal-400 mb-1">Retry com Backoff</h4><p class="text-neutral-300 text-sm">Para erros transitorios (timeout, 429, 503). Tentar 2-3 vezes com delay crescente.</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm border border-teal-500/30">2</span><div class="w-0.5 h-8 bg-teal-500/30 mt-2"></div></div>
+              <div><h4 class="font-semibold text-teal-400 mb-1">Fonte Alternativa</h4><p class="text-neutral-300 text-sm">Se a fonte primaria esta indisponivel, tentar cache, banco secundario ou endpoint alternativo.</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm border border-teal-500/30">3</span><div class="w-0.5 h-8 bg-teal-500/30 mt-2"></div></div>
+              <div><h4 class="font-semibold text-teal-400 mb-1">Resultado Parcial</h4><p class="text-neutral-300 text-sm">Retornar o que foi obtido com metadata indicando o que faltou.</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-red-500/20 text-red-400 font-bold text-sm border border-red-500/30">4</span></div>
+              <div><h4 class="font-semibold text-red-400 mb-1">Propagar Erro Estruturado</h4><p class="text-neutral-300 text-sm">Somente se todas as alternativas falharam. Incluir contexto completo da falha.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🧩 Agregacao de Resultados Parciais</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Em sistemas com multiplos subagentes executando em paralelo, e comum que alguns completem com sucesso enquanto outros falham. O agente coordenador deve agregar os resultados bem-sucedidos e indicar explicitamente quais partes estao faltando e por que.</p>
+        <p class="text-neutral-300 leading-relaxed">A resposta ao usuario deve ser transparente: "Aqui estao os dados de vendas e estoque. Os dados de marketing nao estao disponiveis no momento devido a manutencao do sistema — voce pode tentar novamente em 30 minutos." Essa transparencia constroi confianca.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed"><strong class="text-teal-400">Resposta parcial transparente > nenhuma resposta.</strong> Agregar resultados de subagentes bem-sucedidos, indicar gaps com motivo e sugestao, e deixar o usuario decidir se o resultado parcial e suficiente.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📄</span> Exemplo de Resposta Parcial</h3>
+          <div class="bg-dark-700 rounded-lg p-4 font-mono text-sm text-neutral-300 space-y-1">
+            <p>{</p>
+            <p class="pl-4"><span class="text-teal-400">"complete_data"</span>: {</p>
+            <p class="pl-8"><span class="text-teal-400">"vendas"</span>: { ... },</p>
+            <p class="pl-8"><span class="text-teal-400">"estoque"</span>: { ... }</p>
+            <p class="pl-4">},</p>
+            <p class="pl-4"><span class="text-red-400">"missing_data"</span>: {</p>
+            <p class="pl-8"><span class="text-red-400">"marketing"</span>: {</p>
+            <p class="pl-12">"reason": "api_timeout",</p>
+            <p class="pl-12">"suggestion": "retry_in_30_min"</p>
+            <p class="pl-8">}</p>
+            <p class="pl-4">},</p>
+            <p class="pl-4"><span class="text-amber-400">"completeness"</span>: "2/3 sources available"</p>
+            <p>}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">📊 Logging e Observabilidade de Erros</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Em sistemas multi-agente, erros podem ocorrer em qualquer nivel da hierarquia. Sem logging estruturado e observabilidade, erros intermitentes e padroes de falha sao invisiveis. Cada erro propagado deve ser registrado com contexto completo para analise posterior.</p>
+        <p class="text-neutral-300 leading-relaxed">O logging ideal usa trace IDs que permitem rastrear uma requisicao desde o agente principal ate cada subagente envolvido. Metricas agregadas revelam padroes: qual subagente falha mais, quais tipos de erro sao mais frequentes, e qual o tempo medio de recuperacao.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Cada erro deve ser logado com: <strong class="text-teal-400">trace_id, agent_id, operacao tentada, tipo de erro, resultado do tratamento e timestamp</strong>. Metricas agregadas revelam padroes de falha e guiam melhorias no sistema.</p>
+        </div>
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center"><span class="mr-2">🎯</span> Metricas Essenciais</h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Taxa de erro por subagente (identifica elos fracos)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Tempo medio de recuperacao local (eficiencia de retry)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Taxa de propagacao vs recuperacao local (resiliencia)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">•</span><span>Tipos de erro mais frequentes (guia priorizacao de fixes)</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO FINAL -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📋</span> Resumo Final</h2>
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Erros devem ser propagados com contexto estruturado (tipo, query, parciais, alternativas)</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Access failure e resultado vazio valido sao cenarios fundamentalmente diferentes</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Supressao silenciosa e terminacao total sao anti-padroes criticos</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Subagentes devem tentar recuperacao local antes de propagar erros</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Resposta parcial transparente e superior a nenhuma resposta</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Logging estruturado com trace IDs e essencial para observabilidade</span></div>
+      </div>
+      <div class="bg-teal-500/10 rounded-lg border border-teal-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm"><strong class="text-teal-400">Proximo modulo:</strong> 5.4 — Contexto em Codebases Grandes</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="modulo-5-2.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-teal-400 hover:border-teal-500/30 transition-colors font-medium">← Modulo Anterior</a>
+        <a href="modulo-5-4.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-teal-500/20 border border-teal-500/30 text-teal-400 hover:bg-teal-500/10 transition-colors font-medium">Proximo Modulo →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>CCA-Q1 — Claude Certified Architect - 2026</p></div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) { themeToggleDarkIcon.classList.remove('hidden'); html.classList.remove('dark'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

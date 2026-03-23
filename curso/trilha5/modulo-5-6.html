@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 5.6 — Proveniencia e Sintese Multi-Fonte | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13, 148, 136, 0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13, 148, 136, 0.25); }
+    html:not(.dark) .hover\:bg-teal-500\/30:hover { background-color: rgba(13, 148, 136, 0.18); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">🏗️</span><span class="font-bold text-lg hidden sm:inline">CCA-Q1</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Arquitetura</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Ferramentas</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Claude Code</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Prompts</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-teal-400 bg-teal-500/10"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Contexto</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-teal-400 transition-colors">Inicio</a><span>/</span>
+      <a href="index.html" class="hover:text-teal-400 transition-colors">Trilha 5</a><span>/</span>
+      <span class="text-teal-400 font-medium">Modulo 5.6</span>
+    </nav>
+  </div>
+
+  <header class="bg-gradient-to-br from-teal-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-teal-500/20 text-teal-400 text-sm font-semibold rounded-full mb-4">MODULO 5.6</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🔗 Proveniencia e Sintese Multi-Fonte</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Manter rastreabilidade de fontes durante sintese, claim-source mappings, conflitos entre dados e proveniencia end-to-end.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">6</div><div class="text-xs text-neutral-400">Topicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">25</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">Inter</div><div class="text-xs text-neutral-400">Intermediario</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center"><div class="text-2xl font-bold text-teal-400">T+P</div><div class="text-xs text-neutral-400">Teoria+Pratica</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🔍 Perda de Atribuicao Durante Sumarizacao</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando um agente sintetiza informacoes de multiplas fontes em um resumo unico, a atribuicao de qual dado veio de qual fonte tende a se perder completamente. O resultado e um texto coerente mas opaco — impossivel de verificar, impossivel de auditar.</p>
+        <p class="text-neutral-300 leading-relaxed">Esse problema e especialmente grave em contextos regulados, juridicos ou financeiros, onde cada afirmacao precisa ser rastreavel a sua fonte original. Um relatorio que diz "a receita da empresa cresceu 15%" sem indicar a fonte e fundamentalmente nao-verificavel.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Sumarizacao sem rastreio de fonte produz <strong class="text-teal-400">outputs nao-verificaveis</strong>. Cada afirmacao no resumo deve ser vinculada a sua fonte original. Sem isso, o sistema inteiro perde auditabilidade e confianca.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-3">Resumo Opaco (errado)</h4>
+            <p class="text-neutral-300 text-sm">"A empresa teve receita de R$10M em 2025, com crescimento de 15% e margem EBITDA de 22%."</p>
+            <p class="text-red-400 text-xs mt-2">De onde vieram esses numeros? Impossivel verificar.</p>
+          </div>
+          <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+            <h4 class="font-semibold text-teal-400 mb-3">Resumo com Atribuicao (correto)</h4>
+            <p class="text-neutral-300 text-sm">"A empresa teve receita de R$10M [Balanco Anual 2025, p.12], com crescimento de 15% [Press Release Q4] e margem EBITDA de 22% [Relatorio Analista XYZ]."</p>
+            <p class="text-teal-400 text-xs mt-2">Cada dado rastreavel a sua fonte.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📋 Claim-Source Mappings Obrigatorios</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Claim-source mappings sao a solucao tecnica para o problema de perda de atribuicao. Cada afirmacao (claim) e explicitamente vinculada a sua fonte (source) em uma estrutura de dados parseavel. Isso permite verificacao automatizada e auditoria sistematica.</p>
+        <p class="text-neutral-300 leading-relaxed">O formato ideal inclui a afirmacao, a fonte, e opcionalmente um score de confianca e a data do dado. Esse formato deve ser parte do output obrigatorio do agente, nao um adendo opcional.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Claim-source mappings sao <strong class="text-teal-400">obrigatorios em qualquer sistema de sintese multi-fonte</strong>. O formato estruturado permite verificacao automatizada e garante que cada afirmacao e rastreavel a sua origem.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📄</span> Formato Claim-Source</h3>
+          <div class="bg-dark-700 rounded-lg p-4 font-mono text-sm text-neutral-300 space-y-1">
+            <p>[</p>
+            <p class="pl-4">{</p>
+            <p class="pl-8"><span class="text-teal-400">"claim"</span>: "Receita anual de R$10M",</p>
+            <p class="pl-8"><span class="text-teal-400">"source"</span>: "Balanco Anual 2025, pagina 12",</p>
+            <p class="pl-8"><span class="text-teal-400">"confidence"</span>: 0.95,</p>
+            <p class="pl-8"><span class="text-teal-400">"date"</span>: "2025-12-31"</p>
+            <p class="pl-4">},</p>
+            <p class="pl-4">{</p>
+            <p class="pl-8"><span class="text-teal-400">"claim"</span>: "Crescimento de 15% YoY",</p>
+            <p class="pl-8"><span class="text-teal-400">"source"</span>: "Press Release Q4 2025",</p>
+            <p class="pl-8"><span class="text-teal-400">"confidence"</span>: 0.90,</p>
+            <p class="pl-8"><span class="text-teal-400">"date"</span>: "2026-01-15"</p>
+            <p class="pl-4">}</p>
+            <p>]</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">⚡ Anotacao de Estatisticas Conflitantes</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando fontes diferentes apresentam dados conflitantes, o agente NUNCA deve resolver o conflito silenciosamente — nem escolhendo um valor, nem fazendo media, nem ignorando a fonte menos "confiavel". Conflitos devem ser anotados explicitamente e apresentados ao usuario para decisao.</p>
+        <p class="text-neutral-300 leading-relaxed">O agente pode e deve fornecer contexto adicional sobre o conflito: datas de cada fonte, metodologias diferentes, possivel causa da divergencia. Mas a decisao de qual valor usar pertence ao humano, nao ao agente.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Dados conflitantes devem ser <strong class="text-teal-400">anotados com transparencia total</strong>. O agente apresenta ambos os valores com suas fontes e deixa o usuario decidir. <strong class="text-teal-400">Nunca resolver silenciosamente</strong> — isso e desinformacao.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">⚡</span> Exemplo de Conflito Anotado</h3>
+          <div class="bg-amber-500/10 rounded-lg border border-amber-500/30 p-4">
+            <p class="text-amber-400 font-semibold text-sm mb-3">CONFLITO DETECTADO: Receita Anual</p>
+            <div class="space-y-2 text-sm">
+              <div class="flex items-start space-x-3">
+                <span class="text-teal-400 font-bold">Fonte A:</span>
+                <span class="text-neutral-300">R$10M — Balanco Anual 2025 (auditado, publicado 2026-03-01)</span>
+              </div>
+              <div class="flex items-start space-x-3">
+                <span class="text-teal-400 font-bold">Fonte B:</span>
+                <span class="text-neutral-300">R$12M — Relatorio Setorial XYZ (estimativa, publicado 2025-11-15)</span>
+              </div>
+              <div class="flex items-start space-x-3">
+                <span class="text-amber-400 font-bold">Nota:</span>
+                <span class="text-neutral-300">Divergencia de R$2M. Fonte A e auditada e mais recente. Fonte B e estimativa pre-fechamento.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">📅 Dados Temporais com Datas</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Dados de fontes diferentes frequentemente tem datas de referencia distintas. Misturar dados de Q1 2025 com Q4 2025 sem indicar as datas pode gerar conclusoes completamente erroneas. A dimensao temporal e tao importante quanto o dado em si.</p>
+        <p class="text-neutral-300 leading-relaxed">O agente deve preservar e exibir a data de cada dado, permitindo ao usuario avaliar atualidade e relevancia. Em muitos casos, a causa de dados conflitantes e simplesmente que eles se referem a periodos diferentes.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Todo dado sintetizado deve carregar seu <strong class="text-teal-400">timestamp de referencia</strong>. Dados sem data sao ambiguos. Conflitos aparentes frequentemente se resolvem quando a dimensao temporal e considerada.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">📅</span> Dados com Dimensao Temporal</h3>
+          <div class="space-y-3">
+            <div class="bg-dark-700 rounded-lg p-3 flex items-center justify-between">
+              <span class="text-neutral-300 text-sm">Funcionarios: 150</span>
+              <span class="text-teal-400 text-xs font-mono">2025-06-30</span>
+            </div>
+            <div class="bg-dark-700 rounded-lg p-3 flex items-center justify-between">
+              <span class="text-neutral-300 text-sm">Funcionarios: 180</span>
+              <span class="text-teal-400 text-xs font-mono">2025-12-31</span>
+            </div>
+            <div class="bg-dark-700 rounded-lg p-3 flex items-center justify-between">
+              <span class="text-neutral-300 text-sm">Funcionarios: 195</span>
+              <span class="text-teal-400 text-xs font-mono">2026-03-15</span>
+            </div>
+            <p class="text-neutral-400 text-xs">Sem datas, pareceriam dados conflitantes. Com datas, mostram tendencia de crescimento.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🤖 Subagentes com Output Claim-Source</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Em arquiteturas multi-agente, cada subagente deve retornar seus resultados no formato de claim-source mappings. Se subagentes retornam texto livre, o agente coordenador perde toda capacidade de rastrear fontes e detectar conflitos.</p>
+        <p class="text-neutral-300 leading-relaxed">O agente principal recebe os claim-source mappings de cada subagente, agrega-os, detecta conflitos entre fontes diferentes, e produz uma sintese com proveniencia end-to-end — de cada afirmacao final ate a fonte original consultada pelo subagente.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Subagentes devem retornar <strong class="text-teal-400">claim-source mappings estruturados, nao texto livre</strong>. Isso permite ao coordenador agregar, detectar conflitos e manter proveniencia end-to-end de cada afirmacao.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">🏗️</span> Fluxo Multi-Agente com Proveniencia</h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm border border-teal-500/30">1</span><div class="w-0.5 h-8 bg-teal-500/30 mt-2"></div></div>
+              <div><h4 class="font-semibold text-teal-400 mb-1">Subagentes Coletam com Claim-Source</h4><p class="text-neutral-300 text-sm">Cada subagente consulta sua fonte e retorna dados no formato estruturado</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm border border-teal-500/30">2</span><div class="w-0.5 h-8 bg-teal-500/30 mt-2"></div></div>
+              <div><h4 class="font-semibold text-teal-400 mb-1">Coordenador Agrega e Detecta Conflitos</h4><p class="text-neutral-300 text-sm">Combina claims de todos os subagentes, identifica dados conflitantes</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center"><span class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm border border-teal-500/30">3</span></div>
+              <div><h4 class="font-semibold text-teal-400 mb-1">Sintese com Proveniencia End-to-End</h4><p class="text-neutral-300 text-sm">Output final onde cada afirmacao e rastreavel a fonte original via subagente</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔄 Pipeline Completo de Sintese Confiavel</h2>
+      </div>
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O pipeline completo integra todas as tecnicas desta trilha: subagentes coletam com claim-source, o coordenador detecta conflitos, divergencias sao anotadas, dados temporais incluem datas, scores de confianca sao atribuidos por claim, e claims de baixa confianca sao roteados para revisao humana.</p>
+        <p class="text-neutral-300 leading-relaxed">Esse pipeline e a abordagem holistica para sintese confiavel em producao. Cada etapa resolve uma vulnerabilidade especifica: perda de atribuicao, conflitos silenciosos, dados desatualizados, incerteza nao-rastreada, e falta de oversight humano.</p>
+        <div class="bg-teal-500/10 rounded-xl border border-teal-500/30 p-6">
+          <h3 class="text-lg font-semibold text-teal-400 mb-3 flex items-center"><span class="mr-2">💡</span> Conceito Principal</h3>
+          <p class="text-neutral-300 leading-relaxed">Pipeline end-to-end: <strong class="text-teal-400">coleta com claim-source → deteccao de conflitos → anotacao de divergencias → dados temporais → scores de confianca → roteamento para humano</strong>. Cada etapa resolve uma vulnerabilidade especifica de confiabilidade.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-4 flex items-center"><span class="mr-2">🏗️</span> Pipeline End-to-End</h3>
+          <div class="space-y-4">
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm flex-shrink-0">1</span>
+              <div><h4 class="font-semibold text-teal-400 text-sm">Coleta com Claim-Source</h4><p class="text-neutral-300 text-xs">Subagentes retornam dados estruturados com atribuicao</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm flex-shrink-0">2</span>
+              <div><h4 class="font-semibold text-teal-400 text-sm">Deteccao de Conflitos</h4><p class="text-neutral-300 text-xs">Coordenador identifica dados divergentes entre fontes</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm flex-shrink-0">3</span>
+              <div><h4 class="font-semibold text-teal-400 text-sm">Anotacao de Divergencias</h4><p class="text-neutral-300 text-xs">Conflitos anotados com ambos os valores e contexto</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm flex-shrink-0">4</span>
+              <div><h4 class="font-semibold text-teal-400 text-sm">Dados Temporais</h4><p class="text-neutral-300 text-xs">Cada dado acompanhado de data de referencia</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm flex-shrink-0">5</span>
+              <div><h4 class="font-semibold text-teal-400 text-sm">Scores de Confianca</h4><p class="text-neutral-300 text-xs">Confianca por claim baseada na qualidade da fonte e consistencia</p></div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm flex-shrink-0">6</span>
+              <div><h4 class="font-semibold text-amber-400 text-sm">Roteamento para Humano</h4><p class="text-neutral-300 text-xs">Claims de baixa confianca e conflitos nao-resolvidos encaminhados para revisao</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO FINAL -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">📋</span> Resumo Final</h2>
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Sumarizacao sem atribuicao produz outputs nao-verificaveis</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Claim-source mappings sao obrigatorios para sintese confiavel</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Dados conflitantes devem ser anotados, nunca resolvidos silenciosamente</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Dados temporais precisam de timestamps para interpretacao correta</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Subagentes devem retornar claim-source mappings, nao texto livre</span></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-lg">✓</span><span class="text-neutral-300">Pipeline end-to-end garante proveniencia e auditabilidade completa</span></div>
+      </div>
+
+      <div class="bg-teal-500/10 border border-teal-500/30 rounded-xl p-6 mb-6">
+        <p class="text-teal-400 font-semibold text-center text-lg">🎉 Parabens! Voce completou todas as 5 trilhas do CCA-Q1!</p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="modulo-5-5.html" class="px-6 py-3 bg-dark-700 hover:bg-dark-600 rounded-lg text-sm font-semibold text-center transition-colors border border-dark-600">← Modulo Anterior</a>
+        <a href="index.html" class="px-6 py-3 bg-dark-700 hover:bg-dark-600 rounded-lg text-sm font-semibold text-center transition-colors border border-dark-600">Voltar ao Indice</a>
+        <a href="../../index.html" class="px-6 py-3 bg-teal-500/20 hover:bg-teal-500/30 text-teal-400 rounded-lg text-sm font-semibold text-center transition-colors border border-teal-500/30">Voltar ao Inicio</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>CCA-Q1 — Claude Certified Architect - 2026</p></div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) { themeToggleDarkIcon.classList.remove('hidden'); html.classList.remove('dark'); } else { themeToggleLightIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => { themeToggleDarkIcon.classList.toggle('hidden'); themeToggleLightIcon.classList.toggle('hidden'); html.classList.toggle('dark'); localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light'); });
+  </script>
+</body>
+</html>

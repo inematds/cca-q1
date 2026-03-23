@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trilha 5 - Gerenciamento de Contexto e Confiabilidade | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    /* Light mode overrides */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* Light mode - cores de acento (trilha teal) */
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13, 148, 136, 0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13, 148, 136, 0.25); }
+    html:not(.dark) .hover\:bg-teal-500\/30:hover { background-color: rgba(13, 148, 136, 0.18); }
+
+    /* Light mode - remove gradientes e cores especiais */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* Light mode - nav */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-teal-400 bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-teal-900/30 via-dark-800 to-dark-800 py-16 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="inline-block px-4 py-1.5 bg-teal-500/20 text-teal-400 text-sm font-semibold rounded-full mb-6">TRILHA 5</span>
+      <h1 class="text-4xl sm:text-5xl font-bold mb-4">🛡️ Gerenciamento de Contexto e Confiabilidade</h1>
+      <p class="text-xl text-neutral-300 mb-2">Mantendo Claude afiado em conversas longas</p>
+      <p class="text-neutral-400 max-w-2xl mx-auto mb-8">Janela de contexto, escalonamento, propagacao de erro e revisao humana. Domine as tecnicas para manter a qualidade e confiabilidade em sistemas agenticos complexos.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-teal-400">6</div>
+          <div class="text-xs text-neutral-400">Modulos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-teal-400">36</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-teal-400">~3h</div>
+          <div class="text-xs text-neutral-400">Duracao</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-teal-400">Inter.</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- SECTION 1: Simple Cards Grid -->
+    <h2 class="text-2xl font-bold mb-6">Modulos</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-16">
+
+      <a href="#modulo-5-1" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm">5.1</span>
+          <h3 class="font-semibold text-neutral-100">Gerenciamento de Contexto de Conversacao</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Lost in the middle, pin key facts, trim outputs, subagentes</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-5-2" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm">5.2</span>
+          <h3 class="font-semibold text-neutral-100">Padroes de Escalonamento</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Triggers, sentiment unreliable, human requests, policy gaps</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-5-3" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm">5.3</span>
+          <h3 class="font-semibold text-neutral-100">Propagacao de Erros Multi-Agente</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Erro estruturado, access failures, anti-patterns, local recovery</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-5-4" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm">5.4</span>
+          <h3 class="font-semibold text-neutral-100">Contexto em Codebases Grandes</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Degradacao, scratchpad, subagentes, /compact</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-5-5" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm">5.5</span>
+          <h3 class="font-semibold text-neutral-100">Revisao Humana e Calibracao</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Aggregate accuracy, stratified sampling, confidence scores</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-5-6" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm">5.6</span>
+          <h3 class="font-semibold text-neutral-100">Proveniencia e Sintese Multi-Fonte</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Source attribution, claim-source mappings, conflicting data</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+    </div>
+
+    <!-- SECTION 2: Detailed Cards with Expandable Topics -->
+    <h2 class="text-2xl font-bold mb-6">Conteudo Detalhado</h2>
+    <div class="space-y-6">
+
+      <!-- MODULE 5.1 -->
+      <div id="modulo-5-1" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm">5.1</span>
+                <h3 class="text-2xl font-bold">Gerenciamento de Contexto de Conversacao</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Domine as tecnicas para manter informacoes relevantes acessiveis em conversas longas, evitando degradacao de qualidade e perda de foco.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-teal-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 5.1.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Efeito "lost in the middle"</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">O efeito "lost in the middle" ocorre quando informacoes posicionadas no meio de um contexto longo recebem menos atencao do modelo. Claude tende a priorizar informacoes no inicio e no fim da janela de contexto, negligenciando dados intermediarios em conversas muito longas.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Compreender esse efeito e essencial para projetar sistemas que mantenham a qualidade ao longo de conversas extensas. Sem essa consciencia, informacoes criticas podem ser silenciosamente ignoradas pelo modelo.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Primacy e recency bias em LLMs, degradacao de atencao em contextos longos, posicionamento estrategico de informacoes, impacto na qualidade de respostas.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.1.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Acumulo de tokens por tool results</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Cada resultado de ferramenta e adicionado ao historico de conversacao, consumindo tokens da janela de contexto. Em tarefas com muitas iteracoes, os tool_results acumulados podem ocupar a maior parte do contexto disponivel, empurrando informacoes iniciais importantes para fora.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O acumulo descontrolado de tokens e a causa principal de degradacao em conversas longas. Saber gerenciar esse crescimento e fundamental para manter agentes eficientes.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Crescimento linear de tokens por iteracao, tool_results verbosos, janela de contexto finita, impacto no custo e latencia, monitoramento de uso de tokens.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.1.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Pin key facts no topo do contexto</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">A tecnica de "pinning" consiste em posicionar fatos criticos no inicio do contexto (system prompt ou primeiras mensagens) para garantir que recebam maxima atencao do modelo. Informacoes no TOPO do contexto sao as mais confiavalmente lembradas.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Em cenarios de producao, regras de negocio, restricoes de seguranca e instrucoes criticas devem estar sempre acessiveis ao modelo, independentemente do tamanho da conversa.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">System prompt como ancora, repeticao estrategica de instrucoes criticas, priorizacao por posicao, regras de negocio no topo.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.1.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Trim de outputs verbosos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Trimming e a pratica de reduzir tool_results antes de injeta-los no historico. Isso inclui truncar saidas longas, extrair apenas campos relevantes de JSONs grandes, e resumir outputs de ferramentas que retornam dados excessivos.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Sem trimming, uma unica chamada de ferramenta que retorna um arquivo de 10.000 linhas pode consumir metade do contexto disponivel. Gerenciar o tamanho dos resultados e essencial para conversas longas.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Truncamento com indicador "[truncated]", extracao de campos relevantes, resumo de outputs, limites de tamanho por tool_result, preservacao de informacao critica.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.1.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Delegacao a subagentes</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Delegar tarefas a subagentes e uma estrategia de gerenciamento de contexto: cada subagente opera com sua propria janela de contexto limpa, processando uma parte especifica da tarefa e retornando apenas um resultado resumido ao agente principal.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Subagentes permitem processar grandes volumes de informacao sem sobrecarregar o contexto do agente coordenador. E a estrategia principal para escalar alem dos limites de uma unica janela.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Contexto isolado por subagente, resultado resumido retornado ao hub, paralelismo de processamento, reducao de tokens no agente principal.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.1.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Nova sessao com resumo vs conversa obsoleta</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando uma conversa fica muito longa, iniciar uma nova sessao com um resumo estruturado do progresso e superior a continuar na conversa obsoleta. O resumo captura decisoes-chave, estado atual e proximos passos, fornecendo contexto limpo e focado.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Conversas longas acumulam ruido (tentativas falhadas, tangentes, dados obsoletos). Uma nova sessao com resumo remove esse ruido e restaura a qualidade das respostas do modelo.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Resumo estruturado (objetivo, descobertas, estado, proximos passos), limpeza de contexto, nova sessao > stale conversation, /compact como alternativa leve.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-5-1.html')" class="flex items-center space-x-2 px-4 py-2 bg-teal-500/20 text-teal-400 rounded-lg hover:bg-teal-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 5.2 -->
+      <div id="modulo-5-2" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm">5.2</span>
+                <h3 class="text-2xl font-bold">Padroes de Escalonamento</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Aprenda quando e como escalonar conversas para atendentes humanos, identificando triggers confiaveis e evitando armadilhas de deteccao de sentimento.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-teal-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 5.2.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Triggers de escalonamento</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Triggers de escalonamento sao condicoes pre-definidas que ativam a transferencia de uma conversa automatizada para um atendente humano. Os dois triggers mais confiaveis sao: (1) o cliente solicita explicitamente falar com um humano, e (2) a situacao envolve lacunas na politica que o agente nao pode resolver.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Escalonamento correto e critico para experiencia do usuario e compliance. Triggers mal configurados resultam em clientes frustrados presos em loops automatizados ou escalonamentos desnecessarios que sobrecarregam equipes humanas.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Solicitacao explicita do cliente, lacunas de politica, situacoes fora do escopo do agente, limites de tentativas de resolucao, compliance regulatoria.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.2.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Escalonamento baseado em sentimento e nao confiavel</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Usar analise de sentimento como trigger de escalonamento e fundamentalmente nao confiavel. Clientes podem expressar frustacao sem querer falar com um humano, ou podem estar calmos mas em situacoes que requerem intervencao humana. Sentimento e um sinal ruidoso demais para decisoes criticas.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Muitos sistemas cometem o erro de escalonar baseado em "tom irritado" do cliente. Isso gera falsos positivos (escalonamentos desnecessarios) e falsos negativos (nao escalonar quando deveria por tom neutro).</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Falsos positivos e negativos de sentimento, desconexao entre emocao e necessidade, sarcasmo e ironia como armadilhas, triggers estruturais > sentimento.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.2.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Multiplos matches de cliente</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando uma busca retorna multiplos clientes possiveis (ex: mesmo nome, enderecos similares), o agente NUNCA deve adivinhar qual e o correto. A resposta correta e solicitar identificadores adicionais ao cliente para desambiguacao.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Selecionar o cliente errado pode resultar em exposicao de dados pessoais, acoes em contas erradas e violacoes de privacidade graves. A desambiguacao segura e uma pratica de compliance essencial.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Desambiguacao por identificadores adicionais, nunca adivinhar entre matches, solicitar CPF/email/telefone complementar, log de tentativas de match.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.2.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Honrar solicitacoes explicitas de humano</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando um cliente pede explicitamente para falar com um humano, o agente deve honrar essa solicitacao imediatamente, sem tentar resolver o problema primeiro, sem perguntar "posso ajudar antes?" e sem adicionar friccao ao processo de escalonamento.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Ignorar solicitacoes explicitas de humano e um dos erros mais frustrantes em atendimento automatizado. Alem da experiencia negativa, pode violar regulamentacoes que exigem acesso a atendentes humanos.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Escalonamento imediato sem friccao, deteccao de frases como "falar com humano/atendente/pessoa", zero tentativas de retencao, confirmacao de transferencia.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.2.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Lacunas de politica como trigger</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando o agente encontra uma situacao nao coberta pelas politicas definidas, ele deve escalonar em vez de improvisar. Lacunas de politica incluem: cenarios edge-case, combinacoes incomuns de condicoes, e solicitacoes que caem entre categorias estabelecidas.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Agentes que improvisam em lacunas de politica criam precedentes inconsistentes e riscos de compliance. O escalonamento permite que humanos tomem decisoes informadas e que as politicas sejam atualizadas.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Deteccao de gaps na politica, escalonamento preventivo, log de lacunas para melhoria continua, nunca inventar politicas.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.2.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Contexto no handoff para humano</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Ao escalonar, o agente deve transferir um resumo estruturado da conversa para o atendente humano, incluindo: problema do cliente, tentativas de resolucao ja feitas, informacoes coletadas, e motivo do escalonamento. O humano nao deve precisar repetir perguntas.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Um handoff sem contexto forca o cliente a repetir tudo, criando frustacao e desperdicando tempo do atendente. Contexto estruturado no handoff e essencial para uma transicao suave.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Resumo de conversa para handoff, motivo de escalonamento, tentativas de resolucao, dados do cliente coletados, continuidade da experiencia.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-5-2.html')" class="flex items-center space-x-2 px-4 py-2 bg-teal-500/20 text-teal-400 rounded-lg hover:bg-teal-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 5.3 -->
+      <div id="modulo-5-3" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm">5.3</span>
+                <h3 class="text-2xl font-bold">Propagacao de Erros Multi-Agente</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Aprenda a propagar erros de forma estruturada entre agentes, distinguindo falhas reais de resultados vazios e evitando anti-padroes de supressao.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-teal-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 5.3.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Contexto de erro estruturado</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Erros em sistemas multi-agente devem ser propagados com contexto estruturado contendo: tipo de falha, query tentada, resultados parciais obtidos e alternativas sugeridas. Isso permite que o agente receptor tome decisoes informadas sobre como proceder.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Erros sem contexto forçam o agente principal a adivinhar o que aconteceu, levando a tentativas cegas de retry ou abandono prematuro da tarefa. Contexto estruturado permite recuperacao inteligente.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">failure_type, attempted_query, partial_results, suggested_alternatives, propagacao hierarquica de erros.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.3.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Access failures vs resultados vazios validos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">E fundamental distinguir entre uma falha de acesso (API indisponivel, timeout, permissao negada) e um resultado vazio valido (a busca funcionou mas nao encontrou dados). O primeiro requer retry ou escalonamento; o segundo e informacao util que deve ser reportada normalmente.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Confundir falha de acesso com "nao encontrado" leva a respostas incorretas. Dizer "nao encontrei o registro" quando a API estava fora do ar e um erro grave que pode ter consequencias reais.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">HTTP status codes como sinais, timeout vs empty result, error vs no-data, tratamento diferenciado por tipo de resposta.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.3.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Anti-padroes: supressao silenciosa e terminacao total</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Dois anti-padroes criticos: (1) supressao silenciosa — o subagente falha mas retorna uma resposta vazia ou generica sem indicar o erro, e (2) terminacao total — qualquer erro em qualquer subagente aborta toda a tarefa, mesmo quando outros subagentes poderiam contribuir com resultados parciais uteis.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Supressao silenciosa gera respostas incorretas sem nenhum indicador de problema. Terminacao total desperdiça trabalho util ja realizado. Ambos degradam severamente a confiabilidade do sistema.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Silent suppression, total termination, degradacao graceful, resultados parciais uteis, transparencia sobre falhas.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.3.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Recuperacao local em subagentes</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Subagentes devem tentar recuperacao local antes de propagar erros: retry com backoff, busca em fonte alternativa, ou retorno de resultados parciais com indicacao clara do que faltou. Apenas erros irrecuperaveis devem subir ao agente principal.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Recuperacao local reduz a carga no agente coordenador e aumenta a resiliencia geral do sistema. Propagar todo erro para cima cria gargalos e complexidade desnecessaria.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Retry com exponential backoff, fontes alternativas, resultados parciais com metadata, classificacao de erros recuperaveis vs irrecuperaveis.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.3.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Agregacao de resultados parciais</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando multiplos subagentes executam em paralelo e alguns falham, o agente coordenador deve agregar os resultados bem-sucedidos e indicar claramente quais partes estao faltando. Uma resposta parcial com transparencia e quase sempre melhor que nenhuma resposta.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Em sistemas reais, falhas parciais sao comuns. Saber agregar resultados parciais com transparencia sobre lacunas e uma habilidade essencial para construir sistemas confiaveis.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Agregacao parcial, indicacao de gaps, confianca por fonte, resposta parcial transparente > nenhuma resposta, metadata de completude.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.3.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Logging e observabilidade de erros</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Todo erro propagado em um sistema multi-agente deve ser logado com contexto completo: qual agente falhou, qual operacao tentou, qual erro ocorreu, e como foi tratado. Isso permite diagnostico pos-incidente e melhoria continua do sistema.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Sem logging adequado, erros intermitentes e padroes de falha sao invisiveis. A observabilidade e o que permite identificar pontos fracos e melhorar a confiabilidade ao longo do tempo.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Structured logging, trace IDs entre agentes, metricas de taxa de erro por subagente, alertas em padroes anomalos, post-mortem automatizado.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-5-3.html')" class="flex items-center space-x-2 px-4 py-2 bg-teal-500/20 text-teal-400 rounded-lg hover:bg-teal-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 5.4 -->
+      <div id="modulo-5-4" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm">5.4</span>
+                <h3 class="text-2xl font-bold">Contexto em Codebases Grandes</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Identifique sinais de degradacao de contexto e aplique tecnicas como scratchpad, subagentes e /compact para manter a qualidade em projetos grandes.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-teal-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 5.4.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Sinais de degradacao de contexto</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Degradacao de contexto se manifesta como: respostas inconsistentes com informacoes anteriores, mencao a "padroes tipicos" em vez de detalhes especificos do projeto, repeticao de erros ja discutidos, e perda de convencoes de codigo previamente estabelecidas.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Reconhecer sinais de degradacao precocemente permite intervir antes que a qualidade do trabalho caia significativamente. A degradacao e gradual e pode passar despercebida ate causar erros serios.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Respostas genericas ("typical patterns"), inconsistencias com contexto anterior, "esquecimento" de convencoes, hallucinations sobre codigo, perda de foco no objetivo.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.4.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Scratchpad files para estado persistente</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Scratchpad files sao arquivos temporarios usados pelo agente para persistir estado entre iteracoes. Em vez de depender apenas da janela de contexto, o agente escreve progresso, decisoes e dados intermediarios em um arquivo que pode ser relido quando necessario.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Scratchpads contornam os limites da janela de contexto ao externalizar estado. E uma tecnica pratica e eficaz para tarefas que geram mais informacao do que cabe no contexto.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Arquivos .scratchpad ou .progress, escrita incremental, releitura sob demanda, estado externalizado, limpeza ao final da tarefa.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.4.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Delegacao a subagentes para codebases</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Em codebases grandes, subagentes podem ser delegados para explorar partes especificas: um subagente analisa o modulo de autenticacao, outro investiga testes, outro verifica dependencias. Cada um opera com contexto focado e retorna apenas conclusoes relevantes.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Tentar carregar toda uma codebase grande no contexto de um unico agente e inviavel. Subagentes permitem explorar projetos de qualquer tamanho mantendo a qualidade das analises.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Subagente por modulo/componente, instrucoes focadas, resultado resumido, paralelismo de exploracao, coordenacao pelo agente principal.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.4.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Persistencia de estado estruturado</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Alem de scratchpads, estado estruturado pode ser persistido em formatos como JSON ou YAML contendo: arquivos modificados, dependencias identificadas, decisoes arquiteturais tomadas, e proximos passos planejados. Isso permite continuidade entre sessoes.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Em refatoracoes ou features que levam multiplas sessoes, estado estruturado e o que permite retomar o trabalho sem perder progresso ou contexto acumulado.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">JSON/YAML de estado, checkpoint de progresso, decisoes documentadas, plano de execucao persistido, CLAUDE.md como memoria de longo prazo.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.4.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">/compact para reducao de contexto</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">O comando /compact no Claude Code resume o historico de conversacao, descartando detalhes de iteracoes anteriores e mantendo apenas conclusoes e estado atual. Isso libera espaço na janela de contexto para novas interacoes sem perder informacoes essenciais.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">/compact e a ferramenta mais rapida para restaurar qualidade quando o contexto esta degradado. Saber quando usa-lo e uma habilidade pratica fundamental para desenvolvimento com Claude Code.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">/compact como resumo automatico, preservacao de conclusoes-chave, descarte de detalhes intermediarios, uso proativo antes de degradacao, custo zero de setup.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.4.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Estrategia combinada para projetos complexos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Para projetos complexos, a abordagem ideal combina multiplas tecnicas: subagentes para exploracao, scratchpad para estado intermediario, /compact quando o contexto cresce, e novas sessoes com resumo para marcos importantes. Cada tecnica cobre uma dimensao diferente do problema.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Nenhuma tecnica isolada resolve todos os problemas de contexto. Saber combinar estrategias de forma adequada ao cenario e o que diferencia uso eficiente de uso basico de Claude.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Combinacao de subagentes + scratchpad + compact, decisao situacional, indicadores de quando mudar de estrategia, fluxo de trabalho para projetos multi-dia.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-5-4.html')" class="flex items-center space-x-2 px-4 py-2 bg-teal-500/20 text-teal-400 rounded-lg hover:bg-teal-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 5.5 -->
+      <div id="modulo-5-5" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm">5.5</span>
+                <h3 class="text-2xl font-bold">Revisao Humana e Calibracao</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Entenda por que metricas agregadas mascaram problemas e como implementar revisao humana estrategica com amostragem e scores de confianca.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-teal-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 5.5.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Acuracia agregada mascara problemas</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Uma metrica agregada de 97% de acuracia pode esconder performance abismal em categorias especificas. Por exemplo, o sistema pode acertar 99% dos casos simples mas apenas 40% dos casos complexos, resultando em media alta mas qualidade real inconsistente.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Confiar em metricas agregadas e uma armadilha comum que gera falsa confianca. Em producao, os 3% de erros podem ser exatamente os casos mais criticos ou de maior impacto financeiro.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Simpson's paradox em metricas de IA, performance desigual por categoria, 97% agregado vs 40% em edge cases, metricas estratificadas obrigatorias.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.5.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Amostragem aleatoria estratificada</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Stratified random sampling seleciona amostras para revisao humana de forma proporcional a cada categoria de tarefa, garantindo que todas as categorias — incluindo as raras — sejam avaliadas. Isso evita que categorias de alto volume dominem a amostra e escondam problemas em categorias menores.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Amostragem aleatoria simples tende a selecionar muitos casos faceis e poucos dificeis. Amostragem estratificada garante visibilidade em todas as categorias, revelando problemas que a amostragem simples perderia.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Estratificacao por tipo de tarefa, proporcao minima por categoria, oversampling de edge cases, cobertura garantida de categorias raras.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.5.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Scores de confianca por campo</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Field-level confidence scores sao indicadores de certeza que o agente atribui a cada campo individualmente em sua resposta. Em vez de um unico score global, cada campo (nome, endereco, valor, data) recebe sua propria pontuacao de confianca, permitindo revisao granular.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Um score global alto pode esconder um campo especifico com baixa confianca. Scores por campo permitem que revisores humanos foquem exatamente nos pontos de incerteza, otimizando o tempo de revisao.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Confidence per field vs per response, escala de 0-1, thresholds por criticidade do campo, calibracao de scores com feedback humano.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.5.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Roteamento de baixa confianca para humanos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Respostas ou campos com scores de confianca abaixo de um threshold pre-definido sao automaticamente roteados para revisao humana. Isso cria um sistema hibrido onde o agente resolve casos de alta confianca autonomamente e solicita ajuda humana nos demais.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O roteamento por confianca e a ponte entre automacao total e revisao manual total. Permite escalar o volume de processamento automatizado mantendo qualidade atraves de revisao seletiva.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Threshold de confianca configuravel, fila de revisao humana, feedback loop (humano corrige → agente aprende), metricas de taxa de roteamento.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.5.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Calibracao continua de confianca</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Os scores de confianca precisam ser calibrados continuamente contra resultados reais. Se o agente diz "95% confianca" mas erra 20% das vezes nesses casos, o score esta descalibrado. Feedback de revisores humanos alimenta um loop de calibracao que ajusta os thresholds.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Scores descalibrados sao piores que nenhum score — criam falsa confianca. A calibracao continua garante que os scores reflitam a realidade e que o roteamento funcione corretamente.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Calibration curve, expected vs actual accuracy, ajuste de thresholds, feedback loop humano-agente, monitoramento de drift.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.5.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Design de interface de revisao humana</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">A interface de revisao humana deve destacar campos de baixa confianca, mostrar o raciocinio do agente, apresentar dados-fonte relevantes, e permitir correcoes rapidas. O design deve minimizar o tempo de revisao enquanto maximiza a qualidade do feedback.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Uma interface de revisao mal desenhada transforma um sistema eficiente em um gargalo. O design correto permite que revisores processem muitos casos rapidamente, mantendo o throughput do sistema.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Highlight de campos incertos, exibicao de raciocinio do agente, one-click approve/reject, batch review, metricas de tempo de revisao.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-5-5.html')" class="flex items-center space-x-2 px-4 py-2 bg-teal-500/20 text-teal-400 rounded-lg hover:bg-teal-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 5.6 -->
+      <div id="modulo-5-6" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 font-bold text-sm">5.6</span>
+                <h3 class="text-2xl font-bold">Proveniencia e Sintese Multi-Fonte</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Aprenda a manter rastreabilidade de fontes durante sintese de informacoes, anotando conflitos e garantindo proveniencia de cada afirmacao.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-teal-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 5.6.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Perda de atribuicao durante sumarizacao</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando o agente resume informacoes de multiplas fontes, a atribuicao de qual informacao veio de qual fonte tende a se perder. O resultado e um resumo que parece coerente mas nao permite verificar a origem de nenhuma afirmacao especifica.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Sem atribuicao de fonte, nao ha como verificar afirmacoes, identificar erros ou resolver conflitos. Em contextos regulados ou juridicos, proveniencia de dados e requisito obrigatorio.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Source attribution loss, merge de informacoes sem rastreio, resumos opacos, impossibilidade de verificacao posterior.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.6.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Claim-source mappings obrigatorios</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Claim-source mappings sao estruturas que vinculam cada afirmacao (claim) a sua fonte original (source). O agente deve produzir esses mapeamentos como parte do output, permitindo que cada dado seja rastreado ate sua origem.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Claim-source mappings sao a solucao tecnica para o problema de perda de atribuicao. Sem eles, sistemas de sintese multi-fonte sao fundamentalmente nao-verificaveis.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Formato {claim: "...", source: "...", confidence: 0.9}, mapeamento por afirmacao, output estruturado, verificabilidade garantida.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.6.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Anotacao de estatisticas conflitantes</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando fontes diferentes apresentam dados conflitantes (ex: Fonte A diz receita de R$10M, Fonte B diz R$12M), o agente deve anotar o conflito explicitamente em vez de escolher silenciosamente um valor ou fazer media. O usuario precisa saber que ha divergencia.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Escolher silenciosamente entre dados conflitantes e uma forma de desinformacao. O agente nao tem autoridade para resolver conflitos — deve apresenta-los com transparencia para decisao humana.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Deteccao de conflitos entre fontes, anotacao explicita de divergencias, apresentacao side-by-side, nunca resolver silenciosamente.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.6.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Dados temporais com datas</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Dados de fontes diferentes podem ter datas de referencia distintas. Ao sintetizar informacoes, o agente deve preservar e exibir a data de cada dado, permitindo ao usuario avaliar a atualidade e relevancia temporal de cada informacao.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Misturar dados de periodos diferentes sem indicar datas pode gerar conclusoes erroneas. A dimensao temporal e fundamental para interpretar dados corretamente.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Timestamp por dado, data de referencia da fonte, freshness indicator, conflitos por defasagem temporal, preferencia por dados mais recentes quando aplicavel.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.6.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Subagentes com output de claim-source</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">Em arquiteturas multi-agente, cada subagente deve retornar seus resultados no formato de claim-source mappings. O agente coordenador entao agrega esses mapeamentos, detecta conflitos entre fontes e produz uma sintese com proveniencia completa.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Se subagentes retornam texto livre sem atribuicao, o agente principal perde a capacidade de rastrear fontes. O formato estruturado desde a origem e essencial para proveniencia end-to-end.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Output estruturado por subagente, agregacao de claims no hub, deteccao de conflitos entre subagentes, proveniencia end-to-end.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 5.6.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-teal-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Pipeline completo de sintese confiavel</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-teal-400 font-semibold">O que e:</span> <span class="text-neutral-300">O pipeline completo integra: subagentes que coletam com claim-source → coordenador que detecta conflitos → anotacao de divergencias → dados temporais com datas → scores de confianca por claim → roteamento de baixa confianca para humano. E a abordagem holistica para sintese confiavel.</span></div>
+                <div><span class="text-teal-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Compreender o pipeline completo permite projetar sistemas de sintese que sao confiaveis, verificaveis e transparentes — requisitos essenciais para qualquer aplicacao de producao.</span></div>
+                <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Pipeline end-to-end, coleta → conflito → anotacao → confianca → roteamento, transparencia total, auditabilidade de cada afirmacao.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-5-6.html')" class="flex items-center space-x-2 px-4 py-2 bg-teal-500/20 text-teal-400 rounded-lg hover:bg-teal-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="module-modal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="absolute inset-4 sm:inset-8 lg:inset-16 bg-dark-900 rounded-2xl border border-dark-600 overflow-hidden flex flex-col">
+      <div class="flex items-center justify-between p-4 border-b border-dark-700">
+        <span class="text-neutral-400 text-sm">Modulo Completo</span>
+        <button onclick="closeModal()" class="p-2 hover:bg-dark-700 rounded-lg transition-colors">
+          <svg class="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <iframe id="modal-iframe" class="flex-1 w-full" src="" frameborder="0"></iframe>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    // Toggle topic explanation
+    function toggleTopic(button) {
+      const explanation = button.nextElementSibling;
+      const arrow = button.querySelector('svg');
+      explanation.classList.toggle('active');
+      arrow.classList.toggle('rotate-180');
+    }
+
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Modal
+    function openModal(src) {
+      const modal = document.getElementById('module-modal');
+      const iframe = document.getElementById('modal-iframe');
+      iframe.src = src;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('module-modal');
+      const iframe = document.getElementById('modal-iframe');
+      modal.classList.add('hidden');
+      iframe.src = '';
+      document.body.style.overflow = '';
+    }
+
+    // ESC to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+
+</body>
+</html>

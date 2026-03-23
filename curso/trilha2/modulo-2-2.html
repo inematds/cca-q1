@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 2.2 — Respostas de Erro Estruturadas | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); }
+
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13, 148, 136, 0.08); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .bg-red-500\/20 { background-color: rgba(220, 38, 38, 0.12); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400 transition-colors">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400 font-medium">Modulo 2.2</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-blue-500/20 text-blue-400 text-sm font-semibold rounded-full mb-4">MODULO 2.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">⚠️ Respostas de Erro Estruturadas</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Comunique falhas de forma que Claude entenda a causa, a categoria e a estrategia de recuperacao. Erros bem estruturados sao a base de agentes resilientes.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">25</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">Inter</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- ==================== TOPIC 1 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🚩 Padrao isError</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando uma ferramenta falha, o resultado enviado de volta ao Claude precisa sinalizar explicitamente que houve uma falha. O padrao isError usa um campo booleano no tool_result para distinguir sucesso de falha. Sem esse sinal, Claude pode interpretar uma mensagem de erro como dados validos e continuar com informacoes incorretas.</p>
+
+        <p class="text-neutral-300 leading-relaxed">O campo <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">isError: true</code> no tool_result diz ao Claude: "esta operacao falhou, adapte sua estrategia". Com isError, Claude pode decidir re-tentar, usar uma ferramenta alternativa, pedir parametros diferentes ao usuario, ou informar que a operacao nao e possivel.</p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">O flag <strong class="text-blue-400">isError: true</strong> no tool_result e o mecanismo padrao para comunicar falhas de ferramentas ao modelo. Sem ele, Claude nao consegue distinguir entre um resultado de sucesso e uma mensagem de erro, levando a comportamentos incorretos e dados corrompidos no raciocinio.</p>
+        </div>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+          <h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+            <span class="mr-2">⚡</span> Dica Pratica
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Sempre envie <code class="bg-dark-700 px-2 py-0.5 rounded text-primary text-sm">isError: true</code> junto com uma mensagem descritiva quando a ferramenta falha. A mensagem deve incluir o que falhou e, idealmente, o que Claude pode fazer a respeito. Exemplo: "Timeout ao conectar ao banco de dados. Tente novamente em 5 segundos."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 2 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📂 Categorias de Erro</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Nem todos os erros sao iguais, e cada tipo exige uma estrategia de recuperacao diferente. Categorizar erros permite que Claude tome decisoes inteligentes sobre como proceder. Um timeout (transiente) pode ser re-tentado; um parametro invalido (validacao) precisa ser corrigido; um acesso negado (permissao) deve ser escalado ao usuario.</p>
+
+        <!-- Timeline: 4 Categories -->
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-6 flex items-center">
+            <span class="mr-2">📍</span> As 4 Categorias de Erro
+          </h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">1</span>
+                <div class="w-0.5 h-8 bg-blue-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">Transiente</h4>
+                <p class="text-neutral-300 text-sm">Timeouts, erros de rede, servico temporariamente indisponivel. <strong>Acao:</strong> re-tentar automaticamente apos intervalo.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">2</span>
+                <div class="w-0.5 h-8 bg-blue-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">Validacao</h4>
+                <p class="text-neutral-300 text-sm">Parametros invalidos, formato incorreto, valor fora do range. <strong>Acao:</strong> corrigir parametros e re-tentar.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">3</span>
+                <div class="w-0.5 h-8 bg-blue-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">Negocios</h4>
+                <p class="text-neutral-300 text-sm">Politica violada, limite excedido, operacao nao permitida por regras. <strong>Acao:</strong> informar o usuario sobre a restricao.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">4</span>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">Permissao</h4>
+                <p class="text-neutral-300 text-sm">Acesso negado, autenticacao falhou, token expirado. <strong>Acao:</strong> escalar ao usuario ou abortar a operacao.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 3 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🔄 Erros Uniformes vs Especificos</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Um anti-padrao grave e retornar erros uniformes — a mesma mensagem generica para qualquer tipo de falha. Quando todas as ferramentas retornam apenas "Erro: operacao falhou", Claude nao tem informacao suficiente para decidir se deve re-tentar, corrigir parametros, escalar ao usuario ou abortar.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Erros especificos comunicam exatamente o que falhou e permitem que Claude adapte sua estrategia. A diferenca entre "Erro: operacao falhou" e "Erro de validacao: o campo 'email' deve conter um endereco valido. Valor recebido: 'joao'" e a diferenca entre um agente que entra em loop infinito de re-tentativas e um que corrige o problema na primeira tentativa.</p>
+
+        <!-- Box Alerta -->
+        <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+          <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center">
+            <span class="mr-2">⚠️</span> Alerta
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Erros uniformes sao uma das causas mais comuns de <strong class="text-red-400">loops infinitos</strong> em agentes. Claude recebe "operacao falhou", re-tenta com os mesmos parametros, recebe "operacao falhou" novamente, e repete indefinidamente. Erros especificos quebram esse ciclo ao dar informacao acionavel ao modelo.</p>
+        </div>
+
+        <!-- Grid Fazer vs Evitar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+            <h4 class="font-semibold text-blue-400 mb-4 flex items-center">
+              <span class="mr-2">✅</span> Fazer
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Retornar a categoria do erro (transiente, validacao, negocios, permissao)</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Incluir o campo ou parametro que causou o erro</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Sugerir acao corretiva quando possivel</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Indicar se o erro e retentavel (isRetryable)</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center">
+              <span class="mr-2">❌</span> Evitar
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Mensagens genericas como "Erro" ou "Operacao falhou"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Mesmo formato de erro para timeout e parametro invalido</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Stack traces tecnicos sem informacao acionavel</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Erros que nao indicam se podem ser re-tentados</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 4 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">📊 Metadados Estruturados</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Alem de isError e uma mensagem descritiva, erros bem projetados incluem metadados estruturados que permitem ao modelo tomar decisoes programaticas. Campos como <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">errorCategory</code>, <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">isRetryable</code>, <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">retryAfterMs</code> e <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">userMessage</code> transformam um erro opaco em uma instrucao clara de recuperacao.</p>
+
+        <!-- Box Dados/Pesquisa -->
+        <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">📊</span> Schema de Erro Estruturado
+          </h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>errorCategory:</strong> "transient" | "validation" | "business" | "permission" — guia a estrategia de recuperacao.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>isRetryable:</strong> boolean — indica se faz sentido re-tentar a operacao.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>retryAfterMs:</strong> number — tempo sugerido antes do retry (para rate limits e timeouts).</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>userMessage:</strong> string — mensagem legivel para repassar ao usuario quando necessario.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>invalidFields:</strong> string[] — para erros de validacao, lista os campos com problema.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+          <h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+            <span class="mr-2">⚡</span> Dica Pratica
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Defina um schema padrao de erro para todas as ferramentas do sistema. Quando todas as ferramentas retornam erros no mesmo formato, Claude aprende a interpretar metadados de forma consistente, melhorando a qualidade da recuperacao em todo o sistema.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 5 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🔍 Falha de Acesso vs Resultado Vazio</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Uma distincao critica que muitos sistemas falham em fazer: uma falha de acesso (a ferramenta nao conseguiu executar) e completamente diferente de um resultado vazio valido (a ferramenta executou com sucesso mas nao encontrou dados). Uma busca que retorna zero resultados NAO e um erro — e uma informacao valiosa que diz "nao existe nada que corresponda a esses criterios".</p>
+
+        <p class="text-neutral-300 leading-relaxed">Confundir essas duas situacoes leva a problemas serios. Se resultado vazio e tratado como erro, Claude pode re-tentar a busca desnecessariamente, ou reportar ao usuario que "houve uma falha" quando na verdade simplesmente nao ha dados. Se falha de acesso e tratada como resultado vazio, Claude pode concluir que "nao ha dados" quando na verdade a consulta nem executou.</p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Resultado vazio = <strong class="text-blue-400">isError: false</strong>, dados: []. A busca funcionou, simplesmente nao encontrou nada. Falha de acesso = <strong class="text-blue-400">isError: true</strong>, errorCategory: "transient" ou "permission". A busca nem conseguiu executar. Essa distincao previne re-tentativas desnecessarias e relatorios de falha falsos.</p>
+        </div>
+
+        <!-- Grid Fazer vs Evitar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+            <h4 class="font-semibold text-blue-400 mb-4 flex items-center">
+              <span class="mr-2">✅</span> Resultado Vazio (sucesso)
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>isError: false</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>data: [] (lista vazia)</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>"Nenhum usuario encontrado com nome 'XYZ'"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Claude aceita a informacao e prossegue</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center">
+              <span class="mr-2">⚠️</span> Falha de Acesso (erro)
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>isError: true</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>errorCategory: "transient"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>"Timeout ao conectar ao banco de dados"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Claude tenta recuperar ou escalar</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 6 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔧 Recuperacao Local em Subagentes</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Em arquiteturas hub-and-spoke, subagentes devem tentar resolver erros localmente antes de escalar ao coordenador. Um subagente que encontra um timeout deve re-tentar automaticamente; um que recebe erro de validacao deve ajustar os parametros. Apenas erros irrecuperaveis (permissao, politica) devem ser reportados ao hub.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Recuperacao local melhora a resiliencia do sistema, reduz a carga no coordenador e diminui a latencia percebida pelo usuario. Sem recuperacao local, cada erro transiente sobe ao coordenador, que precisa decidir o que fazer e delegar novamente — um ciclo lento e ineficiente.</p>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+          <h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+            <span class="mr-2">⚡</span> Dica Pratica
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Configure subagentes com instrucoes explicitas de recuperacao: "Se uma ferramenta retornar erro transiente, re-tente ate 3 vezes com backoff exponencial. Se retornar erro de validacao, ajuste os parametros e tente novamente. Apenas reporte ao coordenador se o erro persistir apos todas as tentativas."</p>
+        </div>
+
+        <!-- Box Dados/Pesquisa -->
+        <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">📊</span> Fluxo de Recuperacao
+          </h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Erro transiente:</strong> subagente re-tenta localmente (ate 3x com backoff).</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Erro de validacao:</strong> subagente corrige parametros e re-tenta.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Erro de negocios:</strong> subagente reporta ao coordenador com contexto.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Erro de permissao:</strong> subagente aborta e escala imediatamente.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESUMO ==================== -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6">Resumo do Modulo</h2>
+
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">O padrao isError e o mecanismo padrao para comunicar falhas de ferramentas ao modelo</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">4 categorias de erro: transiente, validacao, negocios e permissao — cada uma com estrategia de recuperacao distinta</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Erros uniformes impedem recuperacao inteligente e causam loops infinitos</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Resultado vazio (isError: false) e completamente diferente de falha de acesso (isError: true)</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Subagentes devem recuperar localmente antes de escalar ao coordenador</span>
+        </div>
+      </div>
+
+      <div class="bg-blue-500/10 rounded-lg border border-blue-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm">
+          <strong class="text-blue-400">Proximo modulo:</strong> 2.3 — Distribuicao de Ferramentas e Tool Choice
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-blue-400 hover:border-blue-500/30 transition-colors font-medium">
+          ← Voltar para Trilha
+        </a>
+        <a href="modulo-2-3.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 transition-colors font-medium">
+          Proximo Modulo →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

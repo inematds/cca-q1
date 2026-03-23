@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trilha 2 - Design de Ferramentas e Integracao MCP | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    /* Light mode overrides */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* Light mode - cores de acento (trilha blue) */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37, 99, 235, 0.18); }
+
+    /* Light mode - remove gradientes e cores especiais */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* Light mode - nav */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-16 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="inline-block px-4 py-1.5 bg-blue-500/20 text-blue-400 text-sm font-semibold rounded-full mb-6">TRILHA 2</span>
+      <h1 class="text-4xl sm:text-5xl font-bold mb-4">🔧 Design de Ferramentas e Integracao MCP</h1>
+      <p class="text-xl text-neutral-300 mb-2">Como Claude se conecta ao mundo externo. Descricoes de ferramentas, erros estruturados, distribuicao de tools e servidores MCP.</p>
+      <p class="text-neutral-400 max-w-2xl mx-auto mb-8">Domine o design de interfaces de ferramentas, padroes de erro, distribuicao inteligente e integracao com servidores MCP no Claude Code.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-blue-400">5</div>
+          <div class="text-xs text-neutral-400">Modulos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-blue-400">30</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-blue-400">~2.5h</div>
+          <div class="text-xs text-neutral-400">Duracao</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-blue-400">Inter.</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- SECTION 1: Simple Cards Grid -->
+    <h2 class="text-2xl font-bold mb-6">Modulos</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-16">
+
+      <a href="#modulo-2-1" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm">2.1</span>
+          <h3 class="font-semibold text-neutral-100">Design de Interfaces de Ferramentas</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Descricoes como mecanismo de selecao, formato de entrada/retorno, ambiguidade</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~30 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-2-2" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm">2.2</span>
+          <h3 class="font-semibold text-neutral-100">Respostas de Erro Estruturadas</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Padrao isError, categorias de erro, metadados estruturados, recuperacao</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-2-3" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm">2.3</span>
+          <h3 class="font-semibold text-neutral-100">Distribuicao de Ferramentas e Tool Choice</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Sobrecarga, ferramentas fora do escopo, modos de tool_choice</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-2-4" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm">2.4</span>
+          <h3 class="font-semibold text-neutral-100">Servidores MCP no Claude Code</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">.mcp.json, ~/.claude.json, variaveis de ambiente, resources</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-2-5" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 transition-colors p-5 sm:col-span-2">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm">2.5</span>
+          <h3 class="font-semibold text-neutral-100">Ferramentas Built-in</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Grep vs Glob, Read/Write vs Edit, fallback, entendimento incremental</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~20 min · 6 topicos</span>
+      </a>
+
+    </div>
+
+    <!-- SECTION 2: Detailed Cards with Expandable Topics -->
+    <h2 class="text-2xl font-bold mb-6">Conteudo Detalhado</h2>
+    <div class="space-y-6">
+
+      <!-- MODULE 2.1 -->
+      <div id="modulo-2-1" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm">2.1</span>
+                <h3 class="text-2xl font-bold">Design de Interfaces de Ferramentas</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Aprenda a projetar descricoes de ferramentas que guiam Claude a fazer selecoes corretas, com formatos claros, limites explicitos e diferenciacao precisa.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-blue-400 font-bold">~30 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 2.1.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Descricoes como mecanismo de selecao</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">As descricoes de ferramentas sao o mecanismo primario pelo qual Claude decide qual ferramenta usar. Claude le a descricao de cada ferramenta disponivel e compara com a intencao do usuario para selecionar a mais adequada. A descricao funciona como um "cardapio" — se estiver mal escrita, Claude escolhe errado.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">No exame CCA, quando um agente seleciona a ferramenta errada, a causa raiz quase sempre e uma descricao inadequada. Melhorar descricoes e mais eficaz do que adicionar few-shot examples, camadas de roteamento ou qualquer outro fix.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Descricao como sinal de selecao, comparacao intencao-descricao, descricoes claras e especificas, prioridade sobre outros mecanismos de roteamento.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.1.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Formato de entrada e retorno</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Uma boa descricao de ferramenta inclui os formatos esperados de entrada (quais parametros, tipos, exemplos de queries validas) e o formato do retorno (estrutura JSON, campos retornados, casos-limite como listas vazias). Isso elimina ambiguidade sobre quando e como usar a ferramenta.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Claude precisa saber exatamente o que uma ferramenta aceita e retorna para usa-la corretamente. Descricoes que omitem formatos levam a erros de parametros, resultados inesperados e re-tentativas desnecessarias que consomem tokens.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Schemas de entrada tipados, exemplos de queries validas, formato de retorno documentado, edge cases (lista vazia, null), descricao de cada parametro.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.1.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Sobreposicao e ambiguidade</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando duas ou mais ferramentas tem descricoes que se sobrepoe (ambas parecem adequadas para a mesma tarefa), Claude nao consegue distinguir qual usar e frequentemente escolhe errado. Isso e chamado de sobreposicao ou ambiguidade de ferramentas, e e uma das causas mais comuns de misrouting.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame CCA apresenta cenarios com ferramentas ambiguas e pede para identificar a causa do misrouting. Reconhecer sobreposicao e a habilidade chave para diagnosticar problemas de selecao de ferramentas.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Descricoes sobrepostas, misrouting por ambiguidade, diferenciacao explicita, limites claros entre ferramentas similares, auditoria de sobreposicao.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.1.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Linha "NAO use para..."</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Adicionar uma linha explicita "NAO use esta ferramenta para..." na descricao reduz drasticamente erros de selecao. Em vez de apenas dizer o que a ferramenta faz, voce tambem define o que ela NAO faz, criando limites claros que previnem misrouting para casos comuns de confusao.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Este e um dos padroes mais testados no exame CCA. A tecnica "NAO use para..." e a intervencao de maior impacto para resolver problemas de selecao de ferramentas — mais eficaz que few-shot, roteamento ou qualquer outra abordagem.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Exclusao explicita, limites negativos, prevencao de misrouting, complemento a descricao positiva, reducao drastica de erros de selecao.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.1.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Descricoes vs few-shot</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando Claude seleciona a ferramenta errada, muitos desenvolvedores tentam corrigir com few-shot examples, camadas de roteamento ou logica adicional. Porem, a abordagem mais eficaz e simplesmente melhorar a descricao da ferramenta. Boas descricoes superam qualquer outro mecanismo de correcao.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame CCA testa diretamente esta hierarquia de solucoes. Quando apresentado com um problema de selecao de ferramentas, a resposta correta quase sempre e "melhorar a descricao" — nao adicionar exemplos, roteadores ou camadas extras.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Descricao > few-shot > roteamento > logica custom, principio da simplicidade, descricoes como investimento de maior ROI, evitar complexidade desnecessaria.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.1.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Renomear e dividir ferramentas</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando ferramentas sao muito genericas ou tem nomes ambiguos, a solucao e renomea-las para refletir melhor seu proposito especifico, ou dividir uma ferramenta generica em varias especializadas. Por exemplo, "search" pode ser dividida em "search_by_name", "search_by_date" e "search_by_tag".</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Dividir ferramentas genericas em especializadas elimina ambiguidade na raiz. O nome da ferramenta e o primeiro sinal que Claude usa para selecao, mesmo antes de ler a descricao completa.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Nomes descritivos e especificos, divisao de ferramentas genericas, eliminacao de ambiguidade por nome, ferramentas focadas em um unico proposito, nome como primeiro filtro de selecao.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-2-1.html')" class="flex items-center space-x-2 px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 2.2 -->
+      <div id="modulo-2-2" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm">2.2</span>
+                <h3 class="text-2xl font-bold">Respostas de Erro Estruturadas</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Domine os padroes de comunicacao de erros entre ferramentas e o modelo, usando flags estruturadas, categorias e metadados para recuperacao inteligente.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-blue-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 2.2.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Padrao isError</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">O padrao isError e o mecanismo padrao para comunicar falhas de ferramentas ao modelo. Quando uma ferramenta falha, o resultado deve incluir um campo isError: true no tool_result, sinalizando explicitamente ao Claude que a operacao nao teve sucesso e permitindo que ele adapte sua estrategia.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Sem o flag isError, Claude pode interpretar uma mensagem de erro como um resultado valido e continuar com dados incorretos. O padrao isError e fundamental para que o modelo distingua sucesso de falha e tome acoes de recuperacao adequadas.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Flag isError no tool_result, sinalizacao explicita de falha, diferenciacao sucesso/falha, base para estrategias de recuperacao, campo booleano no retorno.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.2.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Categorias de erro</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Erros de ferramentas se dividem em categorias distintas: transientes (timeouts, rede), validacao (parametros invalidos), negocios (politica violada, limite excedido) e permissao (acesso negado). Cada categoria exige uma estrategia de recuperacao diferente do modelo.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Categorizar erros permite que Claude tome decisoes inteligentes: re-tentar erros transientes, corrigir parametros para erros de validacao, informar o usuario sobre erros de politica. Sem categorias, Claude trata todos os erros da mesma forma.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Transientes (retry), validacao (corrigir input), negocios (informar usuario), permissao (escalar ou abortar), categorias como guia de recuperacao.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.2.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Erros uniformes vs especificos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Retornar erros uniformes (ex: "operacao falhou" para tudo) impede que Claude identifique a causa e escolha a estrategia de recuperacao correta. Erros especificos comunicam exatamente o que falhou, permitindo que o modelo adapte sua resposta ao tipo de falha.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame CCA testa cenarios onde erros uniformes causam loops infinitos de re-tentativa ou respostas inadequadas. Saber diferenciar erros e fundamental para projetar ferramentas robustas.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Erros genericos impedem recuperacao, erros especificos guiam o modelo, mensagens descritivas, codigos de erro tipados, anti-padrao de erro unico.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.2.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Metadados estruturados</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Alem do flag isError e da mensagem, erros bem projetados incluem metadados estruturados: errorCategory (tipo do erro), isRetryable (pode re-tentar?), retryAfterMs (quando), descricao legivel para o usuario e campos especificos do contexto da falha.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Metadados estruturados permitem que Claude tome decisoes programaticas sobre erros — re-tentar automaticamente erros transientes, ajustar parametros para erros de validacao, ou informar o usuario com uma mensagem clara para erros de negocios.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">errorCategory, isRetryable, retryAfterMs, userMessage, campos contextuais, schema padrao de erro, composabilidade de metadados.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.2.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Falha de acesso vs resultado vazio</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">E critico distinguir entre uma falha de acesso (a ferramenta nao conseguiu executar — timeout, permissao negada) e um resultado vazio valido (a ferramenta executou com sucesso mas nao encontrou dados). Uma busca que retorna zero resultados NAO e um erro — e uma informacao valida.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Confundir resultado vazio com erro leva Claude a re-tentar buscas desnecessariamente ou reportar falhas que nao existem. O exame testa especificamente esta distincao.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Resultado vazio != erro, isError: false para buscas sem resultado, isError: true para falhas de execucao, semantica correta no retorno, prevencao de loops de re-tentativa.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.2.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Recuperacao local em subagentes</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Em arquiteturas hub-and-spoke, subagentes devem tentar recuperar de erros localmente antes de escalar ao coordenador. Um subagente que encontra um timeout deve re-tentar automaticamente; um que recebe um erro de validacao deve ajustar parametros. So erros irrecuperaveis devem ser escalados.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Recuperacao local reduz a carga no coordenador, diminui latencia e melhora a resiliencia do sistema. O exame testa cenarios onde a falta de recuperacao local causa falhas em cascata.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Retry local para erros transientes, ajuste de parametros para validacao, escalacao apenas para erros irrecuperaveis, resiliencia distribuida, subagente autonomo em recuperacao.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-2-2.html')" class="flex items-center space-x-2 px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 2.3 -->
+      <div id="modulo-2-3" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm">2.3</span>
+                <h3 class="text-2xl font-bold">Distribuicao de Ferramentas e Tool Choice</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Entenda como a quantidade e o escopo das ferramentas afetam a selecao, e como usar tool_choice para controlar o comportamento do modelo.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-blue-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 2.3.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Sobrecarga de ferramentas (18 vs 4-5)</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quanto mais ferramentas um agente tem disponivel, pior fica a qualidade de selecao. Estudos mostram que agentes com 18+ ferramentas cometem significativamente mais erros de selecao do que agentes com 4-5 ferramentas. A sobrecarga de opcoes confunde o modelo e aumenta misrouting.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame CCA testa diretamente o conceito de "tool overload". Saber que 4-5 ferramentas e o ponto ideal por agente e fundamental para projetar sistemas multi-agente onde cada subagente tem um conjunto restrito e focado.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Tool overload, 4-5 ferramentas por agente ideal, degradacao com mais ferramentas, distribuicao entre subagentes, qualidade vs quantidade.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.3.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Ferramentas fora do escopo</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Agentes que tem acesso a ferramentas fora de seu papel tendem a usa-las de forma inadequada. Um agente de code review com acesso a ferramentas de deploy pode acidentalmente fazer deploy. Cada agente deve ter acesso apenas as ferramentas necessarias para sua funcao especifica.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O principio de menor privilegio aplicado a ferramentas e um tema central do CCA. Dar ferramentas de mais a um agente nao e "flexibilidade" — e um risco de seguranca e uma fonte de erros.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Principio do menor privilegio, ferramentas por papel, risco de misuse, agentes focados, allowedTools no Agent SDK.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.3.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Acesso por papel</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Cada subagente em um sistema multi-agente deve ter um conjunto de ferramentas definido por seu papel. O subagente de pesquisa tem ferramentas de busca; o de escrita tem ferramentas de edicao; o de deploy tem ferramentas de infraestrutura. A definicao de papel determina o conjunto de ferramentas.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O design por papel e a base para sistemas multi-agente seguros e eficientes. O exame CCA apresenta cenarios onde voce deve definir quais ferramentas cada agente deve ter acesso baseado em sua funcao.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Papel define ferramentas, separacao de responsabilidades, allowedTools por agente, design centrado em funcao, previsibilidade de comportamento.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.3.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Modos de tool_choice</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">O parametro tool_choice controla como Claude seleciona ferramentas: "auto" permite que Claude decida livremente (padrao), "any" forca o uso de pelo menos uma ferramenta, e selecao forcada especifica exatamente qual ferramenta Claude deve usar naquele passo.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Saber quando usar cada modo de tool_choice e essencial para controlar o comportamento do agente em cenarios especificos. O exame testa quando forcar uma ferramenta vs deixar Claude decidir.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">tool_choice: auto (padrao, Claude decide), tool_choice: any (forca uso), selecao forcada (ferramenta especifica), controle granular por passo.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.3.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Selecao forcada no passo 1</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Um padrao comum e forcar a selecao de uma ferramenta especifica no primeiro passo do loop (ex: forcar leitura de contexto antes de qualquer acao) e depois mudar para "auto" nos passos seguintes. Isso garante que o agente sempre comece com a informacao necessaria.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Forcar o primeiro passo e uma tecnica poderosa para garantir que o agente obtenha contexto antes de agir. O exame testa cenarios onde essa tecnica previne erros comuns de agentes que "pulam" a fase de coleta de informacao.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Passo 1 forcado, coleta de contexto obrigatoria, auto nos passos seguintes, prevencao de acoes prematuras, padrao "read-first".</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.3.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Restricao como recurso</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Restringir o conjunto de ferramentas de um subagente nao e uma limitacao — e um recurso que melhora a qualidade. Substituir uma ferramenta generica por alternativas restritas e especializadas melhora a confiabilidade da selecao e reduz erros.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">A mentalidade "mais ferramentas = mais capaz" e um anti-padrao. O exame CCA testa se voce entende que restricao inteligente de ferramentas e uma pratica de design superior a acesso irrestrito.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Restricao melhora qualidade, ferramentas especializadas > genericas, menos opcoes = melhores decisoes, design por subtracao, foco sobre flexibilidade.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-2-3.html')" class="flex items-center space-x-2 px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 2.4 -->
+      <div id="modulo-2-4" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm">2.4</span>
+                <h3 class="text-2xl font-bold">Servidores MCP no Claude Code</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Configure e gerencie servidores MCP para estender as capacidades do Claude Code com integracao de ferramentas externas e resources.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-blue-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 2.4.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">.mcp.json (nivel projeto)</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">O arquivo .mcp.json na raiz do projeto define servidores MCP especificos para aquele projeto. Quando Claude Code abre o projeto, ele carrega automaticamente esses servidores, disponibilizando as ferramentas para todos que trabalham no repositorio. E versionado junto com o codigo.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">A configuracao por projeto e o padrao recomendado para ferramentas especificas do codebase — como acesso a banco de dados, APIs internas ou ferramentas de build. O exame testa quando usar .mcp.json vs ~/.claude.json.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">.mcp.json na raiz do projeto, carregamento automatico, versionado no Git, ferramentas especificas do projeto, compartilhado com a equipe.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.4.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">~/.claude.json (nivel usuario)</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">O arquivo ~/.claude.json define servidores MCP no nivel do usuario, disponiveis em todos os projetos. E ideal para ferramentas pessoais que voce usa independentemente do projeto — como integracao com Slack, email, calendario ou ferramentas de produtividade pessoal.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Saber quando configurar no nivel do usuario vs projeto e uma habilidade pratica testada no exame. Ferramentas pessoais nao devem ser commitadas no repositorio do projeto.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">~/.claude.json no home do usuario, disponivel em todos os projetos, ferramentas pessoais, NAO versionado, separacao de configuracao pessoal/projeto.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.4.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Variaveis de ambiente</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Servidores MCP podem usar variaveis de ambiente para credenciais e configuracoes sensiveis. No .mcp.json, voce referencia variaveis com a sintaxe ${NOME_VAR} (ex: ${GITHUB_TOKEN}), evitando commitar secrets no repositorio. As variaveis sao expandidas em runtime.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Seguranca de credenciais e um tema recorrente no CCA. Hardcodar tokens em arquivos de configuracao e um anti-padrao grave — variaveis de ambiente sao o mecanismo padrao para injetar credenciais.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Sintaxe ${VAR_NAME}, expansao em runtime, sem secrets no Git, .env local ou CI/CD, separacao de credenciais da configuracao.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.4.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">MCP resources</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Alem de ferramentas (tools), servidores MCP podem expor resources — catalogos de conteudo estatico ou semi-estatico como documentacao, schemas de API, dados de referencia. Resources sao carregados no contexto do modelo sem necessidade de chamada de ferramenta.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Resources sao uma forma eficiente de fornecer contexto ao modelo sem consumir chamadas de ferramenta. O exame testa quando usar resources vs tools para fornecer informacao ao Claude.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Resources vs tools, conteudo estatico, carregamento automatico no contexto, documentacao como resource, catalogo de dados de referencia.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.4.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Servidores da comunidade</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">A comunidade MCP mantem servidores pre-construidos para integracoes comuns — GitHub, Slack, bancos de dados, APIs populares. Esses servidores sao testados, documentados e prontos para uso, evitando que voce recrie integracoes que ja existem.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O principio "nao reinvente a roda" se aplica a MCP. O exame testa se voce sabe quando usar um servidor comunitario existente vs criar um customizado, e a resposta geralmente e usar o existente.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Ecossistema de servidores comunitarios, integracoes pre-construidas, reutilizacao sobre customizacao, catalogo de servidores, avaliacao de qualidade.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.4.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Customizado vs padrao</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Servidores MCP customizados so devem ser criados quando nenhum servidor comunitario atende a necessidade — tipicamente para APIs internas, workflows unicos ou integracao com sistemas proprietarios. Para integracoes padrao (GitHub, Slack, DBs), use servidores da comunidade.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame apresenta cenarios e pede para decidir entre customizado e comunitario. Criar servidores customizados desnecessariamente adiciona custo de manutencao e risco de bugs sem beneficio real.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Customizado para workflows unicos, comunitario para integracoes padrao, custo de manutencao, avaliacao de necessidade, regra: custom apenas quando necessario.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-2-4.html')" class="flex items-center space-x-2 px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 2.5 -->
+      <div id="modulo-2-5" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm">2.5</span>
+                <h3 class="text-2xl font-bold">Ferramentas Built-in</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Domine as ferramentas nativas do Claude Code — Grep, Glob, Read, Write, Edit — e suas estrategias de uso para entendimento incremental de codebases.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-blue-400 font-bold">~20 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 2.5.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Grep vs Glob</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Grep busca conteudo dentro de arquivos (procura por texto, regex, padroes), enquanto Glob busca arquivos por padrao de nome (*.ts, src/**/*.test.js). Sao ferramentas complementares: Glob encontra os arquivos certos, Grep encontra o conteudo certo dentro deles.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Confundir Grep com Glob e um erro comum que leva a resultados vazios ou incorretos. O exame CCA testa especificamente quando usar cada um e como combina-los eficientemente.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Grep = busca por conteudo, Glob = busca por nome de arquivo, complementares, Glob primeiro para filtrar, Grep depois para encontrar conteudo.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.5.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Read/Write vs Edit</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Read le o conteudo completo de um arquivo, Write sobrescreve um arquivo inteiro, e Edit faz modificacoes cirurgicas em trechos especificos. Edit e preferivel para mudancas pontuais porque preserva o resto do arquivo e consome menos tokens.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Usar Write quando Edit seria suficiente desperdiCa tokens e aumenta risco de perda de conteudo. O exame testa quando cada ferramenta e mais adequada e como combina-las corretamente.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Read para inspecao, Write para reescrita completa, Edit para mudancas pontuais, Edit economiza tokens, Edit preserva conteudo nao-modificado.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.5.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Fallback quando Edit falha</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Edit falha quando o trecho a ser substituido nao e unico no arquivo (match ambiguo). Quando isso acontece, a estrategia de fallback e: Read o arquivo completo para entender o contexto, depois Write o arquivo inteiro com as modificacoes aplicadas manualmente.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O padrao Edit → Read + Write e um dos mais testados no CCA. Saber quando e por que Edit falha, e qual e a sequencia correta de fallback, e essencial para o exame.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Edit falha em match nao-unico, fallback: Read completo → Write completo, preservacao de conteudo, old_string deve ser unico, contexto adicional para desambiguar.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.5.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Entendimento incremental</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Claude Code entende codebases de forma incremental — nao le tudo de uma vez. Comeca com buscas amplas (Grep para encontrar padroes), depois le arquivos relevantes (Read), segue imports e dependencias, e constroi entendimento progressivamente. Cada passo informa o proximo.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Entender como Claude Code navega codebases ajuda a projetar estruturas de projeto que facilitam o entendimento incremental — arquivos bem nomeados, imports claros, estrutura previsivel.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Busca ampla primeiro, leitura dirigida depois, seguir imports, construcao progressiva de contexto, nao ler tudo de uma vez.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.5.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Trace de funcoes</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">Trace de funcoes e a pratica de seguir o fluxo de execucao de uma funcao pelo codebase — de onde e chamada, o que chama, quais dependencias usa. Claude Code faz isso automaticamente: Grep para encontrar a funcao, Read para ver a implementacao, Grep novamente para encontrar chamadores.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Trace e essencial para debugging e refatoracao. Entender como Claude Code traca funcoes ajuda a fazer perguntas melhores e obter respostas mais precisas sobre codebases complexos.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Grep para localizar, Read para entender, Grep para chamadores, cadeia de dependencias, navegacao bidirecional (chamado por / chama).</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 2.5.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-blue-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Cadeia Grep-Read-imports</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-blue-400 font-semibold">O que e:</span> <span class="text-neutral-300">A cadeia Grep → Read → seguir imports e o padrao fundamental de exploracao de codebases no Claude Code. Grep localiza o ponto de entrada, Read carrega o conteudo, e a analise de imports revela dependencias que precisam ser exploradas. O ciclo se repete ate ter contexto suficiente.</span></div>
+                <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Este padrao e como Claude Code realmente opera. Entende-lo permite prever o comportamento do agente, otimizar a estrutura de projetos e formular prompts que alinham com o fluxo natural de exploracao.</span></div>
+                <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Grep → Read → imports → Grep (ciclo), construcao de grafo de dependencias, exploracao dirigida por necessidade, profundidade sob demanda, eficiencia de tokens.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-2-5.html')" class="flex items-center space-x-2 px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="module-modal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="absolute inset-4 sm:inset-8 lg:inset-16 bg-dark-900 rounded-2xl border border-dark-600 overflow-hidden flex flex-col">
+      <div class="flex items-center justify-between p-4 border-b border-dark-700">
+        <span class="text-neutral-400 text-sm">Modulo Completo</span>
+        <button onclick="closeModal()" class="p-2 hover:bg-dark-700 rounded-lg transition-colors">
+          <svg class="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <iframe id="modal-iframe" class="flex-1 w-full" src="" frameborder="0"></iframe>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    // Toggle topic explanation
+    function toggleTopic(button) {
+      const explanation = button.nextElementSibling;
+      const arrow = button.querySelector('svg');
+      explanation.classList.toggle('active');
+      arrow.classList.toggle('rotate-180');
+    }
+
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Modal
+    function openModal(src) {
+      const modal = document.getElementById('module-modal');
+      const iframe = document.getElementById('modal-iframe');
+      iframe.src = src;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('module-modal');
+      const iframe = document.getElementById('modal-iframe');
+      modal.classList.add('hidden');
+      iframe.src = '';
+      document.body.style.overflow = '';
+    }
+
+    // ESC to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+
+</body>
+</html>

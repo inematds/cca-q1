@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 2.1 — Design de Interfaces de Ferramentas | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* Light mode - blue accent */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); }
+
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13, 148, 136, 0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13, 148, 136, 0.25); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13, 148, 136, 0.08); }
+
+    /* Light mode - remove gradientes e cores especiais */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* Light mode - nav */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+
+    /* Light mode - red accent for alert boxes */
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .bg-red-500\/20 { background-color: rgba(220, 38, 38, 0.12); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400 transition-colors">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400 font-medium">Modulo 2.1</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-blue-500/20 text-blue-400 text-sm font-semibold rounded-full mb-4">MODULO 2.1</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🎯 Design de Interfaces de Ferramentas</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">As descricoes de ferramentas sao o mecanismo primario pelo qual Claude decide qual ferramenta usar. Aprenda a projetar descricoes que eliminam ambiguidade e garantem selecao correta.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">30</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">Inter</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- ==================== TOPIC 1 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🎯 Descricoes como Mecanismo de Selecao</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando Claude recebe uma solicitacao que requer o uso de uma ferramenta, ele nao usa logica pre-programada para escolher qual ferramenta chamar. Em vez disso, ele le as descricoes de todas as ferramentas disponiveis e compara cada uma com a intencao do usuario. A descricao funciona como um "cardapio" — Claude escolhe o "prato" que melhor combina com o que o usuario pediu.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Isso significa que a qualidade da descricao e o fator mais importante para a selecao correta de ferramentas. Uma descricao vaga ou incompleta leva a selecoes erradas, independentemente de quao bem implementada seja a ferramenta. Descricoes claras, especificas e com limites bem definidos sao o investimento de maior retorno em qualquer sistema agentico.</p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">A descricao da ferramenta e o <strong class="text-blue-400">mecanismo primario de selecao</strong>. Claude compara a intencao do usuario com as descricoes disponiveis para escolher a ferramenta adequada. Melhorar descricoes e mais eficaz do que adicionar few-shot examples, camadas de roteamento ou qualquer outro mecanismo de correcao.</p>
+        </div>
+
+        <!-- Box Dados/Pesquisa -->
+        <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">📊</span> Dados e Pesquisa
+          </h3>
+          <p class="text-neutral-300 leading-relaxed mb-3">Estudos sobre selecao de ferramentas em sistemas agenticos mostram:</p>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Descricoes claras</strong> superam qualquer outro mecanismo de melhoria de selecao — incluindo few-shot examples e routing layers.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Limites explicitos</strong> ("NAO use para...") reduzem erros de selecao mais do que adicionar exemplos positivos.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Ferramentas bem descritas</strong> funcionam melhor com 0 exemplos do que ferramentas mal descritas com 10 exemplos.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 2 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📋 Formato de Entrada e Retorno</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Uma descricao de ferramenta completa vai alem de explicar o que a ferramenta faz. Ela documenta os formatos de entrada (quais parametros aceita, tipos de dados, exemplos de queries validas) e os formatos de retorno (estrutura JSON, campos retornados, como interpretar resultados vazios). Sem essa informacao, Claude tem que "adivinhar" como usar a ferramenta.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Incluir exemplos de queries validas na descricao e particularmente eficaz. Quando Claude ve "Exemplo: search_users({name: 'João', active: true})", ele entende imediatamente o formato esperado. Documentar edge cases — como o que a ferramenta retorna quando nao encontra resultados — previne interpretacoes erroneas.</p>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+          <h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+            <span class="mr-2">⚡</span> Dica Pratica
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Sempre inclua na descricao: (1) um exemplo de chamada valida com parametros reais, (2) o formato de retorno em caso de sucesso, (3) o que acontece quando nao ha resultados, e (4) quais parametros sao obrigatorios vs opcionais. Esses quatro elementos eliminam a maioria dos erros de uso.</p>
+        </div>
+
+        <!-- Timeline: Elementos de uma boa descricao -->
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-6 flex items-center">
+            <span class="mr-2">📍</span> Elementos de uma Boa Descricao
+          </h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">1</span>
+                <div class="w-0.5 h-8 bg-blue-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">O que faz</h4>
+                <p class="text-neutral-300 text-sm">Descricao clara e especifica do proposito da ferramenta em uma ou duas frases.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">2</span>
+                <div class="w-0.5 h-8 bg-blue-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">Parametros de entrada</h4>
+                <p class="text-neutral-300 text-sm">Tipos, exemplos validos, obrigatorios vs opcionais, ranges aceitos.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">3</span>
+                <div class="w-0.5 h-8 bg-blue-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">Formato de retorno</h4>
+                <p class="text-neutral-300 text-sm">Estrutura do resultado, campos retornados, formato de erro.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">4</span>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">Limites e exclusoes</h4>
+                <p class="text-neutral-300 text-sm">O que NAO faz, quando NAO usar, edge cases conhecidos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 3 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🔀 Sobreposicao e Ambiguidade</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Um dos problemas mais comuns em sistemas com multiplas ferramentas e a sobreposicao de descricoes. Quando duas ferramentas parecem fazer a mesma coisa (de acordo com suas descricoes), Claude nao tem como distinguir qual usar e frequentemente escolhe a errada. Isso e especialmente problematico quando ferramentas tem propositos distintos mas descricoes similares.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Por exemplo, uma ferramenta "search_database" e outra "query_records" com descricoes vagas podem parecer intercambiaveis para Claude, mesmo que uma seja para buscas full-text e outra para consultas SQL estruturadas. A ambiguidade nas descricoes e a causa raiz — nao a incapacidade do modelo.</p>
+
+        <!-- Box Alerta -->
+        <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+          <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center">
+            <span class="mr-2">⚠️</span> Alerta
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Quando Claude escolhe a ferramenta errada repetidamente, a causa raiz e quase sempre <strong class="text-red-400">sobreposicao nas descricoes</strong>, nao uma falha do modelo. Antes de adicionar routing layers, few-shot examples ou logica customizada, revise as descricoes e elimine ambiguidades. A solucao mais simples e quase sempre a correta.</p>
+        </div>
+
+        <!-- Grid Fazer vs Evitar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+            <h4 class="font-semibold text-blue-400 mb-4 flex items-center">
+              <span class="mr-2">✅</span> Fazer
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Descrever cada ferramenta com proposito unico e especifico</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Incluir exemplos que diferenciam ferramentas similares</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Auditar periodicamente o conjunto de ferramentas para sobreposicao</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Usar nomes de ferramenta que ja diferenciam o proposito</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center">
+              <span class="mr-2">❌</span> Evitar
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Descricoes genericas como "busca dados" sem especificar o que ou como</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Ferramentas com descricoes que cobrem o mesmo dominio sem diferenciacao</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Adicionar complexidade (routing, examples) antes de corrigir descricoes</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Nomes genericos como "tool1" e "tool2" que nao comunicam proposito</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 4 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🚫 Linha "NAO use para..."</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Uma das tecnicas mais eficazes para melhorar a selecao de ferramentas e adicionar uma linha explicita dizendo para que a ferramenta NAO deve ser usada. Enquanto a descricao positiva diz "use esta ferramenta quando...", a descricao negativa diz "NAO use esta ferramenta para...". Juntas, elas criam limites precisos que previnem misrouting.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Por exemplo, para uma ferramenta de busca por nome: "Busca usuarios pelo nome exato. NAO use para buscas por email, ID ou filtros complexos — use search_users_advanced para esses casos." Essa unica linha previne a maioria dos erros de selecao entre as duas ferramentas.</p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">A linha <strong class="text-blue-400">"NAO use para..."</strong> e a intervencao de maior impacto para resolver problemas de selecao de ferramentas. Ela reduz erros mais drasticamente do que few-shot examples, camadas de roteamento ou qualquer outra abordagem. E simples, direta e extremamente eficaz.</p>
+        </div>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+          <h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+            <span class="mr-2">⚡</span> Dica Pratica
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Para cada ferramenta, identifique os 2-3 casos mais comuns de confusao e adicione explicitamente: "NAO use para [caso confuso] — use [ferramenta correta] em vez disso." Redirecionar para a ferramenta correta e tao importante quanto negar o uso incorreto.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 5 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">📊 Descricoes vs Few-Shot</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando um agente seleciona a ferramenta errada, o instinto natural e adicionar exemplos (few-shot) mostrando a selecao correta. Embora exemplos possam ajudar em casos especificos, eles sao significativamente menos eficazes do que simplesmente melhorar a descricao da ferramenta. A hierarquia de eficacia e clara: descricoes > few-shot > routing > logica custom.</p>
+
+        <p class="text-neutral-300 leading-relaxed">O problema com few-shot examples e que eles cobrem casos especificos — o modelo pode aprender que "para X, use a ferramenta Y" mas nao generalizar para variantes de X. Descricoes, por outro lado, comunicam o proposito geral da ferramenta, permitindo que Claude generalize para qualquer caso dentro do escopo descrito.</p>
+
+        <!-- Box Dados/Pesquisa -->
+        <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">📊</span> Hierarquia de Eficacia
+          </h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">1.</span>
+              <span><strong>Melhorar descricoes</strong> — Maior impacto, menor custo. Sempre comece aqui.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">2.</span>
+              <span><strong>Adicionar limites negativos</strong> — "NAO use para..." na descricao.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">3.</span>
+              <span><strong>Renomear/dividir ferramentas</strong> — Nomes mais especificos, ferramentas mais focadas.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">4.</span>
+              <span><strong>Few-shot examples</strong> — Uteis para casos especificos persistentes.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">5.</span>
+              <span><strong>Routing layers</strong> — Ultimo recurso, adiciona complexidade significativa.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 6 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">✂️ Renomear e Dividir Ferramentas</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Quando uma ferramenta e muito generica — cobrindo multiplos casos de uso — ela se torna dificil de descrever sem ambiguidade. A solucao e dividir em ferramentas especializadas, cada uma com um proposito claro e unico. O nome da ferramenta e o primeiro sinal que Claude usa para selecao, mesmo antes de ler a descricao completa.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Por exemplo, uma ferramenta <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">search</code> que busca por nome, email, ID e filtros complexos pode ser dividida em <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">search_by_name</code>, <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">search_by_email</code> e <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">search_advanced</code>. Cada uma tem um nome auto-descritivo e um escopo restrito, eliminando ambiguidade na raiz.</p>
+
+        <!-- Grid Fazer vs Evitar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+            <h4 class="font-semibold text-blue-400 mb-4 flex items-center">
+              <span class="mr-2">✅</span> Fazer
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Dividir ferramentas genericas em especializadas com escopo restrito</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Usar nomes que comunicam o proposito (search_by_name vs search)</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Cada ferramenta = um proposito unico</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Manter o conjunto total de ferramentas em 4-5 por agente</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center">
+              <span class="mr-2">❌</span> Evitar
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Ferramentas "faz-tudo" com dezenas de parametros opcionais</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Nomes genericos como "process", "handle", "manage"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Dividir demais (20 ferramentas micro causam tool overload)</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Renomear sem reescrever a descricao (nome novo + descricao antiga = confusao)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESUMO ==================== -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6">Resumo do Modulo</h2>
+
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Descricoes de ferramentas sao o mecanismo primario de selecao — mais eficaz que few-shot, routing ou logica custom</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Incluir formatos de entrada, retorno, exemplos e edge cases nas descricoes</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Sobreposicao nas descricoes e a causa raiz de misrouting — elimine ambiguidade</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">A linha "NAO use para..." e a intervencao de maior impacto para reduzir erros de selecao</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Renomear e dividir ferramentas genericas em especializadas elimina ambiguidade na raiz</span>
+        </div>
+      </div>
+
+      <!-- Next Module -->
+      <div class="bg-blue-500/10 rounded-lg border border-blue-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm">
+          <strong class="text-blue-400">Proximo modulo:</strong> 2.2 — Respostas de Erro Estruturadas
+        </p>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-blue-400 hover:border-blue-500/30 transition-colors font-medium">
+          ← Voltar para Trilha
+        </a>
+        <a href="modulo-2-2.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 transition-colors font-medium">
+          Proximo Modulo →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

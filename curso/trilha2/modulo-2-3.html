@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 2.3 — Distribuicao de Ferramentas e Tool Choice | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); }
+
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13, 148, 136, 0.08); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .bg-red-500\/20 { background-color: rgba(220, 38, 38, 0.12); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400 transition-colors">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400 font-medium">Modulo 2.3</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-blue-500/20 text-blue-400 text-sm font-semibold rounded-full mb-4">MODULO 2.3</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📦 Distribuicao de Ferramentas e Tool Choice</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Menos e mais: como a quantidade e escopo de ferramentas afetam a selecao, e como usar tool_choice para controlar o comportamento do agente em cada passo.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">25</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">Inter</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- ==================== TOPIC 1 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">📈 Sobrecarga de Ferramentas (18 vs 4-5)</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Existe uma relacao inversa clara entre a quantidade de ferramentas disponiveis e a qualidade da selecao. Agentes com 18+ ferramentas cometem significativamente mais erros de selecao do que agentes com 4-5 ferramentas. Isso acontece porque o modelo precisa avaliar cada descricao e compara-las — quanto mais opcoes, maior a probabilidade de confusao.</p>
+
+        <p class="text-neutral-300 leading-relaxed">A solucao nao e limitar artificialmente as capacidades do agente, mas distribuir ferramentas entre subagentes especializados. Em vez de um agente monolitico com 18 ferramentas, projete 4 subagentes com 4-5 ferramentas cada, coordenados por um hub. Cada subagente tem um escopo claro e um conjunto restrito de ferramentas alinhado com sua funcao.</p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">O ponto ideal e <strong class="text-blue-400">4-5 ferramentas por agente</strong>. Acima de 18, a degradacao e severa. Distribua ferramentas entre subagentes especializados usando hub-and-spoke em vez de sobrecarregar um unico agente. Menos ferramentas = melhores decisoes de selecao.</p>
+        </div>
+
+        <!-- Box Dados/Pesquisa -->
+        <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">📊</span> Dados e Pesquisa
+          </h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>4-5 ferramentas:</strong> taxa de selecao correta alta e consistente.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>10-12 ferramentas:</strong> degradacao notavel, especialmente com descricoes similares.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>18+ ferramentas:</strong> degradacao severa, misrouting frequente, loops de selecao.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Solucao:</strong> distribuir entre subagentes mantendo 4-5 por agente.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 2 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🚧 Ferramentas Fora do Escopo</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Agentes que tem acesso a ferramentas fora de seu papel tendem a usa-las de forma inadequada. Um agente de code review com acesso a ferramentas de deploy pode acidentalmente fazer deploy. Um agente de pesquisa com acesso a ferramentas de escrita pode modificar arquivos quando deveria apenas ler. A disponibilidade de uma ferramenta cria a tentacao de usa-la.</p>
+
+        <p class="text-neutral-300 leading-relaxed">O principio do menor privilegio aplicado a ferramentas diz: cada agente deve ter acesso apenas as ferramentas necessarias para sua funcao especifica. Isso nao e uma limitacao — e uma protecao que melhora a confiabilidade e previne efeitos colaterais indesejados.</p>
+
+        <!-- Box Alerta -->
+        <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+          <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center">
+            <span class="mr-2">⚠️</span> Alerta
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Dar ferramentas demais a um agente nao e "flexibilidade" — e um <strong class="text-red-400">risco de seguranca</strong>. Um agente de leitura com acesso a ferramentas de escrita pode causar danos irreversiveis. Sempre aplique o principio do menor privilegio: conceda apenas o que e necessario para a tarefa.</p>
+        </div>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+          <h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+            <span class="mr-2">⚡</span> Dica Pratica
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Use <code class="bg-dark-700 px-2 py-0.5 rounded text-primary text-sm">allowedTools</code> no Agent SDK para restringir explicitamente quais ferramentas cada subagente pode acessar. Defina o papel do agente primeiro, depois derive o conjunto minimo de ferramentas necessarias para aquele papel.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 3 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">👤 Acesso por Papel</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Em sistemas multi-agente bem projetados, o papel do agente define seu conjunto de ferramentas. O subagente de pesquisa tem Grep, Glob e Read; o de edicao tem Edit e Write; o de testes tem ferramentas de execucao de testes; o de deploy tem ferramentas de infraestrutura. Cada agente e um especialista com as ferramentas de sua especialidade.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Definir ferramentas por papel tem multiplos beneficios: melhora a qualidade da selecao (menos opcoes), previne acoes fora do escopo (seguranca), facilita o debug (comportamento previsivel) e permite escalar o sistema adicionando novos agentes especializados sem afetar os existentes.</p>
+
+        <!-- Grid Fazer vs Evitar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+            <h4 class="font-semibold text-blue-400 mb-4 flex items-center">
+              <span class="mr-2">✅</span> Fazer
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Definir o papel do agente antes de escolher suas ferramentas</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Usar allowedTools para restringir explicitamente</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Auditar se cada ferramenta e realmente necessaria para o papel</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Documentar o mapeamento papel-ferramentas</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center">
+              <span class="mr-2">❌</span> Evitar
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Dar todas as ferramentas a todos os agentes "por conveniencia"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Agentes "faz-tudo" com 20+ ferramentas de dominios diferentes</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Adicionar ferramentas "just in case" sem necessidade clara</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Confundir "agente flexivel" com "agente sobrecarregado"</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 4 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🎛️ Modos de tool_choice</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O parametro <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">tool_choice</code> na API permite controlar como Claude seleciona ferramentas em cada chamada. Existem tres modos principais que oferecem diferentes niveis de controle sobre o comportamento do agente.</p>
+
+        <!-- Timeline: 3 Modes -->
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-6 flex items-center">
+            <span class="mr-2">📍</span> Os 3 Modos de tool_choice
+          </h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">1</span>
+                <div class="w-0.5 h-8 bg-blue-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">auto (padrao)</h4>
+                <p class="text-neutral-300 text-sm">Claude decide livremente se e qual ferramenta usar. Pode responder sem usar nenhuma ferramenta. E o modo padrao e mais flexivel — ideal para a maioria dos casos.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">2</span>
+                <div class="w-0.5 h-8 bg-blue-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">any</h4>
+                <p class="text-neutral-300 text-sm">Claude DEVE usar pelo menos uma ferramenta — nao pode responder sem chamar nenhuma. Util para garantir que o agente execute uma acao em vez de apenas "conversar".</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">3</span>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">Selecao forcada</h4>
+                <p class="text-neutral-300 text-sm">Claude DEVE usar uma ferramenta especifica. Voce define exatamente qual ferramenta sera chamada. Util para forcar a coleta de contexto ou uma acao obrigatoria.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 5 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🎯 Selecao Forcada no Passo 1</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Um padrao poderoso e combinar selecao forcada no primeiro passo com "auto" nos passos seguintes. No passo 1, voce forca Claude a chamar uma ferramenta especifica — tipicamente para ler contexto, carregar configuracao ou coletar informacao necessaria. Depois do passo 1, voce muda para "auto" e Claude decide livremente o que fazer.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Esse padrao "read-first" previne o erro comum de agentes que comecam a agir antes de ter informacao suficiente. Um agente de code review que comeca escrevendo feedback sem antes ler o codigo e um anti-padrao classico que a selecao forcada no passo 1 elimina.</p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">O padrao <strong class="text-blue-400">"forcar passo 1 + auto depois"</strong> garante que o agente sempre comece com contexto antes de agir. Use tool_choice forcado para a ferramenta de leitura/contexto no primeiro passo, depois mude para tool_choice: auto para dar liberdade ao modelo.</p>
+        </div>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+          <h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+            <span class="mr-2">⚡</span> Dica Pratica
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Implemente o padrao "read-first" no orquestrador: na primeira chamada da API, defina <code class="bg-dark-700 px-2 py-0.5 rounded text-primary text-sm">tool_choice: {type: "tool", name: "read_context"}</code>. Em todas as chamadas subsequentes, use <code class="bg-dark-700 px-2 py-0.5 rounded text-primary text-sm">tool_choice: {type: "auto"}</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 6 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔒 Restricao como Recurso</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A mentalidade "mais ferramentas = mais capaz" e um anti-padrao. Na realidade, restringir o conjunto de ferramentas de um agente melhora a qualidade de suas decisoes. Substituir uma ferramenta generica por alternativas restritas e especializadas aumenta a confiabilidade da selecao e reduz erros.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Pense em restricao como foco: um agente com 4 ferramentas perfeitamente alinhadas com seu papel vai superar consistentemente um agente com 20 ferramentas de dominios variados. A restricao nao limita a capacidade do sistema — ela canaliza a capacidade de cada agente para onde ela e mais eficaz.</p>
+
+        <!-- Grid Fazer vs Evitar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+            <h4 class="font-semibold text-blue-400 mb-4 flex items-center">
+              <span class="mr-2">✅</span> Fazer
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Substituir ferramentas genericas por especializadas</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Manter 4-5 ferramentas por agente como regra</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Criar subagentes para novos dominios em vez de adicionar ferramentas</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Ver restricao como melhoria de qualidade, nao limitacao</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center">
+              <span class="mr-2">❌</span> Evitar
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Adicionar ferramentas de novos dominios a agentes existentes</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Tratar restricao como "limitacao" a ser contornada</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Agentes "canivete suico" com ferramentas de tudo</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Ignorar a correlacao entre numero de ferramentas e taxa de erro</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESUMO ==================== -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6">Resumo do Modulo</h2>
+
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">4-5 ferramentas por agente e o ponto ideal; 18+ causa degradacao severa</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Ferramentas fora do escopo sao um risco de seguranca — aplique o principio do menor privilegio</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">tool_choice tem 3 modos: auto (padrao), any (forca uso), forcado (ferramenta especifica)</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">O padrao "forcar passo 1 + auto depois" garante contexto antes de acao</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Restricao de ferramentas e um recurso que melhora qualidade, nao uma limitacao</span>
+        </div>
+      </div>
+
+      <div class="bg-blue-500/10 rounded-lg border border-blue-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm">
+          <strong class="text-blue-400">Proximo modulo:</strong> 2.4 — Servidores MCP no Claude Code
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-blue-400 hover:border-blue-500/30 transition-colors font-medium">
+          ← Voltar para Trilha
+        </a>
+        <a href="modulo-2-4.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 transition-colors font-medium">
+          Proximo Modulo →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 2.5 — Ferramentas Built-in | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); }
+
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13, 148, 136, 0.08); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .bg-red-500\/20 { background-color: rgba(220, 38, 38, 0.12); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-blue-400 transition-colors">Trilha 2</a>
+      <span>/</span>
+      <span class="text-blue-400 font-medium">Modulo 2.5</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-blue-500/20 text-blue-400 text-sm font-semibold rounded-full mb-4">MODULO 2.5</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🛠️ Ferramentas Built-in</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Domine as ferramentas nativas do Claude Code — Grep, Glob, Read, Write, Edit — e a estrategia de entendimento incremental que e a base de toda interacao com codebases.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">20</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">Inter</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-blue-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- ==================== TOPIC 1 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🔍 Grep vs Glob</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed"><strong class="text-blue-400">Grep</strong> busca conteudo dentro de arquivos — procura por texto, expressoes regulares, padroes dentro do codigo. <strong class="text-blue-400">Glob</strong> busca arquivos por padrao de nome — encontra arquivos que correspondem a um padrao como <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">*.ts</code> ou <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">src/**/*.test.js</code>.</p>
+
+        <p class="text-neutral-300 leading-relaxed">As duas ferramentas sao complementares: Glob encontra os arquivos certos, Grep encontra o conteudo certo dentro deles. Um padrao comum e usar Glob primeiro para filtrar os arquivos relevantes e depois Grep para localizar o codigo especifico dentro desses arquivos.</p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed"><strong class="text-blue-400">Grep = busca por conteudo</strong> (o que esta DENTRO dos arquivos). <strong class="text-blue-400">Glob = busca por nome de arquivo</strong> (quais arquivos existem). Confundir os dois e um erro comum. Use Glob para encontrar os arquivos, Grep para encontrar o codigo.</p>
+        </div>
+
+        <!-- Grid Fazer vs Evitar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+            <h4 class="font-semibold text-blue-400 mb-4 flex items-center">
+              <span class="mr-2">🔍</span> Grep (Conteudo)
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>"Encontre onde a funcao handleError e definida"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>"Quais arquivos importam o modulo auth?"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>"Onde esta a string TODO: fix?"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Busca por regex dentro de arquivos</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+            <h4 class="font-semibold text-blue-400 mb-4 flex items-center">
+              <span class="mr-2">📁</span> Glob (Nomes)
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>"Liste todos os arquivos .test.ts"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>"Quais arquivos existem em src/components/?"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>"Encontre todos os package.json"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Busca por padrao de nome de arquivo</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 2 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📝 Read/Write vs Edit</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed"><code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">Read</code> le o conteudo completo de um arquivo. <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">Write</code> sobrescreve um arquivo inteiro com novo conteudo. <code class="bg-dark-700 px-2 py-0.5 rounded text-blue-400 text-sm">Edit</code> faz modificacoes cirurgicas — substitui apenas um trecho especifico, preservando o resto do arquivo intacto.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Edit e preferivel para mudancas pontuais porque economiza tokens (envia apenas o diff, nao o arquivo inteiro) e preserva conteudo que nao precisa mudar. Write e necessario quando o arquivo inteiro precisa ser reescrito ou quando Edit falha por match ambiguo.</p>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+          <h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+            <span class="mr-2">⚡</span> Dica Pratica
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Regra geral: use <strong class="text-primary">Edit</strong> para mudancas pontuais (alterar uma funcao, corrigir um bug, adicionar um import). Use <strong class="text-primary">Write</strong> para criar arquivos novos ou reescrever arquivos inteiros. Use <strong class="text-primary">Read</strong> antes de Write para garantir que voce nao perde conteudo existente.</p>
+        </div>
+
+        <!-- Timeline: Quando usar cada um -->
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-6 flex items-center">
+            <span class="mr-2">📍</span> Quando Usar Cada Ferramenta
+          </h3>
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">R</span>
+                <div class="w-0.5 h-8 bg-blue-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">Read</h4>
+                <p class="text-neutral-300 text-sm">Inspecionar conteudo, entender estrutura, verificar estado atual. Sempre Read antes de Write para nao perder conteudo.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">E</span>
+                <div class="w-0.5 h-8 bg-blue-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">Edit</h4>
+                <p class="text-neutral-300 text-sm">Mudancas pontuais: corrigir bug, alterar funcao, adicionar import. Economiza tokens e preserva conteudo nao-modificado.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm border border-blue-500/30">W</span>
+              </div>
+              <div>
+                <h4 class="font-semibold text-blue-400 mb-1">Write</h4>
+                <p class="text-neutral-300 text-sm">Criar arquivo novo ou reescrever inteiro. Fallback quando Edit falha. Sempre Read primeiro para preservar conteudo.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 3 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🔄 Fallback quando Edit Falha</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Edit funciona substituindo um trecho exato de texto (old_string) por outro (new_string). Isso falha quando o old_string nao e unico no arquivo — ou seja, existe mais de um trecho identico e Edit nao sabe qual substituir. Isso e um "match ambiguo" e Edit recusa a operacao para evitar modificar o trecho errado.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Quando Edit falha, a estrategia de fallback correta e: (1) Read o arquivo completo para entender o contexto e identificar o trecho correto, (2) Write o arquivo inteiro com as modificacoes aplicadas. Esse padrao Edit → Read + Write e fundamental e extensivamente testado no exame CCA.</p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Edit falha em <strong class="text-blue-400">match nao-unico</strong> (old_string aparece mais de uma vez). Fallback: <strong class="text-blue-400">Read completo → Write completo</strong> com as modificacoes aplicadas. Alternativa: fornecer mais contexto no old_string para tornar o match unico (incluir linhas adjacentes).</p>
+        </div>
+
+        <!-- Box Alerta -->
+        <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+          <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center">
+            <span class="mr-2">⚠️</span> Alerta
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Nunca tente "forcar" Edit quando o match e ambiguo. Edit recusa a operacao por seguranca — se modificasse o trecho errado, poderia corromper o codigo. O fallback <strong class="text-red-400">Read + Write</strong> e a abordagem segura e correta. Outra opcao e incluir mais linhas de contexto no old_string para desambiguar.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 4 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🧩 Entendimento Incremental</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Claude Code nao le o codebase inteiro de uma vez. Ele constroi entendimento de forma incremental — comecando com buscas amplas para localizar pontos de entrada, depois lendo arquivos especificos, seguindo imports e dependencias, e expandindo o entendimento sob demanda. Cada passo informa o proximo.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Esse comportamento e por design: ler tudo de uma vez estouraria a janela de contexto e desperdicaria tokens com informacao irrelevante. O entendimento incremental e eficiente porque carrega apenas a informacao necessaria para a tarefa atual, no momento em que e necessaria.</p>
+
+        <!-- Box Dados/Pesquisa -->
+        <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">📊</span> Fluxo de Entendimento Incremental
+          </h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">1.</span>
+              <span><strong>Busca ampla:</strong> Grep para localizar padroes, funcoes ou termos relevantes no codebase.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">2.</span>
+              <span><strong>Leitura dirigida:</strong> Read nos arquivos identificados como relevantes pelo Grep.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">3.</span>
+              <span><strong>Seguir imports:</strong> identificar dependencias e ler os modulos importados.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">4.</span>
+              <span><strong>Expandir sob demanda:</strong> repetir o ciclo para areas que precisam de mais contexto.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+          <h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+            <span class="mr-2">⚡</span> Dica Pratica
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Projete a estrutura do codebase para facilitar entendimento incremental: nomes de arquivo descritivos, imports claros, README no diretorio raiz, e convencoes consistentes. Isso permite que Claude Code navegue eficientemente e construa contexto com menos passos.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 5 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🔗 Trace de Funcoes</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Trace de funcoes e a pratica de seguir o fluxo de execucao de uma funcao pelo codebase — de onde e chamada (chamadores), o que chama (dependencias), quais parametros recebe e retorna. Claude Code faz isso naturalmente usando a cadeia Grep → Read → Grep.</p>
+
+        <p class="text-neutral-300 leading-relaxed">O trace bidirecional e particularmente util: dado uma funcao, encontrar todos os seus chamadores (quem a usa) E todas as suas dependencias (o que ela chama). Isso permite entender tanto o impacto de uma mudanca (quem e afetado) quanto os pre-requisitos (do que depende).</p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">Trace de funcoes: <strong class="text-blue-400">Grep para localizar a funcao → Read para entender a implementacao → Grep para encontrar chamadores</strong>. O trace bidirecional revela tanto o impacto de mudancas quanto as dependencias da funcao. Essencial para debugging e refatoracao.</p>
+        </div>
+
+        <!-- Grid Fazer vs Evitar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+            <h4 class="font-semibold text-blue-400 mb-4 flex items-center">
+              <span class="mr-2">✅</span> Fazer
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Grep para encontrar onde a funcao e definida</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Read para entender a implementacao completa</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Grep novamente para encontrar todos os chamadores</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-blue-400 mt-0.5">•</span>
+                <span>Seguir imports para entender dependencias</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center">
+              <span class="mr-2">❌</span> Evitar
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Ler o codebase inteiro para encontrar uma funcao</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Assumir o comportamento sem ler a implementacao</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Ignorar chamadores ao fazer refatoracao</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Modificar funcao sem entender quem depende dela</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 6 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🔄 Cadeia Grep-Read-Imports</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">A cadeia <strong class="text-blue-400">Grep → Read → seguir imports</strong> e o padrao fundamental de exploracao de codebases no Claude Code. Grep localiza o ponto de entrada (funcao, classe, variavel), Read carrega o conteudo do arquivo para analise, e os imports no topo do arquivo revelam dependencias que podem precisar ser exploradas.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Este ciclo se repete ate que Claude tenha contexto suficiente para a tarefa. A chave e que cada iteracao e dirigida pela necessidade — Claude nao le arquivos "por curiosidade", mas porque o passo anterior revelou uma dependencia ou referencia que precisa ser entendida. Isso maximiza a eficiencia de tokens.</p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-gradient-to-br from-blue-900/30 to-dark-800 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">O ciclo <strong class="text-blue-400">Grep → Read → imports → Grep</strong> constroi um grafo de dependencias sob demanda. Cada passo e dirigido pela necessidade do passo anterior. Isso e como Claude Code realmente opera — entender este padrao permite prever e otimizar seu comportamento.</p>
+        </div>
+
+        <!-- Box Dados/Pesquisa -->
+        <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">📊</span> Exemplo Pratico
+          </h3>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">1.</span>
+              <span><strong>Grep "handleError"</strong> → encontra em src/utils/errors.ts e src/api/handler.ts</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">2.</span>
+              <span><strong>Read src/utils/errors.ts</strong> → ve a implementacao e os imports (import { Logger } from './logger')</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">3.</span>
+              <span><strong>Read src/utils/logger.ts</strong> → entende como erros sao logados</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5 font-bold">4.</span>
+              <span><strong>Grep "handleError"</strong> → encontra 12 chamadores em 8 arquivos → entende o impacto</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESUMO ==================== -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6">Resumo do Modulo</h2>
+
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Grep busca conteudo dentro de arquivos; Glob busca arquivos por padrao de nome</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Edit para mudancas pontuais (economiza tokens), Write para reescrita completa</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Edit falha em match nao-unico → fallback: Read completo + Write completo</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Entendimento incremental: busca ampla → leitura dirigida → seguir imports → expandir</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-blue-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Cadeia Grep → Read → imports e o padrao fundamental de exploracao de codebases</span>
+        </div>
+      </div>
+
+      <div class="bg-blue-500/10 rounded-lg border border-blue-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm">
+          <strong class="text-blue-400">Proxima trilha:</strong> Trilha 3 — Claude Code como Agente
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-blue-400 hover:border-blue-500/30 transition-colors font-medium">
+          ← Voltar para Trilha
+        </a>
+        <a href="../trilha3/index.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 transition-colors font-medium">
+          Proxima Trilha →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

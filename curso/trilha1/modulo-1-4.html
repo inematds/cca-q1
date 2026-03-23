@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imposicao e Padroes de Handoff | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    /* Light mode */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400 transition-colors">Trilha 1</a>
+      <span>/</span>
+      <span class="text-neutral-100">Modulo 1.4</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-500/10 via-dark-800 to-dark-800 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <span class="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-400 text-sm font-semibold rounded-full mb-4">MODULO 1.4</span>
+      <h1 class="text-2xl font-bold mb-3">⚖️ Imposicao e Padroes de Handoff</h1>
+      <p class="text-neutral-300 max-w-3xl mb-6">Quando usar prompts versus hooks. O conceito mais importante da certificacao — imposicao deterministica para operacoes criticas.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">30 Min</div>
+          <div class="text-xs text-neutral-400">Duracao</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">Inter.</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">1</div>
+        <div>
+          <h2 class="text-xl font-bold">⚖️ Imposicao Programatica vs Prompts</h2>
+          <p class="text-neutral-400 text-sm mt-1">Entendendo as duas abordagens de controle de comportamento</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Existem duas maneiras fundamentais de controlar o comportamento de um agente: <strong>imposicao programatica</strong> (hooks, gates de pre-requisito) e <strong>orientacao por prompt</strong> (system prompts, instrucoes). A diferenca crucial e que prompts sao probabilisticos — funcionam ~99% do tempo — enquanto hooks sao deterministicos — funcionam 100% do tempo. O exame traz um cenario com taxa de falha de 12% quando apenas prompts sao usados para operacoes criticas.</p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+        <h3 class="text-emerald-400 font-semibold mb-4 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-neutral-300">
+          <div>
+            <h4 class="font-semibold text-neutral-100 mb-2">Imposicao Programatica (Hooks)</h4>
+            <ul class="space-y-1">
+              <li>• Deterministica: <strong>100% de conformidade</strong></li>
+              <li>• Bloqueia fisicamente acoes nao autorizadas</li>
+              <li>• Nao depende de interpretacao do modelo</li>
+              <li>• Ideal para: financeiro, seguranca, compliance</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold text-neutral-100 mb-2">Orientacao por Prompt</h4>
+            <ul class="space-y-1">
+              <li>• Probabilistica: <strong>~99% de conformidade</strong></li>
+              <li>• Depende do modelo interpretar corretamente</li>
+              <li>• Pode falhar em edge cases</li>
+              <li>• Ideal para: formatacao, tom, preferencias gerais</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">2</div>
+        <div>
+          <h2 class="text-xl font-bold">🔒 Hooks Deterministicos</h2>
+          <p class="text-neutral-400 text-sm mt-1">Bloqueio fisico de acoes ate que condicoes sejam satisfeitas</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Hooks deterministicos bloqueiam fisicamente uma acao ate que todas as condicoes sejam cumpridas. Eles sao <strong>leis, nao sugestoes</strong>. Para operacoes financeiras, compliance regulatorio e seguranca, hooks sao obrigatorios. Nao importa quao bem escrito esteja seu system prompt — existe sempre uma probabilidade nao-zero de falha quando a unica protecao e textual.</p>
+
+      <!-- Box Conceito -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm">Um hook deterministico funciona como um <strong>portao fisico</strong>: o agente pode querer executar uma acao, mas o hook verifica programaticamente se todas as condicoes estao cumpridas. Se nao estiverem, a acao simplesmente nao acontece — independente do que o modelo "pensa" ou "interpreta".</p>
+      </div>
+
+      <!-- Grid Fazer vs Evitar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-5">
+          <h4 class="text-emerald-400 font-semibold mb-3">✅ Fazer</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li>• Usar hooks para todas as operacoes criticas</li>
+            <li>• Implementar gates de pre-requisito para compliance</li>
+            <li>• Validar programaticamente antes de executar</li>
+            <li>• Tratar hooks como camada obrigatoria de seguranca</li>
+          </ul>
+        </div>
+        <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-5">
+          <h4 class="text-red-400 font-semibold mb-3">❌ Evitar</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li>• Confiar apenas em prompts para operacoes financeiras</li>
+            <li>• Assumir que ~99% de compliance e suficiente</li>
+            <li>• Usar instrucoes textuais como unica barreira</li>
+            <li>• Ignorar edge cases porque "funciona na maioria das vezes"</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">3</div>
+        <div>
+          <h2 class="text-xl font-bold">💰 Conformidade Financeira</h2>
+          <p class="text-neutral-400 text-sm mt-1">Por que hooks sao obrigatorios quando dinheiro esta envolvido</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Quando dinheiro esta envolvido, use hooks — nao prompts. Um system prompt bem escrito pode falhar 1 em 1.000 vezes. Em contextos financeiros, essa taxa de falha e inaceitavel. Um unico reembolso nao autorizado, uma transferencia duplicada ou uma aprovacao sem verificacao pode resultar em perdas reais e consequencias regulatorias.</p>
+
+      <!-- Box Alerta -->
+      <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6 mb-6">
+        <h3 class="text-red-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">🚨</span> Alerta
+        </h3>
+        <p class="text-neutral-300 text-sm">Em producao com milhares de transacoes diarias, uma taxa de falha de 0,1% significa <strong>dezenas de erros por dia</strong>. Para operacoes financeiras, compliance e seguranca, nunca confie exclusivamente em prompts. A imposicao programatica e a unica forma de garantir 100% de conformidade.</p>
+      </div>
+
+      <!-- Box Dica Pratica -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-6">
+        <h3 class="text-primary font-semibold mb-3 flex items-center">
+          <span class="mr-2">🎯</span> Dica Pratica — Prova
+        </h3>
+        <p class="text-neutral-300 text-sm">Na prova, quando uma questao perguntar sobre como garantir conformidade em operacoes financeiras entre prompts e hooks, a resposta correta e sempre <strong>imposicao programatica (hooks)</strong>. Prompts sao uteis para orientacao geral, mas nunca suficientes para operacoes onde falha tem impacto real. A alternativa A tipicamente aponta para enforcement programatico.</p>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">4</div>
+        <div>
+          <h2 class="text-xl font-bold">🤝 Protocolos de Handoff Estruturado</h2>
+          <p class="text-neutral-400 text-sm mt-1">Transferencia de contexto completa entre agentes ou humanos</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Handoff estruturado significa nunca transferir uma conversa ou tarefa sem contexto completo. Quando um agente passa uma tarefa para outro agente ou para um humano, deve incluir: detalhes do cliente, causa raiz identificada, o que ja foi tentado e acoes recomendadas. Sem contexto, o proximo na cadeia comeca do zero — desperdicando tempo e frustrando o usuario.</p>
+
+      <!-- Box Conceito com checklist -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+        <h3 class="text-emerald-400 font-semibold mb-4 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal — Checklist de Handoff
+        </h3>
+        <div class="space-y-3 text-sm text-neutral-300">
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold mt-0.5">1.</span>
+            <span><strong>Detalhes do Cliente/Contexto:</strong> Quem e o usuario, qual o cenario, historico relevante</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold mt-0.5">2.</span>
+            <span><strong>Causa Raiz Identificada:</strong> O que foi diagnosticado como problema principal</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold mt-0.5">3.</span>
+            <span><strong>O Que Foi Tentado:</strong> Quais acoes ja foram executadas e seus resultados</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold mt-0.5">4.</span>
+            <span><strong>Acoes Recomendadas:</strong> Proximos passos sugeridos com base no diagnostico</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">5</div>
+        <div>
+          <h2 class="text-xl font-bold">🔀 Requisicoes Multi-Preocupacao</h2>
+          <p class="text-neutral-400 text-sm mt-1">Decompondo requisicoes com multiplas preocupacoes em fluxos separados</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Uma unica requisicao do usuario pode conter multiplas preocupacoes que precisam de tratamento diferente. Por exemplo: "Cancele meu pedido e me de um reembolso, e tambem atualize meu endereco." O cancelamento precisa de verificacao, o reembolso precisa de autorizacao financeira, e a atualizacao de endereco e uma operacao simples. Cada preocupacao deve ser decomposta e roteada para o fluxo apropriado.</p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm mb-4">A decomposicao de requisicoes multi-preocupacao segue tres passos:</p>
+        <div class="space-y-2 text-sm text-neutral-300">
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold">1.</span>
+            <span><strong>Identificar</strong> cada preocupacao distinta na requisicao</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold">2.</span>
+            <span><strong>Classificar</strong> o nivel de risco/autorizacao de cada uma</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold">3.</span>
+            <span><strong>Rotear</strong> cada preocupacao para o fluxo adequado (simples, com aprovacao, com hook)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">6</div>
+        <div>
+          <h2 class="text-xl font-bold">🚧 Gates de Pre-requisito</h2>
+          <p class="text-neutral-400 text-sm mt-1">Pre-requisitos programaticos que bloqueiam chamadas downstream</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Gates de pre-requisito sao verificacoes programaticas que bloqueiam chamadas de ferramentas downstream ate que condicoes especificas sejam atendidas. O padrao de gateway garante que compliance seja verificado <strong>antes</strong> de qualquer acao prosseguir. Isso e diferente de verificar depois — quando ja pode ser tarde demais.</p>
+
+      <!-- Box Conceito -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm">O padrao de gateway funciona como um checkpoint obrigatorio: antes de qualquer chamada de ferramenta critica, o gate verifica se todas as pre-condicoes estao satisfeitas (autenticacao, autorizacao, limites, validacao de dados). Somente quando <strong>todas</strong> as condicoes passam, a ferramenta e invocada. Isso cria uma camada de seguranca impossivel de contornar via prompt.</p>
+      </div>
+
+      <!-- Box Dica Pratica -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-6">
+        <h3 class="text-primary font-semibold mb-3 flex items-center">
+          <span class="mr-2">🎯</span> Dica Pratica
+        </h3>
+        <p class="text-neutral-300 text-sm">Na certificacao, lembre-se: gates de pre-requisito sao a implementacao pratica do conceito de imposicao deterministica. Quando a questao mencionar "garantir que X aconteca antes de Y", a resposta envolve <strong>gates programaticos</strong>, nao instrucoes no prompt. O gateway pattern e a arquitetura que conecta hooks, validacao e compliance em um unico fluxo.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-xl font-bold mb-4 text-emerald-400">Resumo do Modulo</h2>
+      <p class="text-neutral-300 mb-6">Voce aprendeu a diferenca fundamental entre imposicao programatica e orientacao por prompt, por que hooks deterministicos sao obrigatorios para operacoes criticas, protocolos de handoff estruturado, decomposicao de requisicoes multi-preocupacao e o padrao de gateway com gates de pre-requisito.</p>
+      <p class="text-neutral-400 text-sm mb-6">Proximo modulo: <strong class="text-neutral-100">1.5 - Hooks do Agent SDK</strong></p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="index.html" class="px-6 py-3 bg-dark-700 hover:bg-dark-600 rounded-lg text-sm font-semibold text-center transition-colors border border-dark-600">Voltar ao Indice</a>
+        <a href="modulo-1-5.html" class="px-6 py-3 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 rounded-lg text-sm font-semibold text-center transition-colors border border-emerald-500/30">Proximo Modulo →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

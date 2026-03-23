@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 1.3 — Invocacao de Subagentes | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#10b981',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* Light mode - emerald accent */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .text-emerald-300 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .bg-emerald-500\/5 { background-color: rgba(5, 150, 105, 0.05); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .border-emerald-500\/20 { border-color: rgba(5, 150, 105, 0.15); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+
+    /* Light mode - other trail colors */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); }
+
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13, 148, 136, 0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13, 148, 136, 0.25); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13, 148, 136, 0.08); }
+
+    /* Light mode - special overrides */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #059669; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* Light mode - red alert */
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .bg-red-500\/20 { background-color: rgba(220, 38, 38, 0.12); }
+
+    /* Light mode - nav */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400 transition-colors">Trilha 1</a>
+      <span>/</span>
+      <span class="text-emerald-400 font-medium">Modulo 1.3</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-500/10 via-dark-800 to-dark-800 py-12 border-b border-dark-600 mt-2">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-400 text-sm font-semibold rounded-full mb-4">MODULO 1.3</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-3">🚀 Invocacao de Subagentes</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">Como configurar, spawnar e passar contexto para subagentes. Da ferramenta Agent ao fork_session.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">25</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">Inter</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- ==================== TOPIC 1 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-lg">1</span>
+        <h2 class="text-2xl font-bold">🔧 Ferramenta Agent (ex-Task)</h2>
+      </div>
+
+      <div class="space-y-4">
+        <p class="text-neutral-300 leading-relaxed">
+          A ferramenta <strong class="text-emerald-400">Agent</strong> (anteriormente chamada de Task, renomeada na versao v2.1.63) e o mecanismo principal para criar subagentes programaticamente. Quando um coordenador precisa delegar trabalho, ele invoca a ferramenta Agent para spawnar um subagente com instrucoes e contexto especificos.
+        </p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+          <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 text-sm leading-relaxed mb-3">
+            O Agent tool permite que um agente coordenador crie subagentes especializados. Cada subagente recebe seu proprio contexto, ferramentas permitidas e instrucoes. O coordenador espera o resultado e decide o proximo passo.
+          </p>
+          <div class="bg-dark-900 rounded-lg p-4 font-mono text-sm text-neutral-300">
+            <div class="text-neutral-500">// O coordenador deve ter "Agent" em allowedTools</div>
+            <div><span class="text-emerald-400">allowedTools</span>: [<span class="text-yellow-400">"Agent"</span>, <span class="text-yellow-400">"Read"</span>, <span class="text-yellow-400">"Write"</span>]</div>
+            <div class="mt-2 text-neutral-500">// Ao invocar Agent, o coordenador especifica:</div>
+            <div>- <span class="text-emerald-400">prompt</span>: instrucoes para o subagente</div>
+            <div>- <span class="text-emerald-400">allowedTools</span>: ferramentas que o subagente pode usar</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 2 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-lg">2</span>
+        <h2 class="text-2xl font-bold">🔑 allowedTools e Restricoes</h2>
+      </div>
+
+      <div class="space-y-4">
+        <p class="text-neutral-300 leading-relaxed">
+          Cada subagente pode ter acesso restrito a ferramentas via <strong class="text-emerald-400">allowedTools</strong> no AgentDefinition. Isso impede que subagentes usem ferramentas fora de seu papel. Acesso com escopo = decisoes melhores.
+        </p>
+
+        <!-- Box Conceito -->
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+          <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito
+          </h3>
+          <p class="text-neutral-300 text-sm leading-relaxed">
+            Restringir ferramentas por subagente e uma pratica fundamental. Um agente de pesquisa nao precisa de <code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400 text-xs">Write</code>. Um agente de escrita nao precisa de <code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400 text-xs">Bash</code>. A regra de ouro e: <strong>4-5 ferramentas por agente</strong> — menos opcoes levam a decisoes melhores.
+          </p>
+        </div>
+
+        <!-- Grid Fazer vs Evitar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-6">
+            <h4 class="text-emerald-400 font-semibold mb-3">✅ Fazer</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>Restringir ferramentas ao minimo necessario por papel</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>Agente de leitura: apenas Read, Grep, Glob</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>Agente de escrita: Read + Write + Edit</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>Manter 4-5 ferramentas por agente</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
+            <h4 class="text-red-400 font-semibold mb-3">❌ Evitar</h4>
+            <ul class="space-y-2 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Dar acesso total a todas as ferramentas</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Subagente com Bash sem restricoes</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Misturar papeis: leitura + escrita + execucao</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Mais de 8 ferramentas em um unico agente</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 3 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-lg">3</span>
+        <h2 class="text-2xl font-bold">📦 Contexto Explicito</h2>
+      </div>
+
+      <div class="space-y-4">
+        <p class="text-neutral-300 leading-relaxed">
+          O contexto do subagente deve ser fornecido <strong class="text-emerald-400">EXPLICITAMENTE</strong> — nao ha heranca automatica. Inclua descobertas previas completas nos prompts dos subagentes. Use formatos de dados estruturados para passagem de metadados.
+        </p>
+
+        <!-- Box Alerta (red) -->
+        <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
+          <h3 class="text-red-400 font-semibold mb-3 flex items-center">
+            <span class="mr-2">⚠️</span> Alerta Critico
+          </h3>
+          <p class="text-neutral-300 text-sm leading-relaxed">
+            <strong>Nao ha heranca automatica de contexto!</strong> Um subagente nasce com uma conversa vazia. Se o coordenador descobriu que o arquivo principal e <code class="bg-dark-700 px-1.5 py-0.5 rounded text-red-400 text-xs">src/main.ts</code>, ele deve incluir essa informacao explicitamente no prompt do subagente. Caso contrario, o subagente tera que redescobrir tudo do zero.
+          </p>
+        </div>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+          <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+            <span class="mr-2">🎯</span> Dica Pratica
+          </h3>
+          <p class="text-neutral-300 text-sm leading-relaxed mb-3">
+            Estruture o prompt do subagente com todas as informacoes necessarias:
+          </p>
+          <div class="bg-dark-900 rounded-lg p-4 font-mono text-sm text-neutral-300">
+            <div class="text-neutral-500">// Prompt para subagente — inclua contexto completo</div>
+            <div class="mt-1"><span class="text-emerald-400">"Voce esta trabalhando no projeto X.</span></div>
+            <div><span class="text-emerald-400"> Arquivos relevantes: src/main.ts, src/utils.ts</span></div>
+            <div><span class="text-emerald-400"> Descoberta previa: a funcao parseConfig tem um bug na linha 42.</span></div>
+            <div><span class="text-emerald-400"> Sua tarefa: corrigir o bug e adicionar testes."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 4 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-lg">4</span>
+        <h2 class="text-2xl font-bold">⚙️ AgentDefinition Config</h2>
+      </div>
+
+      <div class="space-y-4">
+        <p class="text-neutral-300 leading-relaxed">
+          O <strong class="text-emerald-400">AgentDefinition</strong> e como voce define a "personalidade" e as capacidades de cada subagente. Inclui descricoes, system prompts e restricoes de ferramentas. Essa configuracao determina o comportamento e os limites do subagente.
+        </p>
+
+        <!-- Box Conceito Principal with config structure -->
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+          <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal — Estrutura do AgentDefinition
+          </h3>
+          <div class="bg-dark-900 rounded-lg p-4 font-mono text-sm text-neutral-300">
+            <div>{</div>
+            <div class="ml-4"><span class="text-emerald-400">"name"</span>: <span class="text-yellow-400">"code-reviewer"</span>,</div>
+            <div class="ml-4"><span class="text-emerald-400">"description"</span>: <span class="text-yellow-400">"Revisa codigo para bugs e padroes"</span>,</div>
+            <div class="ml-4"><span class="text-emerald-400">"systemPrompt"</span>: <span class="text-yellow-400">"Voce e um revisor de codigo experiente..."</span>,</div>
+            <div class="ml-4"><span class="text-emerald-400">"allowedTools"</span>: [</div>
+            <div class="ml-8"><span class="text-yellow-400">"Read"</span>, <span class="text-yellow-400">"Grep"</span>, <span class="text-yellow-400">"Glob"</span></div>
+            <div class="ml-4">],</div>
+            <div class="ml-4"><span class="text-emerald-400">"maxTurns"</span>: <span class="text-blue-400">10</span></div>
+            <div>}</div>
+          </div>
+          <ul class="mt-4 space-y-1 text-neutral-300 text-sm">
+            <li><strong class="text-emerald-400">name:</strong> identificador unico do agente</li>
+            <li><strong class="text-emerald-400">description:</strong> o que o agente faz (usado pelo coordenador)</li>
+            <li><strong class="text-emerald-400">systemPrompt:</strong> instrucoes de comportamento do agente</li>
+            <li><strong class="text-emerald-400">allowedTools:</strong> lista de ferramentas com acesso permitido</li>
+            <li><strong class="text-emerald-400">maxTurns:</strong> limite de turnos para evitar loops infinitos</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 5 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-lg">5</span>
+        <h2 class="text-2xl font-bold">🔀 fork_session</h2>
+      </div>
+
+      <div class="space-y-4">
+        <p class="text-neutral-300 leading-relaxed">
+          O <strong class="text-emerald-400">fork_session</strong> permite explorar abordagens divergentes a partir de uma base compartilhada. Como branches do git — explore sem poluir a conversa principal. Util para comparar diferentes solucoes.
+        </p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+          <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 text-sm leading-relaxed mb-3">
+            fork_session cria uma copia da sessao atual em um ponto especifico, permitindo que o agente explore um caminho alternativo sem afetar o fluxo principal. Diferente do Agent tool (que cria um subagente novo), fork_session <strong>herda todo o contexto</strong> ate o ponto do fork.
+          </p>
+          <div class="bg-dark-900 rounded-lg p-4 font-mono text-sm text-neutral-300">
+            <div class="text-neutral-500">// Analogia com git:</div>
+            <div><span class="text-emerald-400">main</span> ───●───●───●───●───● (conversa principal)</div>
+            <div class="ml-16">  └──●──●──● (fork: abordagem A)</div>
+            <div class="ml-16">  └──●──● (fork: abordagem B)</div>
+          </div>
+        </div>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+          <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+            <span class="mr-2">🎯</span> Dica Pratica
+          </h3>
+          <p class="text-neutral-300 text-sm leading-relaxed">
+            Use fork_session quando voce precisa testar hipoteses concorrentes. Por exemplo: "A solucao ideal e usar uma fila ou um banco de dados?" — faca fork para cada abordagem, avalie os resultados, e volte a conversa principal com a melhor solucao. O custo e minimo e o ganho de qualidade e significativo.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 6 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-lg">6</span>
+        <h2 class="text-2xl font-bold">⚡ Subagentes Paralelos</h2>
+      </div>
+
+      <div class="space-y-4">
+        <p class="text-neutral-300 leading-relaxed">
+          E possivel spawnar <strong class="text-emerald-400">subagentes paralelos</strong> em uma unica resposta do coordenador. Isso maximiza o throughput. O coordenador pode lancar multiplos subagentes simultaneamente e agregar resultados apos todos completarem.
+        </p>
+
+        <!-- Box Conceito -->
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+          <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito
+          </h3>
+          <p class="text-neutral-300 text-sm leading-relaxed mb-3">
+            Quando o coordenador faz multiplas chamadas ao Agent tool na mesma resposta, os subagentes sao executados em paralelo. Cada um resolve sua tarefa independentemente, e o coordenador recebe todos os resultados para sintetizar.
+          </p>
+          <div class="bg-dark-900 rounded-lg p-4 font-mono text-sm text-neutral-300">
+            <div class="text-neutral-500">// Coordenador: uma resposta, 3 subagentes</div>
+            <div><span class="text-emerald-400">Agent</span>(<span class="text-yellow-400">"Analise o frontend..."</span>)  → subagente A</div>
+            <div><span class="text-emerald-400">Agent</span>(<span class="text-yellow-400">"Analise o backend..."</span>)   → subagente B</div>
+            <div><span class="text-emerald-400">Agent</span>(<span class="text-yellow-400">"Analise o database..."</span>)  → subagente C</div>
+            <div class="mt-2 text-neutral-500">// Todos rodam em paralelo → coordenador agrega</div>
+          </div>
+        </div>
+
+        <!-- Box Dados/Pesquisa -->
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+          <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+            <span class="mr-2">📊</span> Dados e Pesquisa
+          </h3>
+          <p class="text-neutral-300 text-sm leading-relaxed mb-3">
+            A execucao paralela de subagentes traz ganhos significativos de eficiencia:
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="bg-dark-900 rounded-lg p-3 text-center">
+              <div class="text-xl font-bold text-emerald-400">3x</div>
+              <div class="text-xs text-neutral-400">Mais rapido que serial</div>
+            </div>
+            <div class="bg-dark-900 rounded-lg p-3 text-center">
+              <div class="text-xl font-bold text-emerald-400">N:1</div>
+              <div class="text-xs text-neutral-400">N subagentes, 1 coordenador</div>
+            </div>
+            <div class="bg-dark-900 rounded-lg p-3 text-center">
+              <div class="text-xl font-bold text-emerald-400">Isolado</div>
+              <div class="text-xs text-neutral-400">Falha de um nao afeta outros</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESUMO ==================== -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center">
+        <span class="mr-2">📋</span> Resumo do Modulo
+      </h2>
+
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 font-bold mt-0.5">✓</span>
+          <span class="text-neutral-300"><strong class="text-emerald-400">Ferramenta Agent</strong> — mecanismo principal para spawnar subagentes (ex-Task, renomeada v2.1.63)</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 font-bold mt-0.5">✓</span>
+          <span class="text-neutral-300"><strong class="text-emerald-400">allowedTools</strong> — restrinja ferramentas por papel; 4-5 ferramentas por agente</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 font-bold mt-0.5">✓</span>
+          <span class="text-neutral-300"><strong class="text-emerald-400">Contexto Explicito</strong> — nenhuma heranca automatica; inclua tudo no prompt</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 font-bold mt-0.5">✓</span>
+          <span class="text-neutral-300"><strong class="text-emerald-400">AgentDefinition</strong> — configure name, description, systemPrompt, allowedTools, maxTurns</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 font-bold mt-0.5">✓</span>
+          <span class="text-neutral-300"><strong class="text-emerald-400">fork_session</strong> — explore abordagens divergentes sem poluir a conversa principal</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 font-bold mt-0.5">✓</span>
+          <span class="text-neutral-300"><strong class="text-emerald-400">Subagentes Paralelos</strong> — multiplos Agent calls na mesma resposta para throughput maximo</span>
+        </div>
+      </div>
+
+      <!-- Next Module -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 mb-6">
+        <p class="text-neutral-300 text-sm">
+          <span class="text-emerald-400 font-semibold">Proximo:</span> 1.4 — Imposicao e Padroes de Handoff
+        </p>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 hover:bg-dark-600 border border-dark-600 rounded-lg text-neutral-300 font-semibold transition-colors">
+          ← Voltar para Trilha 1
+        </a>
+        <a href="modulo-1-4.html" class="flex-1 text-center px-6 py-3 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded-lg text-emerald-400 font-semibold transition-colors">
+          Proximo: Modulo 1.4 →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

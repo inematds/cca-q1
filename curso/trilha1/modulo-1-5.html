@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hooks do Agent SDK | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    /* Light mode */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400 transition-colors">Trilha 1</a>
+      <span>/</span>
+      <span class="text-neutral-100">Modulo 1.5</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-500/10 via-dark-800 to-dark-800 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <span class="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-400 text-sm font-semibold rounded-full mb-4">MODULO 1.5</span>
+      <h1 class="text-2xl font-bold mb-3">🪝 Hooks do Agent SDK</h1>
+      <p class="text-neutral-300 max-w-3xl mb-6">Interceptacao de chamadas de ferramentas para normalizacao e compliance. Como usar PostToolUse para garantir conformidade deterministica.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">25 Min</div>
+          <div class="text-xs text-neutral-400">Duracao</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">Inter.</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">1</div>
+        <div>
+          <h2 class="text-xl font-bold">🪝 PostToolUse Hooks</h2>
+          <p class="text-neutral-400 text-sm mt-1">Interceptando resultados de ferramentas antes do processamento pelo modelo</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">PostToolUse hooks interceptam o resultado de uma chamada de ferramenta <strong>antes</strong> que o modelo processe esse resultado. Isso significa que voce pode transformar, validar ou bloquear dados entre a ferramenta e o Claude. Este e o mecanismo primario de hooks no Agent SDK e a base para compliance deterministico em sistemas agenticos.</p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm">O PostToolUse hook e executado <strong>automaticamente</strong> apos cada chamada de ferramenta. Ele recebe o resultado bruto da ferramenta e pode: (1) modificar os dados antes de entrega-los ao modelo, (2) adicionar metadados de compliance, (3) bloquear completamente o resultado se violar alguma politica, ou (4) transformar formatos para consistencia. O modelo nunca ve o resultado original — apenas o que o hook permite passar.</p>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">2</div>
+        <div>
+          <h2 class="text-xl font-bold">🔍 Interceptacao de Resultados</h2>
+          <p class="text-neutral-400 text-sm mt-1">Hooks veem tudo antes do Claude — modificam, bloqueiam ou enriquecem</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Hooks funcionam como uma camada intermediaria entre ferramentas e o modelo. Eles veem cada resultado de ferramenta antes do Claude e podem modificar, bloquear ou enriquecer os dados. Isso cria uma camada de compliance deterministico que nao depende da interpretacao do modelo.</p>
+
+      <!-- Box Conceito -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm">A interceptacao de resultados transforma o fluxo de dados em um pipeline controlado. Em vez de <code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400 text-xs">Ferramenta → Modelo</code>, o fluxo se torna <code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400 text-xs">Ferramenta → Hook → Modelo</code>, onde o hook tem controle total sobre o que passa.</p>
+      </div>
+
+      <!-- Timeline -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-6">
+        <h3 class="text-neutral-100 font-semibold mb-4">Fluxo de Interceptacao</h3>
+        <div class="space-y-4">
+          <div class="flex items-center space-x-4">
+            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-sm font-bold flex-shrink-0">1</div>
+            <div class="flex-1 bg-dark-700 rounded-lg p-3 text-sm text-neutral-300">Modelo chama uma <strong>ferramenta</strong> (ex: consulta banco de dados)</div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-sm font-bold flex-shrink-0">2</div>
+            <div class="flex-1 bg-dark-700 rounded-lg p-3 text-sm text-neutral-300">Ferramenta retorna resultado bruto</div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-sm font-bold flex-shrink-0">3</div>
+            <div class="flex-1 bg-primary/10 border border-primary/40 rounded-lg p-3 text-sm text-neutral-300"><strong>PostToolUse Hook intercepta</strong> — valida, transforma, enriquece ou bloqueia</div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-sm font-bold flex-shrink-0">4</div>
+            <div class="flex-1 bg-dark-700 rounded-lg p-3 text-sm text-neutral-300">Resultado processado e entregue ao <strong>modelo</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">3</div>
+        <div>
+          <h2 class="text-xl font-bold">📐 Normalizacao de Dados</h2>
+          <p class="text-neutral-400 text-sm mt-1">Garantindo formatos consistentes via PostToolUse</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Um dos usos mais praticos de PostToolUse e a normalizacao de dados. Ferramentas diferentes retornam timestamps em formatos diferentes, codigos de status variam entre APIs, e formatos de moeda sao inconsistentes. O hook normaliza tudo para um formato padrao antes que o modelo processe — eliminando ambiguidades e erros de interpretacao.</p>
+
+      <!-- Box Conceito -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <div class="space-y-2 text-sm text-neutral-300">
+          <p><strong>Exemplos de normalizacao via PostToolUse:</strong></p>
+          <ul class="space-y-1 ml-4">
+            <li>• <strong>Timestamps:</strong> Converter todos para ISO 8601 (ex: 2026-03-23T14:30:00Z)</li>
+            <li>• <strong>Status codes:</strong> Padronizar para enum consistente (ACTIVE, PENDING, CLOSED)</li>
+            <li>• <strong>Moedas:</strong> Formatar como centavos inteiros para evitar erros de ponto flutuante</li>
+            <li>• <strong>Nomes:</strong> Capitalizar e remover espacos extras</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Box Dica Pratica -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-6">
+        <h3 class="text-primary font-semibold mb-3 flex items-center">
+          <span class="mr-2">🎯</span> Dica Pratica
+        </h3>
+        <p class="text-neutral-300 text-sm">Na pratica, normalizacao via hooks e preferivel a pedir ao modelo para normalizar via prompt. O modelo pode interpretar "2/3/26" como 2 de marco ou 3 de fevereiro dependendo do contexto. O hook converte deterministicamente para ISO 8601 — sem ambiguidade, sem erro, todas as vezes.</p>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">4</div>
+        <div>
+          <h2 class="text-xl font-bold">🚫 Bloqueio por Politica</h2>
+          <p class="text-neutral-400 text-sm mt-1">Hooks que impem regras de compliance bloqueando acoes proibidas</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Hooks podem ser usados para impor regras de compliance: bloquear reembolsos acima de um limite, impedir acoes nao autorizadas, recusar operacoes fora do horario permitido. Quando o hook diz NAO, a acao simplesmente nao acontece — nao importa o que o modelo tente fazer.</p>
+
+      <!-- Box Alerta -->
+      <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6 mb-6">
+        <h3 class="text-red-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">🚨</span> Alerta
+        </h3>
+        <p class="text-neutral-300 text-sm">Sem bloqueio por politica via hooks, um agente pode ser manipulado por prompt injection para executar acoes fora da politica. Um hook programatico <strong>nao pode ser contornado</strong> por engenharia de prompt — ele opera fora do controle do modelo, na camada de codigo. Esta e a defesa definitiva contra abusos.</p>
+      </div>
+
+      <!-- Grid Fazer vs Evitar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-5">
+          <h4 class="text-emerald-400 font-semibold mb-3">✅ Fazer</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li>• Definir limites de reembolso no hook (ex: max R$500)</li>
+            <li>• Bloquear chamadas a ferramentas senssiveis sem autorizacao</li>
+            <li>• Registrar tentativas bloqueadas para auditoria</li>
+            <li>• Retornar mensagem clara quando acao e bloqueada</li>
+          </ul>
+        </div>
+        <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-5">
+          <h4 class="text-red-400 font-semibold mb-3">❌ Evitar</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li>• Confiar em "nunca faca X" no system prompt</li>
+            <li>• Usar validacao apenas no lado do modelo</li>
+            <li>• Ignorar logging de tentativas bloqueadas</li>
+            <li>• Permitir que o modelo decida limites de autorizacao</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">5</div>
+        <div>
+          <h2 class="text-xl font-bold">⚖️ Hooks vs Prompts na Pratica</h2>
+          <p class="text-neutral-400 text-sm mt-1">Comparacao quantitativa de taxas de conformidade</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">A diferenca entre hooks e prompts nao e teorica — e quantificavel. Hooks garantem 100% de enforcement. Prompts atingem ~99% de compliance. Em producao com escala, aquele 1% de falha se traduz em incidentes reais. Para qualquer operacao onde uma unica falha tem consequencias reais, hooks sao obrigatorios.</p>
+
+      <!-- Box Dados/Pesquisa -->
+      <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6">
+        <h3 class="text-blue-400 font-semibold mb-4 flex items-center">
+          <span class="mr-2">📊</span> Dados e Pesquisa
+        </h3>
+        <div class="space-y-4 text-sm text-neutral-300">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-dark-800 rounded-lg p-4 text-center border border-dark-600">
+              <div class="text-2xl font-bold text-emerald-400">100%</div>
+              <div class="text-xs text-neutral-400 mt-1">Hooks — Conformidade</div>
+            </div>
+            <div class="bg-dark-800 rounded-lg p-4 text-center border border-dark-600">
+              <div class="text-2xl font-bold text-primary">~99%</div>
+              <div class="text-xs text-neutral-400 mt-1">Prompts — Conformidade</div>
+            </div>
+            <div class="bg-dark-800 rounded-lg p-4 text-center border border-dark-600">
+              <div class="text-2xl font-bold text-red-400">~12%</div>
+              <div class="text-xs text-neutral-400 mt-1">Falha em cenarios complexos*</div>
+            </div>
+          </div>
+          <p class="text-xs text-neutral-500">*Cenario do exame: taxa de falha de compliance quando apenas prompts sao usados para orquestrar operacoes financeiras criticas com multiplas condicoes.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">6</div>
+        <div>
+          <h2 class="text-xl font-bold">✅ Garantias Deterministicas</h2>
+          <p class="text-neutral-400 text-sm mt-1">Hooks fornecem garantias que prompts nao podem oferecer</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">O insight fundamental deste modulo: hooks fornecem <strong>garantias</strong> que prompts nao podem oferecer. Um prompt e uma orientacao — o modelo pode segui-la ou nao. Um hook e uma regra fisica — a acao nao acontece se a condicao nao for atendida. Esta distincao e a fundacao de sistemas agenticos production-grade e um conceito central da certificacao.</p>
+
+      <!-- Box Conceito -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm">Garantias deterministicas significam que voce pode <strong>provar</strong> para auditores, reguladores e stakeholders que certas regras sao impossiveis de violar. Isso transforma agentes de "ferramentas experimentais" em "sistemas de producao confiaveis". Em um mundo onde IA e cada vez mais usada em decisoes criticas, essa distincao e o que separa prototipos de produtos reais.</p>
+      </div>
+
+      <!-- Box Dica Pratica -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-6">
+        <h3 class="text-primary font-semibold mb-3 flex items-center">
+          <span class="mr-2">🎯</span> Dica Pratica — Prova
+        </h3>
+        <p class="text-neutral-300 text-sm">Na certificacao, qualquer questao que pergunte sobre "garantir", "assegurar" ou "impor" conformidade em operacoes criticas tera como resposta correta o uso de <strong>PostToolUse hooks</strong> ou <strong>imposicao programatica</strong>. Prompts sao para orientacao; hooks sao para garantias. Memorize essa distincao.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-xl font-bold mb-4 text-emerald-400">Resumo do Modulo</h2>
+      <p class="text-neutral-300 mb-6">Voce aprendeu como PostToolUse hooks interceptam resultados de ferramentas, como usar hooks para normalizacao de dados, bloqueio por politica, e por que hooks fornecem garantias deterministicas que prompts nao podem oferecer. Este e um dos conceitos mais testados na certificacao.</p>
+      <p class="text-neutral-400 text-sm mb-6">Proximo modulo: <strong class="text-neutral-100">1.6 - Estrategias de Decomposicao</strong></p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="index.html" class="px-6 py-3 bg-dark-700 hover:bg-dark-600 rounded-lg text-sm font-semibold text-center transition-colors border border-dark-600">Voltar ao Indice</a>
+        <a href="modulo-1-6.html" class="px-6 py-3 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 rounded-lg text-sm font-semibold text-center transition-colors border border-emerald-500/30">Proximo Modulo →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

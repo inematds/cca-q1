@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 1.2 — Arquitetura Hub-and-Spoke | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* Light mode - emerald accent */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-amber-400 { color: #92400e; }
+
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13, 148, 136, 0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13, 148, 136, 0.25); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-teal-400 { color: #0d9488; }
+
+    /* Light mode - remove gradients and special colors */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* Light mode - nav */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold bg-emerald-500/10 text-emerald-400">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400 transition-colors">Trilha 1</a>
+      <span>/</span>
+      <span class="text-emerald-400 font-medium">Modulo 1.2</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-500/10 via-dark-800 to-dark-800 py-12 border-b border-dark-600 mt-2">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-400 text-sm font-semibold rounded-full mb-4">MODULO 1.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-3">🕸️ Arquitetura Hub-and-Spoke</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl">O padrao coordenador-subagente para tarefas complexas. Entenda como dividir, delegar e combinar resultados em sistemas multi-agente.</p>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mt-8">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">25 min</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">Inter</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- ==================== TOPIC 1 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🕸️ Padrao Coordenador-Subagente</h2>
+      </div>
+
+      <div class="space-y-4 text-neutral-300 leading-relaxed">
+        <p>O padrao <strong class="text-neutral-100">Hub-and-Spoke</strong> e a arquitetura fundamental para sistemas multi-agente no ecossistema Claude. Neste modelo, um <strong class="text-neutral-100">coordenador central</strong> (o hub) gerencia toda a comunicacao entre subagentes especializados (os spokes).</p>
+        <p>Pense neste padrao como um gerente com membros especializados na equipe. O gerente nao faz o trabalho tecnico — ele divide as tarefas, delega para os especialistas certos e combina os resultados no final. Nenhum membro da equipe fala diretamente com outro; toda comunicacao passa pelo gerente.</p>
+      </div>
+
+      <!-- Box Conceito Principal -->
+      <div class="mt-6 bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-3 flex items-center">
+          <span class="mr-2">🧠</span> Conceito Principal
+        </h3>
+        <ul class="space-y-2 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-0.5">•</span>
+            <span><strong class="text-neutral-100">Coordenador (Hub):</strong> Recebe a tarefa principal, decompoe em subtarefas, delega para subagentes e sintetiza os resultados finais.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-0.5">•</span>
+            <span><strong class="text-neutral-100">Subagentes (Spokes):</strong> Agentes especializados que recebem uma subtarefa especifica, executam e retornam o resultado ao coordenador.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-0.5">•</span>
+            <span><strong class="text-neutral-100">Comunicacao Centralizada:</strong> Toda comunicacao entre subagentes passa pelo coordenador — subagentes nunca se comunicam diretamente entre si.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-0.5">•</span>
+            <span><strong class="text-neutral-100">Agregacao Final:</strong> O coordenador coleta todos os resultados parciais e monta a resposta final coerente e integrada.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 2 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔒 Contexto Isolado dos Subagentes</h2>
+      </div>
+
+      <div class="space-y-4 text-neutral-300 leading-relaxed">
+        <p>Este e o conceito mais critico do padrao hub-and-spoke: <strong class="text-neutral-100">subagentes possuem contexto isolado</strong>. Quando o coordenador cria um subagente, esse subagente comeca com uma conversa limpa — ele nao herda o historico do coordenador, nao ve as mensagens anteriores e nao tem acesso ao trabalho de outros subagentes.</p>
+        <p>Cada subagente opera em sua propria bolha. Se o coordenador nao passar explicitamente uma informacao na mensagem de delegacao, o subagente simplesmente nao tera acesso a ela. Isso e por design — o isolamento previne contaminacao de contexto e permite que cada subagente foque exclusivamente em sua tarefa.</p>
+      </div>
+
+      <!-- Box Alerta (red) -->
+      <div class="mt-6 bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+        <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center">
+          <span class="mr-2">⚠️</span> Alerta Critico
+        </h3>
+        <div class="text-neutral-300 text-sm space-y-2">
+          <p><strong class="text-neutral-100">Subagentes NAO herdam o contexto do coordenador.</strong> Este e o erro mais comum em arquiteturas multi-agente. Muitos arquitetos assumem que o subagente "sabe" tudo que o coordenador sabe — isso e falso.</p>
+          <ul class="space-y-1 ml-4">
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400 mt-0.5">•</span>
+              <span>Subagentes nao veem o historico de conversa do coordenador</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400 mt-0.5">•</span>
+              <span>Subagentes nao veem os resultados de outros subagentes</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400 mt-0.5">•</span>
+              <span>Se a informacao nao foi passada explicitamente, ela nao existe para o subagente</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Box Dica Pratica -->
+      <div class="mt-4 bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-3 flex items-center">
+          <span class="mr-2">💡</span> Dica Pratica
+        </h3>
+        <div class="text-neutral-300 text-sm space-y-2">
+          <p>Sempre passe contexto explicitamente na mensagem de delegacao. Se o subagente precisa de informacao de um subagente anterior, o coordenador deve incluir essa informacao na instrucao.</p>
+          <p><strong class="text-neutral-100">Padrao recomendado:</strong> Na mensagem de delegacao, inclua: (1) a tarefa especifica, (2) todo o contexto necessario, (3) o formato de resposta esperado. Trate cada delegacao como se fosse uma instrucao para alguem que nunca ouviu falar do projeto.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 3 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📋 Papel do Coordenador</h2>
+      </div>
+
+      <div class="space-y-4 text-neutral-300 leading-relaxed">
+        <p>O coordenador e o cerebro da operacao. Ele tem quatro responsabilidades fundamentais: <strong class="text-neutral-100">decomposicao de tarefas</strong>, <strong class="text-neutral-100">delegacao para subagentes</strong>, <strong class="text-neutral-100">agregacao de resultados</strong> e <strong class="text-neutral-100">roteamento por complexidade</strong>.</p>
+        <p>Um bom coordenador funciona como um bom gerente: define o escopo amplo para cada subagente, deixa o especialista decidir como executar e sintetiza os resultados no final. O anti-padrao e o <strong class="text-neutral-100">microgerenciamento</strong> — definir cada passo que o subagente deve seguir elimina o valor da delegacao.</p>
+      </div>
+
+      <!-- Box Conceito Principal -->
+      <div class="mt-6 bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-3 flex items-center">
+          <span class="mr-2">🧠</span> Conceito Principal
+        </h3>
+        <ul class="space-y-2 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-0.5">•</span>
+            <span><strong class="text-neutral-100">Decomposicao:</strong> Dividir a tarefa complexa em subtarefas independentes e gerenciaveis.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-0.5">•</span>
+            <span><strong class="text-neutral-100">Delegacao:</strong> Atribuir cada subtarefa ao subagente mais adequado, com contexto explicito.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-0.5">•</span>
+            <span><strong class="text-neutral-100">Agregacao:</strong> Coletar os resultados de todos os subagentes e sintetizar uma resposta unificada.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-0.5">•</span>
+            <span><strong class="text-neutral-100">Roteamento:</strong> Decidir dinamicamente qual subagente usar com base na complexidade e tipo da tarefa.</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Timeline: Coordinator Workflow -->
+      <div class="mt-6 bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h3 class="text-lg font-semibold mb-4 flex items-center">
+          <span class="mr-2">🔄</span> Fluxo do Coordenador
+        </h3>
+        <div class="space-y-4">
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">1</div>
+            <div class="flex-1 pb-4 border-l border-dark-600 pl-4 -ml-4 ml-6">
+              <p class="font-semibold text-neutral-100">Receber Tarefa Complexa</p>
+              <p class="text-sm text-neutral-400">O coordenador recebe a solicitacao do usuario e analisa a complexidade.</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">2</div>
+            <div class="flex-1 pb-4 border-l border-dark-600 pl-4 -ml-4 ml-6">
+              <p class="font-semibold text-neutral-100">Decompor em Subtarefas</p>
+              <p class="text-sm text-neutral-400">Divide por tema ou area de especializacao, nao por passos sequenciais.</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">3</div>
+            <div class="flex-1 pb-4 border-l border-dark-600 pl-4 -ml-4 ml-6">
+              <p class="font-semibold text-neutral-100">Delegar com Contexto Explicito</p>
+              <p class="text-sm text-neutral-400">Envia cada subtarefa ao subagente adequado com todas as informacoes necessarias.</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">4</div>
+            <div class="flex-1 pb-4 border-l border-dark-600 pl-4 -ml-4 ml-6">
+              <p class="font-semibold text-neutral-100">Coletar Resultados</p>
+              <p class="text-sm text-neutral-400">Recebe os resultados de cada subagente conforme completam suas tarefas.</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">5</div>
+            <div class="flex-1">
+              <p class="font-semibold text-neutral-100">Sintetizar Resposta Final</p>
+              <p class="text-sm text-neutral-400">Combina todos os resultados parciais em uma resposta coerente e completa.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 4 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">✂️ Decomposicao de Tarefas</h2>
+      </div>
+
+      <div class="space-y-4 text-neutral-300 leading-relaxed">
+        <p>A decomposicao de tarefas e onde muitos arquitetos erram. O risco principal e a <strong class="text-neutral-100">decomposicao excessivamente estreita</strong>: quando voce divide a tarefa em itens muito especificos, o subagente perde a visao do todo e a cobertura fica incompleta.</p>
+        <p>A abordagem correta e decompor por <strong class="text-neutral-100">tema ou area</strong>, nao por itens especificos. Dê ao subagente um objetivo de pesquisa amplo e deixe ele decidir quais itens cobrir. Quando voce fornece uma checklist estreita, o subagente se limita apenas aos itens listados e ignora aspectos relevantes que nao foram previstos.</p>
+      </div>
+
+      <!-- Grid Fazer vs Evitar -->
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Fazer -->
+        <div class="bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+          <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center">
+            <span class="mr-2">✅</span> Fazer: Objetivos Amplos
+          </h3>
+          <ul class="space-y-3 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400 mt-0.5">•</span>
+              <span>"Pesquise todos os aspectos de seguranca relevantes para esta arquitetura"</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400 mt-0.5">•</span>
+              <span>"Analise os trade-offs de performance desta solucao"</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400 mt-0.5">•</span>
+              <span>"Identifique riscos operacionais e proponha mitigacoes"</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400 mt-0.5">•</span>
+              <span>Decomposicao por tema/area de expertise</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-emerald-400 mt-0.5">•</span>
+              <span>Subagente decide quais itens cobrir</span>
+            </li>
+          </ul>
+        </div>
+        <!-- Evitar -->
+        <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+          <h3 class="text-lg font-semibold text-red-400 mb-4 flex items-center">
+            <span class="mr-2">❌</span> Evitar: Checklists Estreitas
+          </h3>
+          <ul class="space-y-3 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400 mt-0.5">•</span>
+              <span>"Verifique se tem SQL injection no endpoint /users"</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400 mt-0.5">•</span>
+              <span>"Meca o tempo de resposta da query X"</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400 mt-0.5">•</span>
+              <span>"Confirme se o retry esta configurado no servico Y"</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400 mt-0.5">•</span>
+              <span>Decomposicao por itens individuais</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-red-400 mt-0.5">•</span>
+              <span>Subagente limitado ao checklist fornecido</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 5 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">⚡ Selecao Dinamica de Subagentes</h2>
+      </div>
+
+      <div class="space-y-4 text-neutral-300 leading-relaxed">
+        <p>Em arquiteturas avancadas, a selecao de subagentes nao e predeterminada — o coordenador decide <strong class="text-neutral-100">dinamicamente</strong> quais subagentes usar com base nos requisitos da tarefa. Isso permite que o sistema se adapte a diferentes tipos de solicitacoes sem precisar de um fluxo rigido.</p>
+        <p>Alem disso, o coordenador pode implementar <strong class="text-neutral-100">loops de refinamento iterativo</strong>: se o resultado de um subagente nao atende ao esperado, o coordenador pode delegar novamente com instrucoes mais especificas ou passar o resultado de um subagente como contexto para outro. Toda essa comunicacao e roteada pelo coordenador — nunca diretamente entre subagentes.</p>
+      </div>
+
+      <!-- Box Conceito Principal -->
+      <div class="mt-6 bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-3 flex items-center">
+          <span class="mr-2">🧠</span> Conceito Principal
+        </h3>
+        <ul class="space-y-2 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-0.5">•</span>
+            <span><strong class="text-neutral-100">Selecao Dinamica:</strong> O coordenador escolhe subagentes com base no tipo e complexidade da tarefa, nao em uma sequencia fixa.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-0.5">•</span>
+            <span><strong class="text-neutral-100">Refinamento Iterativo:</strong> Resultados insatisfatorios podem ser reenviados ao mesmo subagente com instrucoes adicionais ou a outro subagente.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-0.5">•</span>
+            <span><strong class="text-neutral-100">Comunicacao Roteada:</strong> Mesmo em loops iterativos, toda comunicacao passa pelo coordenador — subagentes nunca se comunicam diretamente.</span>
+          </li>
+          <li class="flex items-start space-x-2">
+            <span class="text-emerald-400 mt-0.5">•</span>
+            <span><strong class="text-neutral-100">Adaptabilidade:</strong> O sistema se ajusta a qualquer tipo de solicitacao sem fluxos rigidos ou predefinidos.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 6 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🎯 Dica de Prova</h2>
+      </div>
+
+      <div class="space-y-4 text-neutral-300 leading-relaxed">
+        <p>O exame CCA-Q1 aborda extensivamente o padrao hub-and-spoke. As questoes focam principalmente em dois temas: o <strong class="text-neutral-100">risco da decomposicao estreita</strong> causando cobertura incompleta e o <strong class="text-neutral-100">isolamento de contexto</strong> dos subagentes.</p>
+        <p>Um padrao comum de questao apresenta um cenario onde subagentes estao produzindo resultados incompletos e pergunta qual e a causa raiz. A resposta quase sempre envolve decomposicao muito estreita ou falta de contexto explicito na delegacao.</p>
+      </div>
+
+      <!-- Box Dica Pratica (primary/yellow) -->
+      <div class="mt-6 bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center">
+          <span class="mr-2">💡</span> Dica Pratica para o Exame
+        </h3>
+        <div class="text-neutral-300 text-sm space-y-2">
+          <p><strong class="text-neutral-100">Pontos-chave que caem na prova:</strong></p>
+          <ul class="space-y-1 ml-4">
+            <li class="flex items-start space-x-2">
+              <span class="text-primary mt-0.5">•</span>
+              <span>Decomposicao estreita causa cobertura incompleta — sempre prefira objetivos amplos por tema</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-primary mt-0.5">•</span>
+              <span>Subagentes tem contexto isolado — informacao deve ser passada explicitamente</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-primary mt-0.5">•</span>
+              <span>O coordenador passa informacao entre subagentes — eles nunca se comunicam diretamente</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-primary mt-0.5">•</span>
+              <span>Selecao dinamica de subagentes e preferivel a sequencias fixas</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-primary mt-0.5">•</span>
+              <span>Bom coordenador define escopo amplo e sintetiza no final — nao microgerencia os passos</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Box Dados/Pesquisa -->
+      <div class="mt-4 bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h3 class="text-lg font-semibold mb-3 flex items-center">
+          <span class="mr-2">📊</span> Dados da Prova
+        </h3>
+        <div class="text-neutral-300 text-sm space-y-2">
+          <p>O dominio <strong class="text-neutral-100">"Arquitetura Agentica e Orquestracao"</strong> (Trilha 1) representa <strong class="text-emerald-400">27% do exame</strong> — e o dominio com maior peso.</p>
+          <p>Dentro deste dominio, hub-and-spoke e decomposicao de tarefas sao os temas mais frequentes. Espere de 3 a 5 questoes diretamente sobre este modulo, alem de questoes transversais que combinam hub-and-spoke com conceitos de outras trilhas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESUMO ==================== -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center">
+        <span class="mr-2">📝</span> Resumo do Modulo
+      </h2>
+      <div class="space-y-3 text-neutral-300 mb-8">
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 mt-0.5">✓</span>
+          <span>Hub-and-spoke: coordenador central gerencia toda a comunicacao entre subagentes especializados</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 mt-0.5">✓</span>
+          <span>Subagentes possuem contexto isolado — nao herdam historico do coordenador nem veem trabalho de outros subagentes</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 mt-0.5">✓</span>
+          <span>Coordenador tem 4 papeis: decomposicao, delegacao, agregacao e roteamento por complexidade</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 mt-0.5">✓</span>
+          <span>Decomposicao estreita causa cobertura incompleta — prefira objetivos amplos por tema/area</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 mt-0.5">✓</span>
+          <span>Selecao dinamica de subagentes e loops de refinamento iterativo aumentam a adaptabilidade</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 mt-0.5">✓</span>
+          <span>Tema de alta incidencia na prova: 27% do exame cobre Arquitetura Agentica e Orquestracao</span>
+        </div>
+      </div>
+
+      <!-- Next Module -->
+      <div class="bg-emerald-500/10 rounded-lg border border-emerald-500/30 p-4 mb-6">
+        <p class="text-sm text-neutral-400 mb-1">Proximo modulo:</p>
+        <p class="text-emerald-400 font-semibold">1.3 — Invocacao de Subagentes</p>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 hover:bg-dark-600 rounded-lg text-neutral-300 font-medium transition-colors border border-dark-600">
+          ← Voltar para Trilha 1
+        </a>
+        <a href="modulo-1-3.html" class="flex-1 text-center px-6 py-3 bg-emerald-500/20 hover:bg-emerald-500/30 rounded-lg text-emerald-400 font-medium transition-colors border border-emerald-500/30">
+          Proximo: Modulo 1.3 →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

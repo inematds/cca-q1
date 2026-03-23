@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo 1.1 — O Loop Agentico | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* Light mode - emerald accent */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37, 99, 235, 0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37, 99, 235, 0.25); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37, 99, 235, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124, 58, 237, 0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124, 58, 237, 0.25); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124, 58, 237, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217, 119, 6, 0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217, 119, 6, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-amber-400 { color: #92400e; }
+
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13, 148, 136, 0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13, 148, 136, 0.25); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13, 148, 136, 0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-teal-400 { color: #0d9488; }
+
+    /* Light mode - remove gradientes e cores especiais */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* Light mode - nav */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+
+    /* Light mode - red accent for alert boxes */
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-500\/10 { background-color: rgba(220, 38, 38, 0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220, 38, 38, 0.25); }
+    html:not(.dark) .bg-red-500\/20 { background-color: rgba(220, 38, 38, 0.12); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400 transition-colors">Trilha 1</a>
+      <span>/</span>
+      <span class="text-emerald-400 font-medium">Modulo 1.1</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-500/10 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-400 text-sm font-semibold rounded-full mb-4">MODULO 1.1</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🔄 O Loop Agentico</h1>
+      <p class="text-neutral-300 text-lg max-w-3xl mb-8">O motor que impulsiona todo agente Claude. Entenda o ciclo enviar-inspecionar-executar que e a base de toda arquitetura agentica.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-emerald-400">30</div>
+          <div class="text-xs text-neutral-400">Minutos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-emerald-400">Inter</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600 text-center">
+          <div class="text-2xl font-bold text-emerald-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- ==================== TOPIC 1 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🔄 Ciclo de Vida do Loop Agentico</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O loop agentico e o padrao fundamental por tras de todo agente construido com Claude. Ele nao e um conceito abstrato — e literalmente o codigo que voce escreve para permitir que Claude interaja com o mundo real. Em sua essencia, o loop e extremamente simples: voce envia uma requisicao, inspeciona a resposta, executa ferramentas se necessario e retorna os resultados para Claude continuar raciocinando.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Cada iteracao do loop enriquece o contexto de Claude. Os resultados das ferramentas sao adicionados ao historico de conversacao, fornecendo informacoes que Claude usa para tomar decisoes cada vez mais informadas. O loop continua ate que Claude determine que completou a tarefa — e essa determinacao e feita exclusivamente pelo campo <code class="bg-dark-700 px-2 py-0.5 rounded text-emerald-400 text-sm">stop_reason</code>.</p>
+
+        <!-- Box Conceito Principal -->
+        <div class="bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+          <h3 class="text-lg font-semibold text-emerald-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">O loop agentico e um ciclo continuo de <strong class="text-emerald-400">enviar requisicao → inspecionar stop_reason → executar ferramentas → retornar resultados</strong>. Os resultados das ferramentas sao anexados ao historico de conversacao para o proximo passo de raciocinio. Este e o motor que impulsiona cada agente Claude — sem excecao.</p>
+        </div>
+
+        <!-- Timeline: 4 Steps -->
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="text-lg font-semibold mb-6 flex items-center">
+            <span class="mr-2">📍</span> Os 4 Passos do Loop
+          </h3>
+          <div class="space-y-6">
+            <!-- Step 1 -->
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm border border-emerald-500/30">1</span>
+                <div class="w-0.5 h-8 bg-emerald-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-emerald-400 mb-1">Enviar Requisicao</h4>
+                <p class="text-neutral-300 text-sm">Envie a mensagem do usuario (ou o historico acumulado) para a API do Claude junto com as definicoes de ferramentas disponiveis.</p>
+              </div>
+            </div>
+            <!-- Step 2 -->
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm border border-emerald-500/30">2</span>
+                <div class="w-0.5 h-8 bg-emerald-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-emerald-400 mb-1">Inspecionar stop_reason</h4>
+                <p class="text-neutral-300 text-sm">Verifique o campo <code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400 text-xs">stop_reason</code> da resposta. Se for <code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400 text-xs">tool_use</code>, ha ferramentas para executar. Se for <code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400 text-xs">end_turn</code>, Claude terminou.</p>
+              </div>
+            </div>
+            <!-- Step 3 -->
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm border border-emerald-500/30">3</span>
+                <div class="w-0.5 h-8 bg-emerald-500/30 mt-2"></div>
+              </div>
+              <div>
+                <h4 class="font-semibold text-emerald-400 mb-1">Executar Ferramentas</h4>
+                <p class="text-neutral-300 text-sm">Execute cada ferramenta solicitada por Claude no ambiente real. Colete os resultados (sucesso ou erro) de cada execucao.</p>
+              </div>
+            </div>
+            <!-- Step 4 -->
+            <div class="flex items-start space-x-4">
+              <div class="flex flex-col items-center">
+                <span class="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm border border-emerald-500/30">4</span>
+              </div>
+              <div>
+                <h4 class="font-semibold text-emerald-400 mb-1">Retornar Resultados</h4>
+                <p class="text-neutral-300 text-sm">Anexe os resultados das ferramentas ao historico de conversacao e volte ao Passo 1. Claude agora tem mais contexto para raciocinar e decidir o proximo passo.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 2 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🎯 O Campo stop_reason</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">O campo <code class="bg-dark-700 px-2 py-0.5 rounded text-emerald-400 text-sm">stop_reason</code> e o UNICO sinal confiavel para determinar o que fazer a seguir no loop agentico. Nao ha outra forma correta de saber se Claude quer executar uma ferramenta ou se ja terminou a tarefa. Qualquer outra abordagem — como analisar o texto da resposta procurando frases como "pronto" ou "concluido" — e um anti-padrao grave.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Quando <code class="bg-dark-700 px-2 py-0.5 rounded text-emerald-400 text-sm">stop_reason</code> retorna <code class="bg-dark-700 px-2 py-0.5 rounded text-emerald-400 text-sm">tool_use</code>, voce deve executar a ferramenta solicitada, anexar o resultado ao historico e enviar novamente. Quando retorna <code class="bg-dark-700 px-2 py-0.5 rounded text-emerald-400 text-sm">end_turn</code>, Claude decidiu que a tarefa esta completa e voce deve exibir a resposta ao usuario. Essa e toda a logica de decisao necessaria.</p>
+
+        <!-- Box Conceito -->
+        <div class="bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+          <h3 class="text-lg font-semibold text-emerald-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed"><code class="bg-dark-700 px-2 py-0.5 rounded text-emerald-400 text-sm">stop_reason</code> e o unico mecanismo confiavel de controle do loop. Se for <strong class="text-emerald-400">tool_use</strong>: execute a ferramenta, anexe o resultado, envie novamente. Se for <strong class="text-emerald-400">end_turn</strong>: Claude terminou, exiba a resposta. Nunca analise linguagem natural para determinar conclusao.</p>
+        </div>
+
+        <!-- Grid Fazer vs Evitar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+            <h4 class="font-semibold text-emerald-400 mb-4 flex items-center">
+              <span class="mr-2">✅</span> Fazer
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>Verificar <code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400 text-xs">stop_reason == "tool_use"</code> para decidir se ha ferramentas a executar</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>Verificar <code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400 text-xs">stop_reason == "end_turn"</code> para saber quando Claude finalizou</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>Usar o campo estruturado da API como unica fonte de verdade</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>Deixar Claude decidir autonomamente quando a tarefa esta completa</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center">
+              <span class="mr-2">❌</span> Evitar
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Analisar o texto da resposta procurando "Eu terminei" ou "Pronto"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Usar regex ou heuristicas no conteudo textual para detectar conclusao</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Verificar se a resposta contem palavras-chave como "concluido", "finalizado"</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Implementar qualquer logica de terminacao que nao seja baseada em <code class="bg-dark-700 px-1.5 py-0.5 rounded text-red-400 text-xs">stop_reason</code></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 3 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📚 Resultados no Historico de Conversacao</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Um dos aspectos mais importantes do loop agentico e como os resultados das ferramentas se integram ao fluxo de raciocinio de Claude. Quando uma ferramenta e executada, seu resultado nao e simplesmente "consumido e descartado" — ele e anexado ao historico de conversacao como uma mensagem do papel <code class="bg-dark-700 px-2 py-0.5 rounded text-emerald-400 text-sm">tool</code>, tornando-se parte permanente do contexto disponivel para Claude.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Esse mecanismo e o que permite o raciocinio multi-passo. Claude pode ler um arquivo, analisar seu conteudo, decidir que precisa de mais informacoes, chamar outra ferramenta, e usar todos esses resultados acumulados para tomar decisoes cada vez mais refinadas. Cada execucao de ferramenta adiciona informacao ao contexto, e Claude usa esse contexto enriquecido para determinar o proximo passo.</p>
+
+        <p class="text-neutral-300 leading-relaxed">E fundamental entender que esse acumulo de resultados consome tokens da janela de contexto. Em tarefas longas com muitas iteracoes, os resultados das ferramentas podem ocupar uma porcao significativa do contexto disponivel. Isso e um trade-off por design: mais informacao acumulada significa decisoes melhores, mas tambem maior consumo de tokens.</p>
+
+        <!-- Box Dados/Pesquisa -->
+        <div class="bg-blue-500/10 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3 flex items-center">
+            <span class="mr-2">📊</span> Dados e Pesquisa
+          </h3>
+          <p class="text-neutral-300 leading-relaxed mb-3">O acumulo de resultados de ferramentas no historico tem implicacoes diretas no consumo de tokens:</p>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Crescimento linear:</strong> Cada iteracao do loop adiciona tokens ao historico — tanto a resposta de Claude quanto o resultado da ferramenta.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Contexto enriquecido:</strong> Claude utiliza TODOS os resultados anteriores para tomar a proxima decisao, nao apenas o mais recente.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Limite pratico:</strong> Em agentes com muitas iteracoes, o gerenciamento de contexto torna-se critico para evitar estouro da janela de tokens.</span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-blue-400 mt-0.5">•</span>
+              <span><strong>Design consciente:</strong> Ferramentas devem retornar dados concisos e relevantes para minimizar o consumo desnecessario de tokens.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 4 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🤖 Decisao Guiada pelo Modelo</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Um principio central do design de agentes com Claude e a <strong class="text-emerald-400">decisao guiada pelo modelo</strong> (model-driven decision-making). Isso significa que Claude — nao o seu codigo — deve decidir quais ferramentas chamar e em que ordem. O papel do seu codigo e simplesmente executar as ferramentas solicitadas e retornar os resultados.</p>
+
+        <p class="text-neutral-300 leading-relaxed">A alternativa — arvores de decisao pre-configuradas — e um anti-padrao. Em uma arvore pre-configurada, o desenvolvedor codifica regras como "se o usuario pedir X, chame a ferramenta Y, depois a ferramenta Z". Isso e rigido, fragil e perde completamente a vantagem de ter um modelo de linguagem tomando decisoes. Claude pode avaliar o contexto completo, considerar casos-limite e adaptar sua estrategia dinamicamente.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Na pratica, isso significa que seu loop agentico deve ser generico: envie a requisicao, verifique o stop_reason, execute qualquer ferramenta que Claude solicitar. Voce nao deve adicionar logica condicional como "se Claude chamar a ferramenta A, entao force a chamada da ferramenta B em seguida". Deixe Claude orquestrar.</p>
+
+        <!-- Grid Fazer vs Evitar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+            <h4 class="font-semibold text-emerald-400 mb-4 flex items-center">
+              <span class="mr-2">✅</span> Fazer
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>Deixar Claude escolher autonomamente quais ferramentas chamar com base no contexto</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>Implementar um loop generico que executa qualquer ferramenta solicitada</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>Confiar no raciocinio de Claude para adaptar a estrategia a cada situacao</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 mt-0.5">•</span>
+                <span>Fornecer ferramentas bem descritas para que Claude tome decisoes informadas</span>
+              </li>
+            </ul>
+          </div>
+          <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+            <h4 class="font-semibold text-red-400 mb-4 flex items-center">
+              <span class="mr-2">❌</span> Evitar
+            </h4>
+            <ul class="space-y-3 text-neutral-300 text-sm">
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Criar arvores de decisao pre-configuradas no codigo (if tool_A then tool_B)</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Forcar a sequencia de chamadas de ferramentas programaticamente</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Adicionar logica condicional que substitui o raciocinio de Claude</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 mt-0.5">•</span>
+                <span>Usar pipelines fixos que nao permitem adaptacao dinamica</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 5 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">⚠️ Anti-padroes do Loop</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Existem tres anti-padroes criticos relacionados ao loop agentico que sao frequentemente testados no exame CCA. Todos eles representam tentativas erradas de controlar o fluxo do loop de formas que nao sao baseadas no campo <code class="bg-dark-700 px-2 py-0.5 rounded text-emerald-400 text-sm">stop_reason</code>. E fundamental memorizar todos os tres, pois as questoes do exame frequentemente apresentam cenarios onde um ou mais desses anti-padroes estao presentes nas alternativas.</p>
+
+        <p class="text-neutral-300 leading-relaxed">Esses anti-padroes sao perigosos porque parecem razoaveis a primeira vista. Um desenvolvedor iniciante pode pensar que verificar o texto de Claude para "Eu terminei" e uma abordagem valida, ou que limitar o loop a 5 iteracoes e uma boa pratica de seguranca. Na realidade, ambas as abordagens quebram o contrato fundamental do loop agentico e podem causar falhas silenciosas — o agente para antes de completar a tarefa, ou continua executando desnecessariamente.</p>
+
+        <!-- Box Alerta (red) -->
+        <div class="bg-red-500/10 rounded-xl border border-red-500/30 p-6">
+          <h3 class="text-lg font-semibold text-red-400 mb-4 flex items-center">
+            <span class="mr-2">🚨</span> Alerta — 3 Anti-padroes Criticos
+          </h3>
+          <div class="space-y-4">
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-400 font-bold text-sm flex-shrink-0">1</span>
+              <div>
+                <h4 class="font-semibold text-red-400 mb-1">Analisar linguagem natural para terminacao</h4>
+                <p class="text-neutral-300 text-sm">Verificar se o texto de Claude contem frases como "Eu terminei", "Tarefa concluida" ou "Pronto" para decidir quando parar o loop. Isso e fragil, nao-confiavel e ignora o mecanismo oficial (<code class="bg-dark-700 px-1.5 py-0.5 rounded text-red-400 text-xs">stop_reason</code>).</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-400 font-bold text-sm flex-shrink-0">2</span>
+              <div>
+                <h4 class="font-semibold text-red-400 mb-1">Limites arbitrarios de iteracao</h4>
+                <p class="text-neutral-300 text-sm">Impor um limite fixo como "maximo 5 iteracoes" no loop. Isso impede Claude de completar tarefas que legitimamente precisam de mais passos, resultando em trabalho incompleto e uma experiencia degradada.</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-3">
+              <span class="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20 text-red-400 font-bold text-sm flex-shrink-0">3</span>
+              <div>
+                <h4 class="font-semibold text-red-400 mb-1">Verificar texto do assistente para palavras de conclusao</h4>
+                <p class="text-neutral-300 text-sm">Usar regex ou busca de string no conteudo textual da resposta para detectar palavras como "finalizado", "completo", "done". Este e o mesmo problema do anti-padrao 1, mas com uma implementacao ligeiramente diferente — igualmente incorreta.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center">
+            <span class="mr-2">🎯</span> Dica Pratica para o Exame
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">O exame CCA testa os <strong class="text-amber-400">tres anti-padroes</strong> de formas variadas. Voce pode encontrar questoes onde a alternativa "correta" parece ser o limite de iteracoes ("para seguranca, limite a 10 loops") ou a verificacao de texto ("verifique se Claude disse 'pronto'"). <strong class="text-amber-400">Ambas estao erradas.</strong> A unica resposta correta e sempre: use <code class="bg-dark-700 px-1.5 py-0.5 rounded text-amber-400 text-xs">stop_reason</code>. Se uma alternativa menciona analisar o texto da resposta ou limitar iteracoes de forma arbitraria, descarte-a imediatamente.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TOPIC 6 ==================== -->
+    <section>
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🛠️ O Loop na Pratica</h2>
+      </div>
+
+      <div class="space-y-6">
+        <p class="text-neutral-300 leading-relaxed">Na implementacao pratica, o loop agentico e surpreendentemente simples. Ele se resume a: envie a requisicao para Claude, verifique <code class="bg-dark-700 px-2 py-0.5 rounded text-emerald-400 text-sm">stop_reason</code>, execute a ferramenta se necessario ou pare se Claude terminou. Nada mais. Essa simplicidade nao e uma limitacao — e uma caracteristica por design.</p>
+
+        <p class="text-neutral-300 leading-relaxed">A tentacao de adicionar "melhorias" ao loop e constante. Desenvolvedores querem adicionar caching inteligente, logica de retry sofisticada, decisoes condicionais baseadas em quais ferramentas foram chamadas, ou classificacao do tipo de tarefa para rotear o fluxo. Na grande maioria dos casos, essas adicoes sao desnecessarias e frequentemente contraproducentes. Qualquer logica adicional que voce insere no loop e logica que pode conflitar com o raciocinio de Claude.</p>
+
+        <p class="text-neutral-300 leading-relaxed">A regra de ouro e: se voce esta adicionando complexidade ao loop alem de "verificar stop_reason e executar ferramentas", provavelmente esta introduzindo um anti-padrao. A simplicidade do loop E a feature. Deixe Claude fazer o raciocinio complexo — seu codigo so precisa ser o executor confiavel das ferramentas.</p>
+
+        <!-- Box Conceito -->
+        <div class="bg-emerald-500/10 rounded-xl border border-emerald-500/30 p-6">
+          <h3 class="text-lg font-semibold text-emerald-400 mb-3 flex items-center">
+            <span class="mr-2">💡</span> Conceito Principal
+          </h3>
+          <p class="text-neutral-300 leading-relaxed">O loop agentico na pratica tem exatamente tres acoes: <strong class="text-emerald-400">(1)</strong> enviar requisicao, <strong class="text-emerald-400">(2)</strong> verificar stop_reason, <strong class="text-emerald-400">(3)</strong> executar ferramenta ou parar. Qualquer logica adicional e provavelmente um anti-padrao. A simplicidade e a feature — nao adicione complexidade onde Claude pode raciocinar por conta propria.</p>
+        </div>
+
+        <!-- Box Dica Pratica -->
+        <div class="bg-amber-500/10 rounded-xl border border-amber-500/30 p-6">
+          <h3 class="text-lg font-semibold text-amber-400 mb-3 flex items-center">
+            <span class="mr-2">🎯</span> Dica Pratica
+          </h3>
+          <p class="text-neutral-300 leading-relaxed mb-3">Ao implementar seu loop agentico, use este checklist mental:</p>
+          <ul class="space-y-2 text-neutral-300 text-sm">
+            <li class="flex items-start space-x-2">
+              <span class="text-amber-400 mt-0.5">•</span>
+              <span>Meu loop verifica <code class="bg-dark-700 px-1.5 py-0.5 rounded text-amber-400 text-xs">stop_reason</code> e nada mais? <strong class="text-emerald-400">Bom.</strong></span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-amber-400 mt-0.5">•</span>
+              <span>Meu loop executa qualquer ferramenta que Claude solicitar? <strong class="text-emerald-400">Bom.</strong></span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-amber-400 mt-0.5">•</span>
+              <span>Meu loop anexa resultados ao historico automaticamente? <strong class="text-emerald-400">Bom.</strong></span>
+            </li>
+            <li class="flex items-start space-x-2">
+              <span class="text-amber-400 mt-0.5">•</span>
+              <span>Meu loop tem alguma logica condicional alem de stop_reason? <strong class="text-red-400">Revise — provavelmente e um anti-padrao.</strong></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== RESUMO FINAL ==================== -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center">
+        <span class="mr-3">📋</span> Resumo Final
+      </h2>
+
+      <div class="space-y-3 mb-8">
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">O loop agentico e o ciclo enviar → inspecionar → executar → retornar que impulsiona todo agente Claude</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">O campo <code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400 text-xs">stop_reason</code> e o UNICO sinal confiavel para controlar o fluxo do loop</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Resultados de ferramentas sao anexados ao historico, enriquecendo o contexto a cada iteracao</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Claude deve decidir autonomamente quais ferramentas chamar — sem arvores de decisao pre-configuradas</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">Tres anti-padroes criticos: analisar texto, limitar iteracoes, verificar palavras de conclusao</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 font-bold text-lg">✓</span>
+          <span class="text-neutral-300">A simplicidade do loop e a feature — qualquer logica adicional e provavelmente um anti-padrao</span>
+        </div>
+      </div>
+
+      <!-- Next Module -->
+      <div class="bg-emerald-500/10 rounded-lg border border-emerald-500/30 p-4 mb-6">
+        <p class="text-neutral-300 text-sm">
+          <strong class="text-emerald-400">Proximo modulo:</strong> 1.2 — Arquitetura Hub-and-Spoke
+        </p>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 rounded-lg border border-dark-600 text-neutral-300 hover:text-emerald-400 hover:border-emerald-500/30 transition-colors font-medium">
+          ← Voltar para Trilha
+        </a>
+        <a href="modulo-1-2.html" class="flex-1 text-center px-6 py-3 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 transition-colors font-medium">
+          Proximo Modulo →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

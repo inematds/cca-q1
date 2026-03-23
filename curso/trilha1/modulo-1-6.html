@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estrategias de Decomposicao | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    /* Light mode */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400 transition-colors">Trilha 1</a>
+      <span>/</span>
+      <span class="text-neutral-100">Modulo 1.6</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-500/10 via-dark-800 to-dark-800 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <span class="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-400 text-sm font-semibold rounded-full mb-4">MODULO 1.6</span>
+      <h1 class="text-2xl font-bold mb-3">🧩 Estrategias de Decomposicao</h1>
+      <p class="text-neutral-300 max-w-3xl mb-6">Pipelines fixos versus decomposicao dinamica. Como dividir tarefas complexas em sub-tarefas gerenciaveis para agentes.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">25 Min</div>
+          <div class="text-xs text-neutral-400">Duracao</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">Inter.</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">T+P</div>
+          <div class="text-xs text-neutral-400">Teoria+Pratica</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">1</div>
+        <div>
+          <h2 class="text-xl font-bold">🔗 Pipelines Sequenciais (Prompt Chaining)</h2>
+          <p class="text-neutral-400 text-sm mt-1">Pipelines fixos onde a saida de um passo alimenta o proximo</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Prompt chaining e o padrao de decompor uma tarefa em etapas sequenciais fixas, onde a saida de um passo alimenta o proximo. Este padrao e ideal para tarefas previsiveis e bem estruturadas, como revisoes de codigo onde voce sabe exatamente quais etapas serao necessarias. A sequencia e definida antecipadamente e nao muda durante a execucao.</p>
+
+      <!-- Box Conceito com exemplo -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+        <h3 class="text-emerald-400 font-semibold mb-4 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal — Exemplo de Pipeline
+        </h3>
+        <p class="text-neutral-300 text-sm mb-4">Para uma revisao de codigo com 5 arquivos:</p>
+        <div class="space-y-2 text-sm text-neutral-300">
+          <div class="flex items-start space-x-3">
+            <span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-xs font-bold">Passo 1</span>
+            <span>Analisar arquivo A individualmente → gerar achados</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-xs font-bold">Passo 2</span>
+            <span>Analisar arquivo B individualmente → gerar achados</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-xs font-bold">Passo 3</span>
+            <span>Analisar arquivos C, D, E individualmente → gerar achados</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="bg-primary/20 text-primary px-2 py-0.5 rounded text-xs font-bold">Passo 4</span>
+            <span><strong>Integracao cross-file</strong> → combinar todos os achados e identificar padroes entre arquivos</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">2</div>
+        <div>
+          <h2 class="text-xl font-bold">🌊 Decomposicao Adaptativa Dinamica</h2>
+          <p class="text-neutral-400 text-sm mt-1">Sub-tarefas geradas com base em descobertas durante a execucao</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Decomposicao adaptativa dinamica gera sub-tarefas com base em descobertas feitas durante a execucao. Diferente de pipelines fixos, aqui voce nao sabe de antemao todas as etapas — elas emergem conforme o agente explora o problema. Este padrao e ideal para tarefas open-ended, como investigacao de bugs ou pesquisa exploratoria.</p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm mb-3">Na decomposicao dinamica, o agente segue um ciclo:</p>
+        <div class="space-y-2 text-sm text-neutral-300">
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold">1.</span>
+            <span><strong>Explorar</strong> — Investigar o estado atual do problema</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold">2.</span>
+            <span><strong>Descobrir</strong> — Identificar novos aspectos ou complicacoes</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold">3.</span>
+            <span><strong>Gerar</strong> — Criar novas sub-tarefas com base nas descobertas</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold">4.</span>
+            <span><strong>Priorizar</strong> — Decidir qual sub-tarefa atacar primeiro</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold">5.</span>
+            <span><strong>Repetir</strong> — Continuar ate que o problema esteja resolvido</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">3</div>
+        <div>
+          <h2 class="text-xl font-bold">📄 Analise Por-Arquivo</h2>
+          <p class="text-neutral-400 text-sm mt-1">Analise individual focada sem contaminacao cruzada</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Na analise por-arquivo, cada arquivo e analisado individualmente primeiro. Isso cria analises focadas e isoladas, sem contaminacao cruzada de achados. Cada analise individual pode identificar problemas especificos daquele arquivo sem ser influenciada pelo contexto de outros arquivos — resultando em achados mais precisos.</p>
+
+      <!-- Box Conceito -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm">A analise por-arquivo funciona como um <strong>microscópio focado</strong>: ao olhar para um unico arquivo de cada vez, o agente pode dedicar toda sua capacidade de raciocinio a detalhes especificos — erros de logica, problemas de estilo, vulnerabilidades de seguranca — sem distracao. Os achados de cada arquivo sao armazenados separadamente para a fase de integracao.</p>
+      </div>
+
+      <!-- Box Dica Pratica -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-6">
+        <h3 class="text-primary font-semibold mb-3 flex items-center">
+          <span class="mr-2">🎯</span> Dica Pratica
+        </h3>
+        <p class="text-neutral-300 text-sm">Ao dividir uma revisao de codigo grande em analises por-arquivo, voce evita o problema de <strong>context window overflow</strong>. Cada arquivo cabe facilmente na janela de contexto, e os achados resumidos sao muito menores que o codigo original. Esta tecnica e especialmente util quando o total de codigo excede o limite de contexto do modelo.</p>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">4</div>
+        <div>
+          <h2 class="text-xl font-bold">🔗 Integracao Cross-File</h2>
+          <p class="text-neutral-400 text-sm mt-1">Identificando padroes que so emergem ao olhar entre arquivos</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Apos a analise por-arquivo, uma passada de integracao cross-file combina todos os achados. Este passo captura padroes que so emergem quando voce olha entre multiplos arquivos: dependencias circulares, inconsistencias de API, duplicacao de logica, e violacoes de arquitetura que nenhuma analise individual detectaria.</p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm mb-3">A integracao cross-file responde perguntas que analises individuais nao podem:</p>
+        <ul class="space-y-1 text-sm text-neutral-300 ml-4">
+          <li>• Existe <strong>duplicacao de logica</strong> entre arquivos A e C?</li>
+          <li>• As <strong>interfaces de API</strong> sao consistentes entre modulos?</li>
+          <li>• Ha <strong>dependencias circulares</strong> entre componentes?</li>
+          <li>• Os <strong>padroes de erro</strong> sao tratados de forma uniforme?</li>
+          <li>• A <strong>arquitetura geral</strong> segue os principios definidos?</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">5</div>
+        <div>
+          <h2 class="text-xl font-bold">🗺️ Planos Investigativos</h2>
+          <p class="text-neutral-400 text-sm mt-1">Planos adaptativos que evoluem conforme o agente aprende</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Planos investigativos adaptativos geram sub-tarefas com base em descobertas. O plano evolui conforme o agente aprende mais sobre o problema. Isso e fundamentalmente diferente de um checklist estatico — o agente ajusta sua estrategia em tempo real com base no que descobre.</p>
+
+      <!-- Box Conceito -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm">Um plano investigativo adaptativo funciona como um detetive trabalhando em um caso: cada pista leva a novas linhas de investigacao. O agente comeca com hipoteses iniciais, testa cada uma, e usa os resultados para gerar novas hipoteses mais refinadas ate chegar a uma conclusao.</p>
+      </div>
+
+      <!-- Timeline -->
+      <div class="bg-dark-800 border border-dark-600 rounded-xl p-6">
+        <h3 class="text-neutral-100 font-semibold mb-4">Evolucao de um Plano Investigativo</h3>
+        <div class="space-y-4">
+          <div class="flex items-start space-x-4">
+            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-sm font-bold flex-shrink-0 mt-0.5">1</div>
+            <div class="flex-1 bg-dark-700 rounded-lg p-3 text-sm text-neutral-300">
+              <strong>Plano Inicial:</strong> "Investigar erro 500 no endpoint /api/users"
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-sm font-bold flex-shrink-0 mt-0.5">2</div>
+            <div class="flex-1 bg-dark-700 rounded-lg p-3 text-sm text-neutral-300">
+              <strong>Descoberta:</strong> Erro ocorre apenas com usuarios que tem roles multiplas
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-sm font-bold flex-shrink-0 mt-0.5">3</div>
+            <div class="flex-1 bg-primary/10 border border-primary/40 rounded-lg p-3 text-sm text-neutral-300">
+              <strong>Plano Adaptado:</strong> Nova sub-tarefa gerada — "Investigar sistema de roles e permissoes"
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-sm font-bold flex-shrink-0 mt-0.5">4</div>
+            <div class="flex-1 bg-dark-700 rounded-lg p-3 text-sm text-neutral-300">
+              <strong>Resolucao:</strong> Bug encontrado na juncao de tabelas de roles — fix aplicado
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">6</div>
+        <div>
+          <h2 class="text-xl font-bold">🎯 Quando Usar Cada Abordagem</h2>
+          <p class="text-neutral-400 text-sm mt-1">Escolhendo entre pipeline fixo e decomposicao dinamica</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">A escolha entre prompt chaining (pipeline fixo) e decomposicao dinamica depende da previsibilidade da tarefa. Para revisoes de codigo e tarefas com etapas conhecidas, use pipelines. Para investigacoes e tarefas exploratotias, use decomposicao adaptativa. Para revisoes de codigo grandes, combine ambas: per-file analysis (pipeline) + cross-file integration.</p>
+
+      <!-- Grid comparativo -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-5">
+          <h4 class="text-emerald-400 font-semibold mb-3">🔗 Pipeline Fixo (Prompt Chaining)</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li>• Tarefas previsiveis e bem estruturadas</li>
+            <li>• Revisoes de codigo com escopo definido</li>
+            <li>• Processamento de documentos em lote</li>
+            <li>• Fluxos de aprovacao padronizados</li>
+            <li>• <strong>Vantagem:</strong> Previsivel e reproduzivel</li>
+          </ul>
+        </div>
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-5">
+          <h4 class="text-emerald-400 font-semibold mb-3">🌊 Decomposicao Dinamica</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li>• Tarefas open-ended e exploratorias</li>
+            <li>• Investigacao de bugs complexos</li>
+            <li>• Pesquisa e analise sem escopo fixo</li>
+            <li>• Refatoracao de codebases desconhecidas</li>
+            <li>• <strong>Vantagem:</strong> Adaptavel e completa</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Box Dica Pratica -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-6">
+        <h3 class="text-primary font-semibold mb-3 flex items-center">
+          <span class="mr-2">🎯</span> Dica Pratica — Prova
+        </h3>
+        <p class="text-neutral-300 text-sm">Na certificacao, quando a questao descrever uma <strong>revisao de codigo grande</strong>, a resposta correta geralmente envolve <strong>dividir em analise por-arquivo seguida de integracao cross-file</strong>. Quando descrever uma <strong>investigacao de bug</strong>, a resposta envolve <strong>decomposicao adaptativa com planos investigativos</strong>. Identifique o tipo de tarefa para escolher a abordagem correta.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-xl font-bold mb-4 text-emerald-400">Resumo do Modulo</h2>
+      <p class="text-neutral-300 mb-6">Voce aprendeu as duas estrategias fundamentais de decomposicao: pipelines sequenciais (prompt chaining) para tarefas previsiveis e decomposicao adaptativa dinamica para tarefas exploratorias. Tambem viu como combinar analise por-arquivo com integracao cross-file para revisoes de codigo grandes, e como planos investigativos evoluem com base em descobertas.</p>
+      <p class="text-neutral-400 text-sm mb-6">Proximo modulo: <strong class="text-neutral-100">1.7 - Estado de Sessao e Forking</strong></p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="index.html" class="px-6 py-3 bg-dark-700 hover:bg-dark-600 rounded-lg text-sm font-semibold text-center transition-colors border border-dark-600">Voltar ao Indice</a>
+        <a href="modulo-1-7.html" class="px-6 py-3 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 rounded-lg text-sm font-semibold text-center transition-colors border border-emerald-500/30">Proximo Modulo →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

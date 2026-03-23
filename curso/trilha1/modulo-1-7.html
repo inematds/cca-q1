@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estado de Sessao e Forking | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    /* Light mode */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400 transition-colors">Inicio</a>
+      <span>/</span>
+      <a href="index.html" class="hover:text-emerald-400 transition-colors">Trilha 1</a>
+      <span>/</span>
+      <span class="text-neutral-100">Modulo 1.7</span>
+    </nav>
+  </div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-500/10 via-dark-800 to-dark-800 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <span class="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-400 text-sm font-semibold rounded-full mb-4">MODULO 1.7</span>
+      <h1 class="text-2xl font-bold mb-3">💾 Estado de Sessao e Forking</h1>
+      <p class="text-neutral-300 max-w-3xl mb-6">Gerenciamento de sessoes, retomada e exploracao paralela. Quando resumir, forkar ou comecar do zero.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">6</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">20 Min</div>
+          <div class="text-xs text-neutral-400">Duracao</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">Inter.</div>
+          <div class="text-xs text-neutral-400">Nivel</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600 text-center">
+          <div class="text-lg font-bold text-emerald-400">Teoria</div>
+          <div class="text-xs text-neutral-400">Tipo</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- TOPIC 1 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">1</div>
+        <div>
+          <h2 class="text-xl font-bold">🏷️ Sessoes Nomeadas (--resume)</h2>
+          <p class="text-neutral-400 text-sm mt-1">Continuando sessoes nomeadas entre multiplas interacoes</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Use <code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400 text-xs">--resume &lt;session-name&gt;</code> para continuar sessoes nomeadas. Sessoes nomeadas sao ideais para trabalho de investigacao em andamento que se estende por multiplas interacoes. O nome da sessao funciona como um marcador — voce pode retomar exatamente de onde parou com todo o contexto preservado.</p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm mb-3">Sessoes nomeadas preservam o historico completo de conversacao, incluindo:</p>
+        <ul class="space-y-1 text-sm text-neutral-300 ml-4">
+          <li>• Todo o historico de mensagens entre usuario e agente</li>
+          <li>• Resultados de chamadas de ferramentas anteriores</li>
+          <li>• Contexto acumulado de descobertas</li>
+          <li>• Estado da investigacao ou tarefa em andamento</li>
+        </ul>
+        <p class="text-neutral-400 text-xs mt-3">Exemplo: <code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400">claude --resume bug-auth-flow</code></p>
+      </div>
+    </section>
+
+    <!-- TOPIC 2 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">2</div>
+        <div>
+          <h2 class="text-xl font-bold">🔀 fork_session para Exploracao</h2>
+          <p class="text-neutral-400 text-sm mt-1">Branches paralelos de conversacao a partir de um ponto compartilhado</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6"><code class="bg-dark-700 px-1.5 py-0.5 rounded text-emerald-400 text-xs">fork_session</code> cria branches paralelos de exploracao a partir de uma baseline compartilhada. Funciona como branches do git para conversacoes — cada fork pode explorar uma abordagem diferente sem afetar o estado do outro. Ideal para comparar estrategias alternativas.</p>
+
+      <!-- Box Conceito -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm">O fork_session e especialmente util quando voce tem <strong>multiplas hipoteses</strong> e quer testar cada uma independentemente. A sessao original permanece intacta, e cada fork herda todo o contexto ate o ponto de bifurcacao. Depois, voce pode comparar os resultados e escolher o melhor caminho.</p>
+      </div>
+
+      <!-- Box Dica Pratica -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-6">
+        <h3 class="text-primary font-semibold mb-3 flex items-center">
+          <span class="mr-2">🎯</span> Dica Pratica
+        </h3>
+        <p class="text-neutral-300 text-sm">Use fork_session quando precisa <strong>comparar abordagens</strong> sem comprometer a sessao principal. Exemplo: ao refatorar um modulo, crie um fork para testar "refatoracao incremental" e outro para "reescrita completa" — depois compare qual produziu melhor resultado. Na certificacao, fork_session e a resposta quando a questao envolve exploracao paralela.</p>
+      </div>
+    </section>
+
+    <!-- TOPIC 3 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">3</div>
+        <div>
+          <h2 class="text-xl font-bold">🆕 Nova Sessao vs Retomar</h2>
+          <p class="text-neutral-400 text-sm mt-1">Por que contexto fresco supera bagagem acumulada</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Uma nova sessao com resumo estruturado e <strong>melhor</strong> do que retomar uma sessao com resultados de ferramentas obsoletos. Contexto fresco supera bagagem acumulada. Quando uma sessao acumula muitos resultados de ferramentas antigos, o modelo pode se confundir com dados desatualizados — especialmente se arquivos foram modificados desde a ultima interacao.</p>
+
+      <!-- Grid Fazer vs Evitar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-5">
+          <h4 class="text-emerald-400 font-semibold mb-3">✅ Fazer — Nova Sessao com Resumo</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li>• Criar resumo estruturado das descobertas-chave</li>
+            <li>• Iniciar sessao limpa com contexto curado</li>
+            <li>• Incluir apenas achados relevantes e atuais</li>
+            <li>• Referenciar arquivos com estado atual</li>
+          </ul>
+        </div>
+        <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-5">
+          <h4 class="text-red-400 font-semibold mb-3">❌ Evitar — Resume com Estado Obsoleto</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li>• Retomar sessao com dezenas de tool results antigos</li>
+            <li>• Assumir que dados de ferramentas ainda sao validos</li>
+            <li>• Ignorar mudancas em arquivos desde ultima sessao</li>
+            <li>• Acumular contexto irrelevante na janela</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 4 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">4</div>
+        <div>
+          <h2 class="text-xl font-bold">📋 Resumo Estruturado</h2>
+          <p class="text-neutral-400 text-sm mt-1">Fornecendo contexto curado ao iniciar novas sessoes</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Ao iniciar uma nova sessao, forneca um resumo estruturado das descobertas-chave. Isso e mais efetivo do que carregar outputs brutos de ferramentas anteriores. O resumo deve conter apenas o essencial: o que foi descoberto, o que funcionou, o que nao funcionou, e quais sao os proximos passos.</p>
+
+      <!-- Box Conceito -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-6">
+        <h3 class="text-emerald-400 font-semibold mb-4 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal — Estrutura do Resumo
+        </h3>
+        <div class="space-y-3 text-sm text-neutral-300">
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold mt-0.5">1.</span>
+            <span><strong>Objetivo:</strong> O que estavamos tentando resolver</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold mt-0.5">2.</span>
+            <span><strong>Descobertas:</strong> Achados principais e confirmados</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold mt-0.5">3.</span>
+            <span><strong>Tentativas:</strong> O que foi tentado e qual foi o resultado</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold mt-0.5">4.</span>
+            <span><strong>Estado Atual:</strong> Onde estamos agora</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="text-emerald-400 font-bold mt-0.5">5.</span>
+            <span><strong>Proximos Passos:</strong> O que falta fazer</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Box Dica Pratica -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-6">
+        <h3 class="text-primary font-semibold mb-3 flex items-center">
+          <span class="mr-2">🎯</span> Dica Pratica
+        </h3>
+        <p class="text-neutral-300 text-sm">Um bom resumo estruturado tem <strong>menos de 500 palavras</strong> e substitui milhares de linhas de output bruto de ferramentas. Pense nele como um briefing executivo: alguem que nunca viu a sessao anterior deve entender o estado atual em 30 segundos.</p>
+      </div>
+    </section>
+
+    <!-- TOPIC 5 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">5</div>
+        <div>
+          <h2 class="text-xl font-bold">🔄 Comparacao de Abordagens</h2>
+          <p class="text-neutral-400 text-sm mt-1">Usando fork para explorar e comparar estrategias independentes</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Forking para comparar abordagens e um padrao poderoso: cada fork explora uma estrategia independentemente, e depois um coordenador avalia e seleciona o melhor resultado. Isso elimina o vies de compromisso — onde voce tenta misturar duas abordagens e acaba com o pior dos dois mundos.</p>
+
+      <!-- Box Conceito Principal -->
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6">
+        <h3 class="text-emerald-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">💡</span> Conceito Principal
+        </h3>
+        <p class="text-neutral-300 text-sm mb-3">O padrao de comparacao por fork segue tres fases:</p>
+        <div class="space-y-2 text-sm text-neutral-300">
+          <div class="flex items-start space-x-3">
+            <span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-xs font-bold">Fork A</span>
+            <span>Explora abordagem conservadora (ex: refatoracao incremental)</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-xs font-bold">Fork B</span>
+            <span>Explora abordagem agressiva (ex: reescrita completa)</span>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="bg-primary/20 text-primary px-2 py-0.5 rounded text-xs font-bold">Coord.</span>
+            <span>Avalia ambos os resultados e seleciona a melhor solucao</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOPIC 6 -->
+    <section>
+      <div class="flex items-start space-x-4 mb-6">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">6</div>
+        <div>
+          <h2 class="text-xl font-bold">📢 Informando Sessoes Sobre Mudancas</h2>
+          <p class="text-neutral-400 text-sm mt-1">Evitando erros por estado obsoleto ao retomar sessoes</p>
+        </div>
+      </div>
+
+      <p class="text-neutral-300 mb-6">Ao retomar sessoes, informe o agente sobre mudancas em arquivos desde a ultima interacao. Suposicoes obsoletas causam erros — o agente pode tentar editar codigo que ja mudou, refereciar funcoes que foram renomeadas, ou basear decisoes em dados antigos.</p>
+
+      <!-- Box Alerta -->
+      <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6 mb-6">
+        <h3 class="text-red-400 font-semibold mb-3 flex items-center">
+          <span class="mr-2">🚨</span> Alerta — Estado Obsoleto
+        </h3>
+        <p class="text-neutral-300 text-sm">Retomar uma sessao sem informar sobre mudancas e uma das causas mais comuns de erros em fluxos agenticos. O agente opera com base em <strong>suposicoes da sessao anterior</strong> — se o mundo mudou desde entao, essas suposicoes sao falsas. Sempre informe sobre: arquivos modificados, branches alterados, dependencias atualizadas e configuracoes mudadas.</p>
+      </div>
+
+      <!-- Box Dica Pratica -->
+      <div class="bg-primary/10 border border-primary/40 rounded-xl p-6">
+        <h3 class="text-primary font-semibold mb-3 flex items-center">
+          <span class="mr-2">🎯</span> Dica Pratica
+        </h3>
+        <p class="text-neutral-300 text-sm">Na pratica, ao retomar uma sessao, comece com: "Desde a ultima sessao, os seguintes arquivos foram modificados: [lista]. As seguintes dependencias foram atualizadas: [lista]." Isso reseta as suposicoes do agente e evita erros baseados em estado obsoleto. Na certificacao, essa abordagem e a resposta correta para questoes sobre gerenciamento de sessao.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="bg-dark-800 rounded-xl border border-dark-600 p-8">
+      <h2 class="text-xl font-bold mb-4 text-emerald-400">Resumo do Modulo</h2>
+
+      <div class="space-y-3 mb-6 text-neutral-300 text-sm">
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 mt-0.5">✓</span>
+          <span>Sessoes nomeadas com --resume para trabalho continuo</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 mt-0.5">✓</span>
+          <span>fork_session para exploracao paralela de abordagens</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 mt-0.5">✓</span>
+          <span>Nova sessao com resumo estruturado supera resume com estado obsoleto</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 mt-0.5">✓</span>
+          <span>Resumos estruturados com objetivo, descobertas, tentativas e proximos passos</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 mt-0.5">✓</span>
+          <span>Forking para comparacao independente de estrategias</span>
+        </div>
+        <div class="flex items-start space-x-3">
+          <span class="text-emerald-400 mt-0.5">✓</span>
+          <span>Sempre informar sobre mudancas ao retomar sessoes</span>
+        </div>
+      </div>
+
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-6">
+        <p class="text-emerald-400 font-semibold text-center text-lg">🎉 Parabens! Voce completou a Trilha 1 — Arquitetura Agentica e Orquestracao</p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="index.html" class="px-6 py-3 bg-dark-700 hover:bg-dark-600 rounded-lg text-sm font-semibold text-center transition-colors border border-dark-600">Voltar ao Indice</a>
+        <a href="../trilha2/index.html" class="px-6 py-3 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 rounded-lg text-sm font-semibold text-center transition-colors border border-emerald-500/30">Proxima Trilha →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+
+</body>
+</html>

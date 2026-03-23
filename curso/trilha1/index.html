@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trilha 1 - Arquitetura Agentica | CCA-Q1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    /* Light mode overrides */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* Light mode - cores de acento (trilha emerald) */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5, 150, 105, 0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5, 150, 105, 0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5, 150, 105, 0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5, 150, 105, 0.18); }
+
+    /* Light mode - remove gradientes e cores especiais */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161, 98, 7, 0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161, 98, 7, 0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* Light mode - nav */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255, 255, 255, 0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🏗️</span>
+            <span class="font-bold text-lg hidden sm:inline">CCA-Q1</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Arquitetura</span>
+          </a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Ferramentas</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Claude Code</span>
+          </a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Prompts</span>
+          </a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Contexto</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-emerald-500/10 via-dark-800 to-dark-800 py-16 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="inline-block px-4 py-1.5 bg-emerald-500/20 text-emerald-400 text-sm font-semibold rounded-full mb-6">TRILHA 1</span>
+      <h1 class="text-4xl sm:text-5xl font-bold mb-4">🧠 Arquitetura Agentica e Orquestracao</h1>
+      <p class="text-xl text-neutral-300 mb-2">Loop agentico, hub-and-spoke, hooks, decomposicao e sessoes</p>
+      <p class="text-neutral-400 max-w-2xl mx-auto mb-8">Domine os padroes arquiteturais que fundamentam sistemas multi-agente com Claude. Esta trilha cobre 27% do exame CCA.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">7</div>
+          <div class="text-xs text-neutral-400">Modulos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">42</div>
+          <div class="text-xs text-neutral-400">Topicos</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">~3h</div>
+          <div class="text-xs text-neutral-400">Duracao</div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 border border-dark-600">
+          <div class="text-2xl font-bold text-emerald-400">Inter.</div>
+          <div class="text-xs text-neutral-400">Intermediario</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- SECTION 1: Simple Cards Grid -->
+    <h2 class="text-2xl font-bold mb-6">Modulos</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-16">
+
+      <a href="#modulo-1-1" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.1</span>
+          <h3 class="font-semibold text-neutral-100">O Loop Agentico</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Ciclo de vida, stop_reason, decisao guiada pelo modelo</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~30 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-1-2" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.2</span>
+          <h3 class="font-semibold text-neutral-100">Arquitetura Hub-and-Spoke</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Coordenador-subagente, contexto isolado, decomposicao</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-1-3" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.3</span>
+          <h3 class="font-semibold text-neutral-100">Invocacao de Subagentes</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Ferramenta Agent, allowedTools, contexto explicito</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-1-4" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.4</span>
+          <h3 class="font-semibold text-neutral-100">Imposicao e Padroes de Handoff</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Imposicao programatica, hooks deterministicos, compliance</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~30 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-1-5" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.5</span>
+          <h3 class="font-semibold text-neutral-100">Hooks do Agent SDK</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">PostToolUse, interceptacao, normalizacao, bloqueio</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-1-6" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 transition-colors p-5">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.6</span>
+          <h3 class="font-semibold text-neutral-100">Estrategias de Decomposicao</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Pipelines sequenciais, decomposicao adaptativa, planos</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~25 min · 6 topicos</span>
+      </a>
+
+      <a href="#modulo-1-7" class="block bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 transition-colors p-5 sm:col-span-2">
+        <div class="flex items-center space-x-3 mb-2">
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.7</span>
+          <h3 class="font-semibold text-neutral-100">Estado de Sessao e Forking</h3>
+        </div>
+        <p class="text-neutral-400 text-sm">Sessoes nomeadas, fork_session, resumo estruturado</p>
+        <span class="text-xs text-neutral-500 mt-2 block">~20 min · 6 topicos</span>
+      </a>
+
+    </div>
+
+    <!-- SECTION 2: Detailed Cards with Expandable Topics -->
+    <h2 class="text-2xl font-bold mb-6">Conteudo Detalhado</h2>
+    <div class="space-y-6">
+
+      <!-- MODULE 1.1 -->
+      <div id="modulo-1-1" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.1</span>
+                <h3 class="text-2xl font-bold">O Loop Agentico</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Compreenda o ciclo fundamental que permite ao Claude executar tarefas complexas de forma autonoma, iterando entre raciocinio, uso de ferramentas e avaliacao de resultados.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-emerald-400 font-bold">~30 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 1.1.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Ciclo de vida do loop</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">O loop agentico e o ciclo continuo em que Claude recebe uma mensagem, decide se precisa usar uma ferramenta, executa a ferramenta, observa o resultado e decide se deve continuar ou parar. Cada iteracao adiciona novas entradas ao historico de conversa, formando o contexto acumulado.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Todo sistema agentico com Claude depende deste ciclo. Sem entender o loop, e impossivel diagnosticar por que um agente para cedo demais, entra em loops infinitos, ou nao usa as ferramentas corretas.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Mensagem do usuario, resposta do modelo, chamada de ferramenta (tool_use), resultado da ferramenta (tool_result), iteracao continua ate stop_reason = end_turn.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.1.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">stop_reason (tool_use vs end_turn)</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">O campo stop_reason na resposta da API indica por que o modelo parou de gerar. Quando e tool_use, o modelo quer executar uma ferramenta e espera o resultado antes de continuar. Quando e end_turn, o modelo considera a tarefa concluida.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O stop_reason e o sinal que controla o fluxo do loop agentico. O codigo orquestrador usa esse valor para decidir se deve chamar a ferramenta e reenviar, ou entregar a resposta final ao usuario.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">stop_reason: tool_use (continua o loop), stop_reason: end_turn (encerra), stop_reason: max_tokens (truncamento), logica condicional no orquestrador.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.1.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Resultados no historico</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Cada resultado de ferramenta e inserido no array de mensagens como um bloco tool_result, vinculado ao tool_use_id original. O modelo ve todo o historico acumulado a cada nova chamada, o que lhe permite raciocinar sobre o que ja tentou e ajustar sua estrategia.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O acumulo de resultados no historico e o que da "memoria de curto prazo" ao agente dentro de uma sessao. Entender essa mecanica permite otimizar o uso do contexto e evitar que a janela estoure em tarefas longas.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Mensagem com role: user e tipo tool_result, encadeamento tool_use_id, contexto acumulativo, crescimento linear da janela a cada iteracao.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.1.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Decisao guiada pelo modelo</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">No loop agentico, e o modelo que decide qual ferramenta chamar a cada passo, quais parametros passar e quando parar. O orquestrador nao prescreve a sequencia — apenas fornece as ferramentas disponiveis e executa o que o modelo solicita.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Essa autonomia de decisao e o que diferencia um agente de um pipeline fixo. Compreender que o modelo guia o fluxo e essencial para projetar descricoes de ferramentas que levem a decisoes corretas.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Selecao autonoma de ferramentas, descricoes como "cardapio", tool_choice: auto (padrao), confianca nas descricoes para guiar decisoes.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.1.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Anti-padroes do loop</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Anti-padroes sao erros comuns como loops infinitos (ferramenta sempre retorna erro e o modelo re-tenta sem fim), parada prematura (modelo diz end_turn antes de concluir), e ferramentas demais que confundem a selecao. Tambem inclui nao tratar stop_reason: max_tokens.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame CCA testa cenarios onde voce deve identificar a causa raiz de falhas em loops agenticos. Reconhecer anti-padroes permite propor correcoes arquiteturais em vez de apenas ajustar prompts.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Loop infinito por erros repetidos, parada prematura, excesso de ferramentas (manter 4-5 por agente), falta de limite de iteracoes, nao tratar max_tokens como truncamento.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.1.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Loop na pratica</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Implementacao concreta do loop agentico: um while-loop que chama a API, verifica stop_reason, executa ferramentas, injeta tool_result no historico e repete. Inclui limites de seguranca como max_iterations e timeouts por chamada de ferramenta.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Traduzir o conceito abstrato do loop em codigo real e fundamental para a certificacao. O exame apresenta trechos de codigo e pede para identificar erros ou melhorias na implementacao do loop.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">While-loop com condicao em stop_reason, dispatch de ferramentas por nome, injecao de tool_result, max_iterations como guardrail, logging de cada iteracao para debug.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-1-1.html')" class="flex items-center space-x-2 px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 1.2 -->
+      <div id="modulo-1-2" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.2</span>
+                <h3 class="text-2xl font-bold">Arquitetura Hub-and-Spoke</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Entenda o padrao arquitetural central do Claude Code, onde um agente coordenador delega tarefas a subagentes especializados com contextos isolados.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-emerald-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 1.2.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Padrao coordenador-subagente</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">No padrao hub-and-spoke, um agente principal (hub/coordenador) recebe a tarefa do usuario e a decompoe em subtarefas, delegando cada uma a subagentes especializados (spokes). O coordenador sintetiza os resultados parciais em uma resposta coerente.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Este e o padrao arquitetural padrao do Claude Code e do Agent SDK. O exame CCA testa extensivamente quando usar hub-and-spoke versus pipelines lineares e como configurar a delegacao corretamente.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Hub (coordenador central), spokes (subagentes), delegacao via ferramenta Agent, sintese de resultados, topologia estrela.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.2.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Contexto isolado</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Cada subagente opera com sua propria janela de contexto, sem acesso ao historico do coordenador ou de outros subagentes. O coordenador envia apenas as instrucoes necessarias e recebe de volta apenas o resultado resumido.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O isolamento de contexto e uma vantagem critica do hub-and-spoke: evita que a janela de contexto do coordenador estoure e impede vazamento de informacao entre subagentes, o que e importante para seguranca e compliance.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Janela de contexto separada por subagente, instrucoes explicitas na delegacao, resultado compactado retornado ao hub, sem compartilhamento lateral entre spokes.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.2.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Papel do coordenador</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">O coordenador tem tres responsabilidades principais: decompor a tarefa em subtarefas coerentes, selecionar o subagente adequado para cada uma, e sintetizar os resultados parciais em uma resposta final integrada e consistente.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">A qualidade do sistema inteiro depende da capacidade do coordenador. O exame testa cenarios onde a decomposicao inadequada ou a sintese fraca leva a falhas, e voce deve identificar a causa raiz no coordenador.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Decomposicao de tarefas, roteamento para subagentes, sintese de resultados, manutencao de coerencia, decisao de quando delegar vs resolver diretamente.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.2.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Decomposicao de tarefas</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">O coordenador analisa a requisicao e a divide em subtarefas independentes o suficiente para serem delegadas. Cada subtarefa deve ser auto-contida com instrucoes claras sobre o que fazer, qual formato retornar e quais restricoes seguir.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Uma decomposicao bem feita e a diferenca entre um sistema que escala e um que falha. Subtarefas mal definidas causam resultados incoerentes, retrabalho e desperdicio de tokens.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Independencia entre subtarefas, granularidade adequada, instrucoes auto-contidas, formato de saida especificado, dependencias explicitas entre subtarefas.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.2.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Risco da decomposicao estreita</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Decomposicao estreita ocorre quando o coordenador divide a tarefa de forma muito rigida, restringindo a instrucao do subagente demais. Isso impede que o subagente se adapte a descobertas inesperadas ou use seu julgamento para tomar decisoes melhores.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">E um anti-padrao comum testado no exame CCA. A decomposicao estreita transforma agentes inteligentes em scripts rigidos, desperdicando a capacidade de raciocinio do modelo.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Over-specification, perda de adaptabilidade, micro-gerenciamento de subagentes, equilibrio entre instrucao clara e autonomia, delegacao de "o que" vs "como".</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.2.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Selecao dinamica de subagentes</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">O coordenador pode selecionar subagentes dinamicamente com base na tarefa, em vez de usar uma lista fixa. Usando descricoes de AgentDefinition e ferramenta Agent, o modelo decide em runtime qual subagente invocar para cada subtarefa.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Sistemas reais precisam ser flexiveis. A selecao dinamica permite que o mesmo coordenador use subagentes diferentes conforme o tipo de problema, sem hardcoding de rotas.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">AgentDefinition com descricoes claras, roteamento por descricao (nao por if/else), descoberta em runtime, composicao flexivel de subagentes.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-1-2.html')" class="flex items-center space-x-2 px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 1.3 -->
+      <div id="modulo-1-3" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.3</span>
+                <h3 class="text-2xl font-bold">Invocacao de Subagentes</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Aprenda a mecanica de como subagentes sao criados, configurados e invocados usando a ferramenta Agent, allowedTools e contexto explicito.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-emerald-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 1.3.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Ferramenta Agent (ex-Task)</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">A ferramenta Agent (anteriormente chamada Task) e o mecanismo built-in do Claude Code para criar subagentes. Ao invoca-la, o coordenador dispara uma nova instancia de Claude com sua propria sessao, instrucoes e conjunto de ferramentas permitidas.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">E a forma padrao de implementar hub-and-spoke no Claude Code. O exame testa como configurar a ferramenta Agent corretamente e quando usa-la versus resolver a tarefa diretamente.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Ferramenta Agent como built-in tool, parametro prompt com instrucoes, sessao independente, resultado retornado como tool_result ao coordenador.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.3.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">allowedTools e restricoes</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">O parametro allowedTools restringe quais ferramentas um subagente pode usar. Em vez de dar acesso a todas as ferramentas, voce especifica apenas as necessarias para a subtarefa, seguindo o principio de menor privilegio.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Restringir ferramentas melhora a precisao (menos opcoes = melhores decisoes) e a seguranca (subagente nao acessa recursos desnecessarios). E uma best practice testada no exame.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">allowedTools como lista de ferramentas permitidas, principio de menor privilegio, 4-5 ferramentas ideais por subagente, restricao melhora precisao e seguranca.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.3.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Contexto explicito</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Como subagentes nao herdam o historico do coordenador, todo contexto necessario deve ser passado explicitamente no prompt de invocacao. Isso inclui dados relevantes, restricoes, formato de saida esperado e qualquer informacao de background necessaria.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">E o erro mais comum em sistemas hub-and-spoke: assumir que o subagente "sabe" algo que so existe no contexto do coordenador. Contexto explicito e obrigatorio para resultados corretos.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Prompt auto-contido, sem heranca implicita de contexto, passagem de dados necessarios, formato de saida especificado, redundancia intencional.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.3.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">AgentDefinition config</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">AgentDefinition e a estrutura de configuracao que define um subagente no Agent SDK. Inclui nome, descricao, instrucoes (system prompt), ferramentas permitidas e outras opcoes como modelo e temperatura.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Configurar AgentDefinitions corretamente e essencial para construir sistemas multi-agente robustos. A descricao e usada pelo coordenador para decidir quando delegar a cada subagente.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Campos name, description, instructions, allowedTools; descricao como "label" para roteamento; instrucoes como system prompt do subagente.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.3.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">fork_session</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">fork_session cria uma copia da sessao atual como ponto de partida para um subagente, preservando o historico acumulado. Diferentemente de uma sessao nova, o subagente herda o contexto existente e pode continuar de onde a sessao original parou.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">fork_session e util quando o subagente precisa do contexto completo da conversa para executar sua tarefa, como em exploracoes experimentais onde voce quer testar abordagens diferentes sem poluir a sessao principal.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Fork como copia do estado atual, exploracao sem risco, sessao derivada independente, util para tentativa-e-erro, custos de contexto duplicado.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.3.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Subagentes paralelos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">O coordenador pode invocar multiplos subagentes simultaneamente quando as subtarefas sao independentes. Isso reduz a latencia total, pois os subagentes executam em paralelo em vez de sequencialmente.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Paralelismo e uma otimizacao fundamental em sistemas multi-agente. O exame testa quando e seguro paralelizar (subtarefas independentes) versus quando a execucao sequencial e necessaria (dependencias entre subtarefas).</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Invocacao paralela de ferramentas Agent, independencia entre subtarefas como pre-requisito, reducao de latencia, coordenador aguarda todos os resultados antes de sintetizar.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-1-3.html')" class="flex items-center space-x-2 px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 1.4 -->
+      <div id="modulo-1-4" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.4</span>
+                <h3 class="text-2xl font-bold">Imposicao e Padroes de Handoff</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Aprenda a diferenca critica entre pedir ao modelo que siga regras (prompts) versus forcar o cumprimento via codigo (imposicao programatica), e como implementar handoffs seguros entre agentes.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-emerald-400 font-bold">~30 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 1.4.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Imposicao programatica vs prompts</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Imposicao programatica significa usar codigo (hooks, validacao, filtros) para garantir que regras sejam cumpridas, em vez de confiar apenas em instrucoes no prompt. Prompts sao "pedidos" — o modelo pode nao segui-los 100%. Codigo e "imposicao" — a regra e cumprida matematicamente.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Esta e a regra de ouro #1 do CCA: para compliance 100%, use imposicao programatica. O exame testa repetidamente cenarios onde prompts nao sao suficientes e a solucao correta envolve hooks ou validacao no codigo.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Prompts como orientacao (best-effort), hooks como imposicao (garantia), compliance requer imposicao, combinacao de ambos para defesa em profundidade.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.4.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Hooks deterministicos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Hooks deterministicos sao funcoes de codigo que executam automaticamente em pontos especificos do loop agentico (antes/depois de usar ferramentas, antes/depois de cada turno). Eles produzem o mesmo resultado para a mesma entrada, sem variancia probabilistica.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Hooks sao a ferramenta principal para adicionar garantias em sistemas agenticos. Diferentemente de instrucoes no prompt, hooks executam com 100% de confiabilidade e sao auditaveis.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Execucao garantida, sem variancia, auditabilidade, pontos de interceptacao (PreToolUse, PostToolUse), logica de codigo convencional.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.4.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Conformidade financeira</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Um caso de uso classico de imposicao programatica: em sistemas financeiros, regras como "toda transacao acima de $10k requer aprovacao humana" devem ser implementadas via hooks que bloqueiam a acao, nao via instrucoes no prompt que o modelo pode ignorar.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame CCA usa cenarios de compliance financeira para testar se voce sabe quando prompts sao insuficientes. A resposta correta quase sempre envolve hooks ou validacao programatica.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Limites de transacao via hooks, aprovacao humana obrigatoria, audit trail automatico, bloqueio antes da execucao (PreToolUse), compliance regulatoria.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.4.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Protocolos de handoff</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Protocolos de handoff definem como um agente transfere controle para outro. Inclui quais informacoes sao passadas, em qual formato, e como o agente receptor confirma que recebeu e entendeu o contexto necessario para continuar a tarefa.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Handoffs mal implementados causam perda de contexto, trabalho duplicado e respostas inconsistentes. Definir protocolos claros e essencial para sistemas multi-agente confiaveis.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Formato de handoff padronizado, resumo do trabalho feito, dados pendentes, restricoes ativas, confirmacao de recebimento pelo receptor.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.4.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Requisicoes multi-preocupacao</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando uma requisicao do usuario envolve multiplas preocupacoes (ex: "refatore este codigo e adicione testes e atualize a documentacao"), o coordenador deve decompor em subtarefas separadas e rotear cada uma para o subagente ou abordagem adequada.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Requisicoes reais raramente sao simples. O exame testa como arquitetos devem lidar com pedidos compostos, decidindo o que paralelizar, o que sequenciar e como garantir consistencia entre os resultados.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Deteccao de multiplas preocupacoes, decomposicao em subtarefas, dependencias entre preocupacoes, sequenciamento vs paralelismo, consistencia no resultado final.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.4.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Gates de pre-requisito</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Gates sao verificacoes programaticas que devem ser satisfeitas antes que um agente possa prosseguir para a proxima etapa. Por exemplo, verificar que testes passam antes de commitar, ou que dados foram validados antes de processar.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Gates previnem que erros se propaguem em pipelines multi-etapa. Sem gates, um agente pode continuar com dados invalidos, causando falhas em cascata dificeis de diagnosticar.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Verificacoes pre-etapa, bloqueio em caso de falha, feedback sobre o que precisa ser corrigido, gates como hooks PreToolUse, prevencao de propagacao de erros.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-1-4.html')" class="flex items-center space-x-2 px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 1.5 -->
+      <div id="modulo-1-5" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.5</span>
+                <h3 class="text-2xl font-bold">Hooks do Agent SDK</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Domine o sistema de hooks do Agent SDK que permite interceptar, validar, transformar e bloquear acoes do agente em pontos criticos do loop agentico.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-emerald-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 1.5.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">PostToolUse hooks</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">PostToolUse hooks executam imediatamente apos uma ferramenta retornar seu resultado, antes que o resultado seja enviado de volta ao modelo. Permitem inspecionar, modificar ou bloquear o resultado da ferramenta.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">PostToolUse e o ponto de interceptacao mais versatil do Agent SDK. Permite normalizar dados, filtrar informacoes sensiveis, validar resultados e ate bloquear execucoes que violam politicas.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Execucao pos-ferramenta, acesso ao resultado original, capacidade de modificar/bloquear, hook sincrono, retorno determina o que o modelo ve.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.5.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Interceptacao de resultados</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Interceptacao e o ato de capturar o resultado de uma ferramenta no hook e decidir o que fazer com ele: deixar passar, modificar (ex: mascarar dados sensiveis), enriquecer com metadados, ou substituir completamente.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Interceptacao permite criar camadas de protecao sem alterar as ferramentas originais. E o padrao para adicionar seguranca e conformidade em sistemas existentes sem refatorar.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Captura do resultado, decisao pass/modify/block, mascaramento de dados sensiveis (PII), enriquecimento com metadados, transparencia para o modelo.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.5.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Normalizacao de dados</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Hooks PostToolUse podem normalizar dados retornados por ferramentas para um formato consistente. Por exemplo, converter datas para ISO 8601, padronizar unidades monetarias, ou truncar resultados muito grandes para preservar contexto.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Dados inconsistentes confundem o modelo e levam a erros em cascata. Normalizar via hooks garante que o modelo sempre receba dados em formato previsivel, melhorando a qualidade das decisoes.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Padronizacao de formatos, truncamento para preservar contexto, conversao de unidades, formato consistente para o modelo, hooks como camada de transformacao.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.5.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Bloqueio por politica</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Hooks PreToolUse podem bloquear a execucao de uma ferramenta antes que ela aconteca, com base em politicas definidas. Por exemplo, impedir escrita em arquivos de producao, bloquear chamadas de API acima de um limite de custo, ou exigir aprovacao para operacoes destrutivas.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Bloqueio por politica e a implementacao concreta da "Regra de Ouro #1" (Hooks > Prompts). O exame testa cenarios onde voce deve escolher entre instruir no prompt e bloquear via hook.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">PreToolUse para bloqueio preventivo, politicas como funcoes de codigo, mensagem de erro informativa ao modelo, prevencao de acoes destrutivas, audit log automatico.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.5.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Hooks vs prompts na pratica</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Na pratica, a melhor abordagem combina ambos: prompts para guiar o comportamento geral do modelo (tom, estrategia, preferencias) e hooks para impor regras criticas que nao podem ser violadas (seguranca, compliance, limites).</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame apresenta cenarios e pergunta qual abordagem usar. Saber quando cada um e adequado e como combina-los e uma competencia central do CCA.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Prompts para preferencias e orientacao, hooks para regras inviolaveis, defesa em profundidade, prompts falham silenciosamente vs hooks falham explicitamente.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.5.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Garantias deterministicas</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Garantias deterministicas sao propriedades do sistema que valem 100% das vezes, independentemente do que o modelo decide. Sao implementadas via codigo (hooks, validacao, filtros) e podem ser provadas e auditadas, ao contrario de comportamentos baseados em prompts.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Sistemas de producao precisam de garantias, nao de probabilidades. Saber diferenciar o que e garantido (via codigo) do que e provavel (via prompt) e fundamental para a certificacao.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Deterministico vs probabilistico, auditabilidade, prova de conformidade, cobertura de 100% via codigo, combinacao com monitoramento para deteccao de anomalias.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-1-5.html')" class="flex items-center space-x-2 px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 1.6 -->
+      <div id="modulo-1-6" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.6</span>
+                <h3 class="text-2xl font-bold">Estrategias de Decomposicao</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Explore as diferentes estrategias para decompor tarefas complexas em subtarefas gerenciaveis, desde pipelines sequenciais ate planos investigativos adaptativos.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-emerald-400 font-bold">~25 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 1.6.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Pipelines sequenciais (prompt chaining)</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Prompt chaining e a estrategia mais simples: a saida de um passo e a entrada do proximo, em sequencia linear. Cada etapa tem um prompt especializado e o resultado e passado adiante como contexto para a etapa seguinte.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Pipelines sequenciais sao ideais para tarefas com etapas bem definidas e dependencias claras (ex: extrair dados, transformar, validar, formatar). O exame testa quando usar chaining vs hub-and-spoke.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Etapas lineares, saida-como-entrada, prompt por etapa, sem paralelismo, ideal para fluxos com dependencias sequenciais, gates entre etapas.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.6.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">Decomposicao adaptativa</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Na decomposicao adaptativa, o coordenador nao planeja todas as subtarefas antecipadamente. Ele comeca com uma subtarefa, observa o resultado, e decide o proximo passo com base no que aprendeu. O plano evolui durante a execucao.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Muitas tarefas reais nao podem ser decompostas completamente antecipadamente (ex: debugging, investigacao). A decomposicao adaptativa permite que o sistema se ajuste a descobertas inesperadas.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Planejamento incremental, ajuste baseado em resultados, flexibilidade, loop de feedback, ideal para tarefas exploratias e debugging.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.6.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Analise por-arquivo</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Padrao de decomposicao onde cada arquivo ou componente e analisado por um subagente separado. E especialmente util para code review, migracao e refatoracao de codebases grandes, onde cada arquivo pode ser processado independentemente.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Analise por-arquivo permite paralelismo maximo e evita que a janela de contexto estoure com o codebase inteiro. E o padrao recomendado para tarefas que operam sobre muitos arquivos independentemente.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Um subagente por arquivo, paralelismo natural, contexto contido, ideal para review/migracao, coordenador lista arquivos e distribui.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.6.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Integracao cross-file</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Apos a analise por-arquivo, uma etapa de integracao cross-file sintetiza os resultados individuais, verificando consistencia entre arquivos (ex: interfaces compatrveis, imports corretos, convencoes uniformes). Geralmente e feita pelo coordenador ou por um subagente dedicado.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Analise por-arquivo sem integracao gera mudancas inconsistentes. A etapa cross-file e essencial para garantir que o resultado final e coerente como um todo, nao apenas correto arquivo-por-arquivo.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Sintese pos-analise, verificacao de consistencia, interfaces entre arquivos, convencoes globais, etapa complementar a analise por-arquivo.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.6.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Planos investigativos</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Planos investigativos sao decomposicoes para tarefas de descoberta, onde o objetivo nao e executar, mas entender. O agente formula hipoteses, coleta evidencias via ferramentas, avalia resultados e refina sua compreensao iterativamente.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Debugging, auditoria de seguranca e analise de performance sao todos tarefas investigativas. Saber estruturar planos de investigacao para agentes e uma competencia avancada testada no CCA.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Hipotese-evidencia-avaliacao, coleta de dados via ferramentas, refinamento iterativo, divergencia (explorar) e convergencia (concluir), report final estruturado.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.6.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Quando usar cada abordagem</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Guia decisorio para selecionar a estrategia de decomposicao correta: pipeline sequencial para fluxos com dependencias lineares, hub-and-spoke para tarefas paralelas, decomposicao adaptativa para problemas exploratiorios, e por-arquivo para operacoes sobre codebases.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame CCA apresenta cenarios e pede para escolher a melhor estrategia de decomposicao. Saber quando cada abordagem e mais adequada e uma competencia central de um arquiteto agentico.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Pipeline para dependencias lineares, hub-and-spoke para paralelismo, adaptativo para exploracao, por-arquivo para codebases, combinacoes hibridas para cenarios complexos.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-1-6.html')" class="flex items-center space-x-2 px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODULE 1.7 -->
+      <div id="modulo-1-7" class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden">
+        <div class="p-6 border-b border-dark-700">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="flex items-center space-x-3 mb-1">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">1.7</span>
+                <h3 class="text-2xl font-bold">Estado de Sessao e Forking</h3>
+              </div>
+              <p class="text-neutral-400 text-sm mt-2">Entenda como gerenciar o estado de sessoes no Claude Code, incluindo sessoes nomeadas, forking para exploracao e estrategias para manter contexto em tarefas longas.</p>
+            </div>
+            <div class="text-right hidden sm:block ml-4 flex-shrink-0">
+              <span class="text-emerald-400 font-bold">~20 min</span>
+              <div class="text-xs text-neutral-500">6 topicos</div>
+            </div>
+          </div>
+        </div>
+        <div class="divide-y divide-dark-700">
+
+          <!-- Topic 1.7.1 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-neutral-100 font-medium text-left">Sessoes nomeadas (--resume)</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">O Claude Code permite retomar sessoes anteriores com o flag --resume, que restaura todo o historico da conversa. Sessoes podem ser identificadas por ID ou nome, permitindo manter multiplas linhas de trabalho em paralelo.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Gerenciar sessoes e essencial para tarefas que se estendem por dias ou para manter contexto entre sessoes de trabalho. O exame testa quando retomar uma sessao versus iniciar uma nova.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Flag --resume para retomar, identificacao por session ID, historico persistido, custo de re-processar tokens do historico, --resume vs nova sessao.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.7.2 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-neutral-100 font-medium text-left">fork_session para exploracao</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">fork_session cria uma ramificacao da sessao atual, permitindo explorar uma abordagem sem comprometer o estado da sessao principal. Se a exploracao falhar, a sessao original permanece intacta. Se tiver sucesso, os resultados podem ser incorporados.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Forking e uma tecnica poderosa para lidar com incerteza. O exame testa cenarios onde fork_session e a melhor abordagem versus outras alternativas como subagentes ou novas sessoes.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Ramificacao sem risco, exploracao experimental, sessao original preservada, custo de contexto duplicado, merge manual de resultados.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.7.3 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-neutral-100 font-medium text-left">Nova sessao vs retomar</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Decidir entre iniciar uma nova sessao ou retomar uma existente depende de fatores como: o contexto anterior ainda e relevante, a janela esta proxima do limite, a tarefa mudou significativamente, ou o custo de re-processar tokens justifica a continuidade.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Essa decisao impacta diretamente custo, qualidade e latencia. O exame testa cenarios onde retomar e melhor (contexto necessario) e onde nova sessao e melhor (contexto poluido ou janela cheia).</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Relevancia do historico, tamanho da janela de contexto, custo de input tokens, poluicao de contexto, nova sessao com resumo estruturado como alternativa.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.7.4 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-neutral-100 font-medium text-left">Resumo estruturado</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando uma sessao fica longa demais, o modelo pode gerar um resumo estruturado do trabalho feito ate o momento. Esse resumo pode ser usado como contexto inicial para uma nova sessao, transferindo o conhecimento essencial sem carregar todo o historico.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Resumos estruturados sao a ponte entre sessoes. Permitem manter continuidade sem o custo de reprocessar milhares de tokens de historico, sendo uma tecnica essencial para tarefas de longa duracao.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Resumo como "handoff" entre sessoes, formato com decisoes tomadas/pendentes/contexto relevante, compactacao de informacao, perda controlada de detalhes.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.7.5 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-neutral-100 font-medium text-left">Comparacao de abordagens</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Comparacao entre as estrategias de gerenciamento de sessao: --resume (retomar com historico completo), fork_session (ramificar para explorar), nova sessao com resumo (contexto compactado), e subagente (contexto isolado). Cada uma tem trade-offs de custo, contexto e risco.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">O exame apresenta cenarios complexos e pede para escolher a melhor abordagem de sessao. Entender os trade-offs permite selecionar a estrategia certa para cada situacao.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">--resume: maximo contexto, maximo custo; fork: exploracao segura, contexto duplicado; nova sessao: contexto limpo, precisa de resumo; subagente: isolamento total, contexto minimo.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Topic 1.7.6 -->
+          <div class="topic-item">
+            <button onclick="toggleTopic(this)" class="w-full flex items-center space-x-3 p-4 hover:bg-emerald-500/10 transition-colors justify-start">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+              <span class="text-neutral-100 font-medium text-left">Informando sessoes sobre mudancas</span>
+              <svg class="w-4 h-4 text-neutral-500 ml-auto transform transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="topic-explanation px-4 pb-4 pl-14">
+              <div class="space-y-3 text-sm">
+                <div><span class="text-emerald-400 font-semibold">O que e:</span> <span class="text-neutral-300">Quando o estado externo muda entre sessoes (ex: codigo alterado por outros desenvolvedores, nova versao de dependencia, mudanca de requisitos), a sessao retomada precisa ser informada explicitamente sobre essas mudancas para evitar trabalhar com premissas desatualizadas.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <span class="text-neutral-300">Sessoes nao detectam mudancas externas automaticamente. Sem informar o contexto atualizado, o agente toma decisoes baseadas em estado obsoleto, gerando erros silenciosos e resultados incorretos.</span></div>
+                <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <span class="text-neutral-300">Estado externo vs estado da sessao, notificacao explicita de mudancas, diff como contexto de atualizacao, re-leitura de arquivos alterados, CLAUDE.md como fonte de verdade persistente.</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="p-4 border-t border-dark-700">
+          <button onclick="openModal('modulo-1-7.html')" class="flex items-center space-x-2 px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition-colors text-sm font-medium justify-start">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            <span>Abrir Modulo Completo</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="module-modal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="absolute inset-4 sm:inset-8 lg:inset-16 bg-dark-900 rounded-2xl border border-dark-600 overflow-hidden flex flex-col">
+      <div class="flex items-center justify-between p-4 border-b border-dark-700">
+        <span class="text-neutral-400 text-sm">Modulo Completo</span>
+        <button onclick="closeModal()" class="p-2 hover:bg-dark-700 rounded-lg transition-colors">
+          <svg class="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <iframe id="modal-iframe" class="flex-1 w-full" src="" frameborder="0"></iframe>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>CCA-Q1 — Claude Certified Architect - 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    // Toggle topic explanation
+    function toggleTopic(button) {
+      const explanation = button.nextElementSibling;
+      const arrow = button.querySelector('svg');
+      explanation.classList.toggle('active');
+      arrow.classList.toggle('rotate-180');
+    }
+
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Modal
+    function openModal(src) {
+      const modal = document.getElementById('module-modal');
+      const iframe = document.getElementById('modal-iframe');
+      iframe.src = src;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('module-modal');
+      const iframe = document.getElementById('modal-iframe');
+      modal.classList.add('hidden');
+      iframe.src = '';
+      document.body.style.overflow = '';
+    }
+
+    // ESC to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+
+</body>
+</html>
